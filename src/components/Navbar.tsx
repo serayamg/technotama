@@ -216,15 +216,7 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* CTAs */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link
-              href="/online-consultation"
-              className="text-xs font-bold text-slate-700 hover:text-blue-600 px-4 py-2.5 rounded-lg border border-slate-300/80 transition-all duration-200 hover:border-blue-200"
-            >
-              Jadwalkan Konsultasi
-            </Link>
-          </div>
+
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-2">
@@ -344,15 +336,7 @@ export default function Navbar() {
                 </>
               )}
 
-              <div className="pt-4 flex flex-col space-y-2 px-3">
-                <Link
-                  href="/online-consultation"
-                  onClick={() => setIsOpen(false)}
-                  className="text-center font-bold text-slate-700 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  Jadwalkan Konsultasi
-                </Link>
-              </div>
+
             </div>
           </motion.div>
         )}
