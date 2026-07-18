@@ -44,7 +44,7 @@
 
 /* Light / clean cyber aesthetic rules */
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 body {
