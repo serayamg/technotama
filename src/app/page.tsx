@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 
 const CanvasNetwork = dynamic(() => import('@/components/CanvasNetwork'), { ssr: false });
 import { 
-  Shield, CheckCircle2, ChevronRight, FileText, Users, Award, 
+  Shield, CheckCircle2, ChevronRight, ChevronUp, ChevronDown, FileText, Users, Award, 
   HelpCircle, Star, Calendar, ArrowRight, Zap, Target, BookOpen, 
   Lock, Key, Eye, Layout, Server, AlertCircle, X, FileCheck
 } from 'lucide-react';
@@ -306,6 +306,14 @@ export default function Home() {
   const [activeClientGroup, setActiveClientGroup] = useState<keyof typeof clients>('Government');
   const [selectedFramework, setSelectedFramework] = useState<typeof frameworks[0] | null>(null);
   const [activeCaseStudyIdx, setActiveCaseStudyIdx] = useState(0);
+  const [visibleCaseStudiesStartIdx, setVisibleCaseStudiesStartIdx] = useState(0);
+
+  const scrollUp = () => {
+    setVisibleCaseStudiesStartIdx(prev => Math.max(0, prev - 1));
+  };
+  const scrollDown = () => {
+    setVisibleCaseStudiesStartIdx(prev => Math.min(caseStudies.length - 4, prev + 1));
+  };
   const [siteConfig, setSiteConfig] = useState<any>(null);
   const [activeMethodologyStep, setActiveMethodologyStep] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState('all');
@@ -918,23 +926,53 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Switcher list */}
             <div className="lg:col-span-4 flex flex-col gap-2">
-              {caseStudies.map((cs, idx) => (
+              {/* Up scroll button */}
+              {caseStudies.length > 4 && (
                 <button
-                  key={cs.id}
-                  onClick={() => setActiveCaseStudyIdx(idx)}
-                  className={`p-4 rounded-xl text-left border transition-all focus:outline-none flex items-center justify-between ${
-                    activeCaseStudyIdx === idx
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                  }`}
+                  type="button"
+                  onClick={scrollUp}
+                  disabled={visibleCaseStudiesStartIdx === 0}
+                  className="w-full flex items-center justify-center py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-500 hover:text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus:outline-none cursor-pointer"
+                  title="Scroll Up"
                 >
-                  <div>
-                    <div className="text-[9px] font-bold uppercase opacity-80">{cs.project}</div>
-                    <div className="font-display font-bold text-xs mt-0.5">{cs.client}</div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 shrink-0" />
+                  <ChevronUp className="w-4 h-4" />
                 </button>
-              ))}
+              )}
+
+              {/* List of visible items */}
+              {caseStudies.slice(visibleCaseStudiesStartIdx, visibleCaseStudiesStartIdx + 4).map((cs) => {
+                const idx = caseStudies.findIndex(item => item.id === cs.id);
+                return (
+                  <button
+                    key={cs.id}
+                    onClick={() => setActiveCaseStudyIdx(idx)}
+                    className={`p-4 rounded-xl text-left border transition-all focus:outline-none flex items-center justify-between cursor-pointer ${
+                      activeCaseStudyIdx === idx
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-[9px] font-bold uppercase opacity-80">{cs.project}</div>
+                      <div className="font-display font-bold text-xs mt-0.5">{cs.client}</div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 shrink-0" />
+                  </button>
+                );
+              })}
+
+              {/* Down scroll button */}
+              {caseStudies.length > 4 && (
+                <button
+                  type="button"
+                  onClick={scrollDown}
+                  disabled={visibleCaseStudiesStartIdx >= caseStudies.length - 4}
+                  className="w-full flex items-center justify-center py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-slate-500 hover:text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus:outline-none cursor-pointer"
+                  title="Scroll Down"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              )}
             </div>
 
             {/* Case Study Details card */}
