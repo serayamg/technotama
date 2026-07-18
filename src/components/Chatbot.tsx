@@ -369,7 +369,7 @@ export default function Chatbot() {
     } else if (leadStep === 5) {
       currentData.email = text;
       nextStep = 6;
-      botText = 'Berapa nomor handphone/WhatsApp Anda agar kami bisa mengirim penawaran?';
+      botText = 'Untuk memudahkan proses koordinasi lebih lanjut dan agar kami bisa mengirim penawaran, mohon disampaikan nomor handphone/WhatsApp Anda?';
     } else if (leadStep === 6) {
       currentData.phone = text;
       nextStep = 7;
