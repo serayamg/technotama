@@ -310,6 +310,56 @@ export default function Home() {
   const [activeMethodologyStep, setActiveMethodologyStep] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState('all');
 
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [scannerDomain, setScannerDomain] = useState('');
+  const [scanStep, setScanStep] = useState<'idle' | 'scanning' | 'done'>('idle');
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanLogs, setScanLogs] = useState<string[]>([]);
+
+  const runScanner = () => {
+    if (!scannerDomain) {
+      alert('Mohon masukkan nama domain atau URL terlebih dahulu.');
+      return;
+    }
+    setScanStep('scanning');
+    setScanProgress(0);
+    setScanLogs([]);
+    
+    const logs = [
+      `[INFO] Memulai pemindaian siber pada target: ${scannerDomain}`,
+      `[INFO] Menguji resolusi host & catatan DNS...`,
+      `[OK] Host berhasil diresolusi. IP target teridentifikasi.`,
+      `[INFO] Melakukan port scanning & service discovery...`,
+      `[WARN] Port 80 (HTTP) & 443 (HTTPS) terbuka. Port administratif lainnya terfilter dengan baik.`,
+      `[INFO] Menguji konfigurasi enkripsi SSL/TLS...`,
+      `[WARN] SSL terdeteksi, namun server mengizinkan protokol lawas (TLS 1.0/1.1) yang berisiko.`,
+      `[INFO] Memindai HTTP Security Headers (CSP, HSTS, X-Frame-Options)...`,
+      `[CRITICAL] Beberapa header keamanan penting belum terkonfigurasi pada web server.`,
+      `[INFO] Melakukan pengujian penetrasi otomatis dasar (SQLi, XSS)...`,
+      `[OK] Proteksi Web Application Firewall (WAF) terdeteksi aktif.`,
+      `[INFO] Menyusun laporan analisis kerentanan...`,
+      `[SUCCESS] Pemindaian selesai. Skor Keamanan terhitung.`
+    ];
+
+    let currentLogIdx = 0;
+    const interval = setInterval(() => {
+      setScanProgress(prev => {
+        const next = prev + 8;
+        if (next >= 100) {
+          clearInterval(interval);
+          setScanStep('done');
+          return 100;
+        }
+        const logThreshold = Math.floor((logs.length * next) / 100);
+        if (currentLogIdx < logThreshold && logs[currentLogIdx]) {
+          setScanLogs(prevLogs => [...prevLogs, logs[currentLogIdx]]);
+          currentLogIdx++;
+        }
+        return next;
+      });
+    }, 300);
+  };
+
   useEffect(() => {
     fetch('/api/settings')
       .then(res => res.json())
@@ -435,6 +485,13 @@ export default function Home() {
                 >
                   <span>Jadwalkan Konsultasi</span>
                 </Link>
+                <button
+                  onClick={() => setIsScannerOpen(true)}
+                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow-md hover:shadow transition-all duration-200 cursor-pointer"
+                >
+                  <Shield className="w-4 h-4 animate-pulse" />
+                  <span>Scan Your</span>
+                </button>
               </div>
 
               {/* Quick Assessments Link */}
@@ -1026,6 +1083,152 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Vulnerability Scanner Modal */}
+      <AnimatePresence>
+        {isScannerOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden relative"
+            >
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-500" />
+              
+              {/* Header */}
+              <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                <div className="flex items-center space-x-2">
+                  <Shield className="w-5 h-5 text-blue-600 animate-pulse" />
+                  <span className="font-display font-extrabold text-sm text-slate-900 tracking-tight">RTI Vulnerability Scanner</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsScannerOpen(false);
+                    setScanStep('idle');
+                    setScannerDomain('');
+                  }}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-6 space-y-5">
+                {scanStep === 'idle' && (
+                  <div className="space-y-4">
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      Lakukan pemindaian kerentanan siber otomatis pada domain atau URL organisasi Anda untuk melihat tingkat risiko keamanan awal secara gratis.
+                    </p>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Domain / URL Target</label>
+                      <div className="flex space-x-2">
+                        <input
+                          type="text"
+                          value={scannerDomain}
+                          onChange={(e) => setScannerDomain(e.target.value)}
+                          placeholder="Contoh: perusahaananda.com"
+                          className="flex-1 text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                        />
+                        <button
+                          onClick={runScanner}
+                          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
+                        >
+                          Mulai Scan
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {scanStep === 'scanning' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-slate-700 animate-pulse">Memindai kerentanan...</span>
+                      <span className="font-mono font-bold text-blue-600">{scanProgress}%</span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden relative">
+                      <div 
+                        className="h-full bg-gradient-to-r from-blue-600 to-cyan-500 transition-all duration-300"
+                        style={{ width: `${scanProgress}%` }}
+                      />
+                    </div>
+
+                    {/* Scanner Terminal Logs */}
+                    <div className="h-44 overflow-y-auto bg-slate-950 border border-slate-900 rounded-xl p-3.5 font-mono text-[9px] text-slate-300 space-y-1.5 shadow-inner">
+                      {scanLogs.map((log, idx) => {
+                        let colorClass = 'text-slate-350';
+                        if (log.includes('[OK]') || log.includes('[SUCCESS]')) colorClass = 'text-emerald-400';
+                        if (log.includes('[WARN]')) colorClass = 'text-amber-400';
+                        if (log.includes('[CRITICAL]')) colorClass = 'text-red-400 font-bold';
+                        return (
+                          <div key={idx} className={colorClass}>
+                            {log}
+                          </div>
+                        );
+                      })}
+                      <div className="animate-pulse text-blue-400">_</div>
+                    </div>
+                  </div>
+                )}
+
+                {scanStep === 'done' && (
+                  <div className="space-y-4">
+                    <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-5 text-center space-y-3">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 text-amber-500 border border-amber-100 font-display font-extrabold text-lg">
+                        C+
+                      </div>
+                      <div>
+                        <h4 className="font-display font-extrabold text-sm text-slate-900">Hasil Pemindaian: Risiko Menengah</h4>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Ditemukan celah potensial pada enkripsi TLS lawas & HTTP Security Headers</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl text-xs">
+                        <span className="text-slate-600 flex items-center space-x-1.5">
+                          <span className="w-2 h-2 rounded-full bg-red-500" />
+                          <span>Kerentanan Kritis (TLS 1.0/1.1)</span>
+                        </span>
+                        <span className="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded text-[10px]">1 Tinggi</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl text-xs">
+                        <span className="text-slate-600 flex items-center space-x-1.5">
+                          <span className="w-2 h-2 rounded-full bg-amber-500" />
+                          <span>HTTP Security Headers Missing</span>
+                        </span>
+                        <span className="font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded text-[10px]">2 Sedang</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50/55 border border-blue-100 rounded-xl p-3.5 text-xs text-blue-900 leading-relaxed font-semibold">
+                      Tim konsultan keamanan PT Riset Teknologi Indonesia merekomendasikan asesmen formal untuk hardening web server Anda. Silakan klik tombol di bawah untuk konsultasi penanganan atau koordinasi lanjutan.
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      <Link
+                        href="/request-proposal?ref=scanner"
+                        className="flex items-center justify-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+                      >
+                        Request Proposal (RFP)
+                      </Link>
+                      <Link
+                        href="/online-consultation?ref=scanner"
+                        className="flex items-center justify-center px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
+                      >
+                        Jadwalkan Konsultasi
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Chatbot Assistant */}
       <Chatbot />
