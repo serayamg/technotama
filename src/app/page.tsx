@@ -398,6 +398,12 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
+                  href="/online-consultation"
+                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
+                >
+                  <span>Jadwalkan Konsultasi</span>
+                </Link>
+                <Link
                   href="/online-order"
                   className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
                 >
