@@ -521,7 +521,13 @@ export default function ServiceDetail() {
                     href="/request-proposal"
                     className="w-full text-center block py-3 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs rounded-xl transition-colors"
                   >
-                    Minta Proposal Tender (RFP)
+                    Request Proposal
+                  </Link>
+                  <Link
+                    href="/online-consultation"
+                    className="w-full text-center block py-3 bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-xs rounded-xl transition-colors"
+                  >
+                    Jadwalkan Konsultasi
                   </Link>
                 </div>
               </div>

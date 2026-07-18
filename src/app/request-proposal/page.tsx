@@ -13,7 +13,7 @@ export default function RequestProposal() {
     email: '',
     phone: '',
     company: '',
-    industry: 'Banking',
+    industry: 'Banking & Finance',
     employees: '100 - 500',
     location: '',
     serviceType: '',
@@ -205,7 +205,7 @@ export default function RequestProposal() {
                         email: '',
                         phone: '',
                         company: '',
-                        industry: 'Banking',
+                        industry: 'Banking & Finance',
                         employees: '100 - 500',
                         location: '',
                         serviceType: services[0] || '',
@@ -307,7 +307,7 @@ export default function RequestProposal() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Sektor Industri</label>
                         <select
@@ -316,13 +316,19 @@ export default function RequestProposal() {
                           onChange={handleChange}
                           className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all"
                         >
-                          <option>Banking</option>
-                          <option>Fintech / Payment</option>
-                          <option>Government</option>
-                          <option>BUMN</option>
-                          <option>Healthcare</option>
-                          <option>Insurance</option>
-                          <option>Swasta Lainnya</option>
+                          <option>Banking & Finance</option>
+                          <option>Fintech & Payment Gateway</option>
+                          <option>Government & Public Sector</option>
+                          <option>BUMN / State-Owned Enterprise</option>
+                          <option>Healthcare & Medical Services</option>
+                          <option>Insurance & Actuarial</option>
+                          <option>E-Commerce & Digital Retail</option>
+                          <option>Telecommunications & Internet Services</option>
+                          <option>IT Consulting & Software Development</option>
+                          <option>Energy, Utilities & Resources</option>
+                          <option>Manufacturing, Logistics & Supply Chain</option>
+                          <option>Education & Academic Research</option>
+                          <option>Lainnya (Other Sectors)</option>
                         </select>
                       </div>
 
@@ -342,7 +348,7 @@ export default function RequestProposal() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Perkiraan Budget</label>
                         <select

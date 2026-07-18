@@ -36,12 +36,13 @@ export default function Chatbot() {
   };
 
   // Lead Collection State Flow
-  const [leadStep, setLeadStep] = useState(0); // 0 = not in flow, 1 = Name, 2 = Company, 3 = Service, 4 = Email, 5 = Phone, 6 = Budget/Timeline, 7 = Done
+  const [leadStep, setLeadStep] = useState(0); // 0 = none, 1 = Name, 2 = Company, 3 = Service, 4 = Scoping, 5 = Email, 6 = Phone, 7 = Budget, 8 = Timeline, 9 = Done
   const [leadData, setLeadData] = useState({
     name: '',
     company: '',
     role: '',
     service: '',
+    scopingDetails: '',
     email: '',
     phone: '',
     budget: '',
@@ -93,23 +94,164 @@ export default function Chatbot() {
         ];
         break;
       case 'detail_off':
-        botText = 'Layanan Offensive Cybersecurity RTI mencakup Vulnerability Assessment (VA), Penetration Testing (Web, Mobile, API, Network), Secure SDLC Implementation, dan Red Teaming (Simulasi Serangan Nyata).';
+        botText = 'Layanan Offensive Cybersecurity RTI mencakup berbagai metode pengujian keamanan siber proaktif. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+        options = [
+          { label: '🔍 Vulnerability Assessment (VA)', action: 'off_va' },
+          { label: '⚔️ Penetration Testing (Pentest)', action: 'off_pentest' },
+          { label: '💻 Secure SDLC Implementation', action: 'off_ssdlc' },
+          { label: '🛡️ Red Teaming', action: 'off_redteam' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'off_va':
+        botText = '🔍 Vulnerability Assessment (VA) mengidentifikasi dan memetakan celah keamanan siber pada infrastruktur, server, dan jaringan organisasi Anda secara otomatis dan berkala.';
         options = [
           { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Offensive', action: 'detail_off' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'off_pentest':
+        botText = '⚔️ Penetration Testing (Web, Mobile, API, Network) melakukan simulasi peretasan terkontrol oleh ethical hacker kami untuk mengeksploitasi dan melaporkan kerentanan sistem Anda secara mendalam.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Offensive', action: 'detail_off' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'off_ssdlc':
+        botText = '💻 Secure SDLC Implementation mengintegrasikan praktik dan pengujian keamanan siber (security checks) pada setiap tahap siklus pengembangan software Anda (DevSecOps).';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Offensive', action: 'detail_off' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'off_redteam':
+        botText = '🛡️ Red Teaming mensimulasikan taktik serangan nyata (Advanced Persistent Threat) tanpa pemberitahuan sebelumnya untuk menguji kesiapan tim deteksi dan respons keamanan Anda.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Offensive', action: 'detail_off' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
       case 'detail_gov':
-        botText = 'Layanan Cybersecurity Governance RTI mencakup Cybersecurity Blueprint, Policy-SOP Development (Tata Kelola TI), ISO/IEC Implementation, BCM-BCP-DRP Services (Cyber Drill), Digital Maturity Assessment, Awareness & Training, dan IT Audit.';
+        botText = 'Layanan Cybersecurity Governance RTI mencakup berbagai program strategis. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+        options = [
+          { label: '📘 Cybersecurity Blueprint', action: 'gov_blueprint' },
+          { label: '📜 Policy-SOP Development', action: 'gov_policy' },
+          { label: '🔒 ISO/IEC Implementation', action: 'gov_iso' },
+          { label: '🔄 BCM-BCP-DRP (Cyber Drill)', action: 'gov_bcm' },
+          { label: '📊 Digital Maturity Assessment', action: 'gov_maturity' },
+          { label: '🎓 Awareness & Training', action: 'gov_awareness' },
+          { label: '🔎 IT Audit', action: 'gov_audit' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_blueprint':
+        botText = '📘 Cybersecurity Blueprint membantu organisasi menyusun rencana induk (roadmap) jangka panjang pertahanan siber yang selaras dengan tata kelola TI dan tujuan bisnis Anda.';
         options = [
           { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_policy':
+        botText = '📜 Policy-SOP Development (Tata Kelola TI) merancang kebijakan keamanan informasi, pedoman kerja, dan Standar Operasional Prosedur (SOP) tata kelola siber organisasi Anda.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_iso':
+        botText = '🔒 ISO/IEC Implementation membantu persiapan kepatuhan sertifikasi standar ISO/IEC 27001 (Sistem Manajemen Keamanan Informasi) secara end-to-end dari gap analisis hingga pendampingan audit.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_bcm':
+        botText = '🔄 BCM-BCP-DRP Services (Cyber Drill) menguji ketahanan bisnis dan pemulihan bencana sistem melalui simulasi ancaman siber (cyber drill) nyata untuk memastikan kelangsungan operasional.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_maturity':
+        botText = '📊 Digital Maturity Assessment mengukur indeks kematangan keamanan siber dan kesiapan digital organisasi Anda saat ini berdasarkan framework standar internasional.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_awareness':
+        botText = '🎓 Awareness & Training mengedukasi seluruh staf mengenai ancaman siber terbaru, metode rekayasa sosial (phishing), serta melatih refleks kepatuhan siber dasar.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'gov_audit':
+        botText = '🔎 IT Audit melakukan penilaian independen terhadap kepatuhan, keandalan kontrol internal sistem informasi, dan infrastruktur tata kelola TI organisasi Anda.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Governance', action: 'detail_gov' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
       case 'detail_def':
-        botText = 'Layanan Defensive Cybersecurity RTI mencakup Security Operation Center (SOC) 24/7, Cyber Threat Intelligence (CTI) Solution, Network & Endpoint Hardening, Cyber Security Incident Management, dan Digital Forensic.';
+        botText = 'Layanan Defensive Cybersecurity RTI mencakup berbagai sistem pertahanan dan respons siber aktif. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+        options = [
+          { label: '🛡️ Security Operation Center (SOC) 24/7', action: 'def_soc' },
+          { label: '📡 Cyber Threat Intelligence (CTI)', action: 'def_cti' },
+          { label: '🔒 Network & Endpoint Hardening', action: 'def_hardening' },
+          { label: '🚨 Incident Management', action: 'def_incident' },
+          { label: '🔎 Digital Forensic', action: 'def_forensic' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'def_soc':
+        botText = '🛡️ Security Operation Center (SOC) 24/7 menyediakan pemantauan keamanan siber secara real-time non-stop untuk mendeteksi, menganalisis, dan merespons ancaman secara instan.';
         options = [
           { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Defensive', action: 'detail_def' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'def_cti':
+        botText = '📡 Cyber Threat Intelligence (CTI) mengumpulkan dan menganalisis data ancaman siber global untuk memprediksi, mencegah, dan mengantisipasi serangan sebelum terjadi pada organisasi Anda.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Defensive', action: 'detail_def' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'def_hardening':
+        botText = '🔒 Network & Endpoint Hardening memperkuat pertahanan infrastruktur jaringan, server, dan perangkat kerja (endpoints) dengan menutup celah konfigurasi berbahaya.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Defensive', action: 'detail_def' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'def_incident':
+        botText = '🚨 Cyber Security Incident Management memberikan penanganan dan penanggulangan cepat saat insiden serangan siber terjadi guna meminimalisir dampak kerugian bisnis.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Defensive', action: 'detail_def' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'def_forensic':
+        botText = '🔎 Digital Forensic melakukan investigasi mendalam pasca-insiden untuk melacak asal-usul serangan, mengumpulkan bukti digital, dan menyusun laporan forensik formal.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Layanan Defensive', action: 'detail_def' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
@@ -174,20 +316,20 @@ export default function Chatbot() {
         { label: 'Defensive Cybersecurity (SOC/CTI)', action: 'lead_def' },
         { label: 'Lainnya', action: 'lead_other' }
       ];
-    } else if (leadStep === 4) {
-      currentData.email = text;
-      nextStep = 5;
-      botText = 'Berapa nomor handphone/WhatsApp Anda agar kami bisa mengirim penawaran?';
     } else if (leadStep === 5) {
-      currentData.phone = text;
+      currentData.email = text;
       nextStep = 6;
+      botText = 'Berapa nomor handphone/WhatsApp Anda agar kami bisa mengirim penawaran?';
+    } else if (leadStep === 6) {
+      currentData.phone = text;
+      nextStep = 7;
       botText = 'Berapa perkiraan budget proyek ini?';
       options = [
         { label: '< Rp 50 Juta', action: 'budget_small' },
         { label: 'Rp 50Jt - Rp 150Jt', action: 'budget_med' },
         { label: 'Rp 150Jt+', action: 'budget_large' }
       ];
-    } else if (leadStep === 3 || leadStep === 6 || leadStep === 7) {
+    } else if (leadStep === 3 || leadStep === 4 || leadStep === 7 || leadStep === 8) {
       botText = 'Mohon pilih salah satu opsi tombol di atas untuk melanjutkan.';
     }
 
@@ -227,7 +369,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Mari kita hitung estimasi biaya proyek Anda. Siapa nama lengkap Anda?'
+          text: 'Perkenankan kami memahami kebutuhan Anda dengan lebih baik. Siapa nama lengkap Anda?'
         }
       ]);
       return;
@@ -236,6 +378,21 @@ export default function Chatbot() {
     if (action === 'main_menu') {
       setLeadStep(0);
       triggerBotResponse('main_menu', label);
+      return;
+    }
+
+    if (action === 'go_proposal') {
+      window.location.href = '/request-proposal';
+      return;
+    }
+
+    if (action === 'go_consultation') {
+      window.location.href = '/online-consultation';
+      return;
+    }
+
+    if (action === 'go_order') {
+      window.location.href = '/online-order';
       return;
     }
 
@@ -251,6 +408,73 @@ export default function Chatbot() {
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsTyping(false);
+
+      let customText = '';
+      let customOptions: { label: string; action: string }[] = [];
+
+      if (action === 'lead_off') {
+        customText = 'Berapa banyak target aplikasi (web/mobile/API) atau IP address yang ingin di-Pentest?';
+        customOptions = [
+          { label: '1-3 Target Aplikasi/IP', action: 'scoping_off_1_3' },
+          { label: '4-10 Target Aplikasi/IP', action: 'scoping_off_4_10' },
+          { label: '10+ Target / Skala Enterprise', action: 'scoping_off_10' }
+        ];
+      } else if (action === 'lead_gov') {
+        customText = 'Apakah Anda memerlukan pemenuhan regulasi tertentu atau sertifikasi?';
+        customOptions = [
+          { label: 'Sertifikasi ISO/IEC 27001', action: 'scoping_gov_iso' },
+          { label: 'Kepatuhan Regulasi BI/OJK/UU PDP', action: 'scoping_gov_reg' },
+          { label: 'Hanya Penyusunan Blueprint / Policy-SOP', action: 'scoping_gov_blue' }
+        ];
+      } else if (action === 'lead_def') {
+        customText = 'Apa kebutuhan utama sistem pertahanan siber Anda?';
+        customOptions = [
+          { label: 'Layanan SOC Monitoring 24/7', action: 'scoping_def_soc' },
+          { label: 'Network Hardening & Incident Response', action: 'scoping_def_hard' },
+          { label: 'Cyber Threat Intelligence (CTI)', action: 'scoping_def_cti' }
+        ];
+      } else {
+        customText = 'Apa fokus utama dari bantuan siber yang Anda butuhkan?';
+        customOptions = [
+          { label: 'Persiapan Audit Eksternal / Sertifikasi', action: 'scoping_oth_audit' },
+          { label: 'Pengujian & Perlindungan Rutin Berkala', action: 'scoping_oth_routine' },
+          { label: 'Konsultasi Umum Kebutuhan Siber', action: 'scoping_oth_general' }
+        ];
+      }
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: customText,
+          options: customOptions
+        }
+      ]);
+      return;
+    }
+
+    if (leadStep === 4 && action.startsWith('scoping_')) {
+      const scopingMap: Record<string, string> = {
+        scoping_off_1_3: '1-3 Target Aplikasi/IP',
+        scoping_off_4_10: '4-10 Target Aplikasi/IP',
+        scoping_off_10: '10+ Target / Skala Enterprise',
+        scoping_gov_iso: 'Sertifikasi ISO/IEC 27001',
+        scoping_gov_reg: 'Kepatuhan Regulasi BI/OJK/UU PDP',
+        scoping_gov_blue: 'Penyusunan Blueprint / Policy-SOP',
+        scoping_def_soc: 'SOC Monitoring 24/7',
+        scoping_def_hard: 'Hardening & Incident Response',
+        scoping_def_cti: 'Threat Intelligence',
+        scoping_oth_audit: 'Persiapan Audit Eksternal',
+        scoping_oth_routine: 'Perlindungan Rutin Berkala',
+        scoping_oth_general: 'Konsultasi Umum'
+      };
+
+      setLeadData(prev => ({ ...prev, scopingDetails: scopingMap[action] }));
+      setLeadStep(5);
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
@@ -262,14 +486,14 @@ export default function Chatbot() {
       return;
     }
 
-    if (leadStep === 6 && action.startsWith('budget_')) {
+    if (leadStep === 7 && action.startsWith('budget_')) {
       const budgetMap: Record<string, string> = {
         budget_small: '< Rp 50 Juta',
         budget_med: 'Rp 50Jt - Rp 150Jt',
         budget_large: 'Rp 150Jt+'
       };
       setLeadData(prev => ({ ...prev, budget: budgetMap[action] }));
-      setLeadStep(7);
+      setLeadStep(8);
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsTyping(false);
@@ -289,7 +513,7 @@ export default function Chatbot() {
       return;
     }
 
-    if (leadStep === 7 && action.startsWith('timeline_')) {
+    if (leadStep === 8 && action.startsWith('timeline_')) {
       const timelineMap: Record<string, string> = {
         timeline_1m: '1 Bulan',
         timeline_2m: '2 Bulan',
@@ -302,12 +526,12 @@ export default function Chatbot() {
       };
 
       setLeadData(finalData);
-      setLeadStep(8);
+      setLeadStep(9);
 
       setIsTyping(true);
       // Save lead to database API
       try {
-        const response = await fetch('/api/leads', {
+        await fetch('/api/leads', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -316,7 +540,7 @@ export default function Chatbot() {
             phone: finalData.phone,
             company: finalData.company,
             role: 'Client Portal Chat',
-            needs: `Kebutuhan Layanan: ${finalData.service}. Budget: ${finalData.budget}. Timeline: ${finalData.timeline}.`,
+            needs: `Kebutuhan Layanan: ${finalData.service} (${finalData.scopingDetails || ''}). Budget: ${finalData.budget}. Timeline: ${finalData.timeline}.`,
             budget: finalData.budget,
             timeline: finalData.timeline,
             source: 'CHATBOT'
@@ -328,7 +552,7 @@ export default function Chatbot() {
       setIsTyping(false);
 
       // Generate WhatsApp Link
-      const waText = `Halo RTI, saya tertarik menggunakan layanan berikut: ${finalData.service}.\nNama: ${finalData.name}\nPerusahaan: ${finalData.company}\nEmail: ${finalData.email}\nNomor HP: ${finalData.phone}\nTimeline: ${finalData.timeline}\nBudget: ${finalData.budget}`;
+      const waText = `Halo RTI, saya tertarik menggunakan layanan berikut: ${finalData.service} (${finalData.scopingDetails || ''}).\nNama: ${finalData.name}\nPerusahaan: ${finalData.company}\nEmail: ${finalData.email}\nNomor HP: ${finalData.phone}\nTimeline: ${finalData.timeline}\nBudget: ${finalData.budget}`;
       const waLink = `https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(waText)}`;
 
       setMessages(prev => [
@@ -336,9 +560,12 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: `Terima kasih! Kami telah mencatat kebutuhan Anda.\n\nEstimasi awal untuk proyek ${finalData.service} dengan skala tersebut berkisar antara ${finalData.budget}. Konsultan kami akan menghubungi Anda segera melalui Email (${finalData.email}) atau WhatsApp (${finalData.phone}).\n\nUntuk respon cepat, Anda dapat langsung menghubungkan penawaran ini ke WhatsApp Business kami.`,
+          text: `Terima kasih! Kami telah mencatat detail kebutuhan Anda:\n• Layanan: ${finalData.service} (${finalData.scopingDetails || ''})\n• Estimasi Budget: ${finalData.budget}\n• Target Timeline: ${finalData.timeline}\n\nUntuk memproses penawaran resmi atau konsultasi tatap muka, Anda dapat langsung melakukan estimasi formal dan memesan solusi dengan menjadwalkan konsultasi gratis atau mengirimkan request proposal (RFP) di bawah ini.`,
           options: [
-            { label: '📲 Hubungkan ke WhatsApp RTI', action: `wa_link:${waLink}` },
+            { label: '📄 Request Proposal (RFP)', action: 'go_proposal' },
+            { label: '📅 Jadwalkan Konsultasi', action: 'go_consultation' },
+            { label: '🛒 Order Solusi Instan', action: 'go_order' },
+            { label: '📲 Hubungkan ke WhatsApp', action: `wa_link:${waLink}` },
             { label: '↩ Menu Utama', action: 'main_menu' }
           ]
         }
@@ -367,7 +594,7 @@ export default function Chatbot() {
     ]);
     setInputText('');
 
-    if (leadStep > 0 && leadStep < 8) {
+    if (leadStep > 0 && leadStep < 9) {
       handleLeadFlow(text);
     } else {
       // Rule-based keyword matching
@@ -491,7 +718,7 @@ export default function Chatbot() {
                 <div className="px-3 pt-2 pb-1.5 bg-slate-50/50 border-b border-slate-100 flex items-start space-x-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                   <p className="text-[9px] leading-relaxed text-slate-400 font-medium">
-                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan penghitungan estimasi biaya sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
+                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan kami memahami kebutuhan Anda dengan lebih baik sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
                   </p>
                 </div>
               )}

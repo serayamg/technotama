@@ -360,6 +360,38 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] aurora-cyan opacity-40 blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] aurora-gold opacity-30 blur-3xl pointer-events-none" />
 
+        {/* Cybersecurity Motif & RTI Logo Silhouette Overlay */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none opacity-[0.06] flex items-center justify-center lg:justify-end lg:pr-20">
+          <svg className="w-[600px] h-[600px] text-blue-600 shrink-0" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="0.5">
+            {/* Hexagonal cyber shields / RTI Logo shape silhouette */}
+            <polygon points="100,20 170,60 170,140 100,180 30,140 30,60" strokeDasharray="3 3" />
+            <polygon points="100,30 160,65 160,135 100,170 40,135 40,65" />
+            <polygon points="100,45 145,71 145,129 100,155 55,129 55,71" strokeWidth="1" />
+            
+            {/* Cybersecurity node lines */}
+            <line x1="100" y1="20" x2="100" y2="180" />
+            <line x1="30" y1="60" x2="170" y2="140" />
+            <line x1="30" y1="140" x2="170" y2="60" />
+            
+            {/* Inner tech lines */}
+            <circle cx="100" cy="100" r="25" strokeDasharray="2 1" />
+            <circle cx="100" cy="100" r="10" fill="currentColor" opacity="0.2" />
+            
+            {/* Outer network nodes */}
+            <circle cx="100" cy="20" r="3" fill="currentColor" />
+            <circle cx="170" cy="60" r="3" fill="currentColor" />
+            <circle cx="170" cy="140" r="3" fill="currentColor" />
+            <circle cx="100" cy="180" r="3" fill="currentColor" />
+            <circle cx="30" cy="140" r="3" fill="currentColor" />
+            <circle cx="30" cy="60" r="3" fill="currentColor" />
+            
+            <circle cx="55" cy="71" r="2" fill="currentColor" />
+            <circle cx="145" cy="71" r="2" fill="currentColor" />
+            <circle cx="145" cy="129" r="2" fill="currentColor" />
+            <circle cx="55" cy="129" r="2" fill="currentColor" />
+          </svg>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Hero Left Content */}
@@ -414,6 +446,10 @@ export default function Home() {
                 <span className="flex items-center space-x-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   <span>Konsultan Bersertifikasi</span>
+                </span>
+                <span className="flex items-center space-x-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Tersertifikasi ISO 27001 & BSSN</span>
                 </span>
               </div>
             </div>
@@ -734,7 +770,7 @@ export default function Home() {
             <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden lg:block" />
             
             {/* Grid layout of timeline nodes */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 relative z-10">
+            <div className="flex overflow-x-auto pb-4 px-4 -mx-4 gap-6 scrollbar-none md:grid md:grid-cols-4 lg:grid-cols-7 lg:gap-4 md:mx-0 md:px-0 relative z-10">
               {methodology.map((m, idx) => {
                 const isActive = activeMethodologyStep === idx;
                 return (
@@ -742,7 +778,7 @@ export default function Home() {
                     key={idx}
                     type="button"
                     onClick={() => setActiveMethodologyStep(idx)}
-                    className="flex flex-col items-center text-center focus:outline-none cursor-pointer group"
+                    className="flex flex-col items-center text-center focus:outline-none cursor-pointer group shrink-0 w-24 md:w-auto"
                   >
                     {/* Circle Node */}
                     <div className={`w-14 h-14 rounded-full flex items-center justify-center font-display font-extrabold text-base border-2 transition-all duration-300 ${

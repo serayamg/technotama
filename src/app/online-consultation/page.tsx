@@ -363,11 +363,9 @@ export default function OnlineConsultation() {
                     </div>
                     <div>
                       <span className="text-slate-400 font-bold uppercase text-[9px] block">Platform & Link</span>
-                      <div className="flex items-center space-x-1.5 text-blue-600 font-bold">
-                        <Video className="w-4 h-4" />
-                        <a href="https://meet.google.com/mock-rti-meeting" target="_blank" rel="noreferrer" className="underline hover:text-blue-700">
-                          {bookingDetails.platform} Link (Klik untuk bergabung)
-                        </a>
+                      <div className="text-slate-600 font-semibold flex items-center space-x-1.5">
+                        <Video className="w-4 h-4 text-slate-450 shrink-0" />
+                        <span>Link meeting dikirimkan melalui email yang terdaftar pada RTI</span>
                       </div>
                     </div>
                   </div>
