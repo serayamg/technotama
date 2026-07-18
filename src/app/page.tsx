@@ -1124,19 +1124,21 @@ export default function Home() {
             {testimonials.map((t, idx) => (
               <div 
                 key={idx} 
-                className="w-full sm:w-[380px] lg:w-auto flex-shrink-0 lg:flex-shrink bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
+                className="w-full sm:w-[380px] lg:w-auto flex-shrink-0 lg:flex-shrink flex flex-col justify-between h-full bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
               >
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
+                <div>
+                  <div className="flex items-center space-x-1 mb-4">
+                    {[...Array(t.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs italic leading-relaxed text-slate-600 mb-6">
+                    &quot;{t.text}&quot;
+                  </p>
                 </div>
-                <p className="text-xs italic leading-relaxed text-slate-600 mb-6 min-h-[72px]">
-                  &quot;{t.text}&quot;
-                </p>
-                <div className="border-t border-slate-100 pt-4">
-                  <div className="font-display font-bold text-xs text-slate-900">{t.author}</div>
-                  <div className="text-[10px] font-semibold text-slate-500">{t.company}</div>
+                <div className="border-t border-slate-100 pt-4 mt-auto">
+                  <div className="font-display font-bold text-xs text-slate-900 min-h-[16px]">{t.author}</div>
+                  <div className="text-[10px] font-semibold text-slate-500 mt-0.5 min-h-[30px]">{t.company}</div>
                 </div>
               </div>
             ))}
@@ -1180,19 +1182,21 @@ export default function Home() {
             {insights.map((article, idx) => (
               <article 
                 key={idx}
-                className="w-full sm:w-[340px] lg:w-auto flex-shrink-0 lg:flex-shrink border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
+                className="w-full sm:w-[340px] lg:w-auto flex-shrink-0 lg:flex-shrink flex flex-col justify-between h-full border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
               >
-                <div className="p-6 space-y-3.5">
-                  <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor}`}>
-                    {article.category}
-                  </span>
-                  <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors line-clamp-2 min-h-[40px]">
-                    {article.title}
-                  </h3>
-                  <p className="text-xs leading-relaxed text-slate-500 line-clamp-3 min-h-[54px]">
-                    {article.desc}
-                  </p>
-                  <div className="text-[10px] font-bold text-slate-400 pt-2 border-t border-slate-100">{article.date}</div>
+                <div className="p-6 flex flex-col justify-between h-full space-y-3.5 flex-grow">
+                  <div>
+                    <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor} mb-2`}>
+                      {article.category}
+                    </span>
+                    <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors line-clamp-2 min-h-[40px] mb-1">
+                      {article.title}
+                    </h3>
+                    <p className="text-xs leading-relaxed text-slate-500 line-clamp-3 min-h-[54px]">
+                      {article.desc}
+                    </p>
+                  </div>
+                  <div className="text-[10px] font-bold text-slate-400 pt-2 border-t border-slate-100 mt-auto">{article.date}</div>
                 </div>
               </article>
             ))}
