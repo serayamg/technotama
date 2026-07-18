@@ -394,7 +394,7 @@ export default function Home() {
                   href="/request-proposal"
                   className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/10 hover:shadow transition-all duration-200"
                 >
-                  <span>Mulai Konsultasi Gratis</span>
+                  <span>Request Proposal</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
