@@ -403,7 +403,7 @@ export default function OnlineOrder() {
                       }}
                       className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
                     >
-                      Lanjutkan ke Upload
+                      Lanjutkan
                     </button>
                   </div>
                 </div>
