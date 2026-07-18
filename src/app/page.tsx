@@ -686,7 +686,7 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-6">
               <div className="text-xs font-bold text-blue-600 uppercase tracking-widest">Kepatuhan Standardisasi</div>
               <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight leading-tight">
-                Integrasi Standar & <span className="whitespace-nowrap">Framework Siber Internasional</span>
+                Integrasi Standar & <span className="whitespace-nowrap">Framework Internasional</span>
               </h2>
               <p className="text-sm leading-relaxed text-slate-500">
                 Seluruh metodologi asesmen dan audit kami menyelaraskan kerangka kerja keamanan siber kelas dunia agar sesuai dengan regulasi kepatuhan Indonesia.
@@ -752,11 +752,11 @@ export default function Home() {
       </section>
 
       {/* Project Methodology Section */}
-      <section className="py-20 bg-slate-50 cyber-grid overflow-hidden">
+      <section className="py-10 md:py-20 bg-slate-50 cyber-grid overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Metodologi Proyek</div>
-            <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
+            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">
               Siklus Implementasi Proyek Berbasis <span className="whitespace-nowrap">Siklus Hidup PDCA</span>
             </h2>
             <p className="text-xs text-slate-500 mt-2">
@@ -765,7 +765,7 @@ export default function Home() {
           </div>
 
           {/* Interactive Timeline pipeline */}
-          <div className="relative mb-10 pb-6 border-b border-slate-200">
+          <div className="relative mb-6 pb-4 md:mb-10 md:pb-6 border-b border-slate-200">
             {/* Connection line background */}
             <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden lg:block" />
             
@@ -800,57 +800,51 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Detailed methodology step card view with animations */}
-          <div className="min-h-[250px]">
-            <AnimatePresence mode="wait">
-              {methodology.map((m, idx) => {
-                if (activeMethodologyStep !== idx) return null;
-                return (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.25 }}
-                    className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-start"
-                  >
-                    {/* Left Column: Number, Title, Desc */}
-                    <div className="md:col-span-6 space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <span className="font-display font-extrabold text-4xl text-blue-600/20">{m.step}</span>
-                        <h3 className="font-display font-extrabold text-xl text-slate-900">{m.title} Phase</h3>
-                      </div>
-                      <p className="text-xs sm:text-sm leading-relaxed text-slate-600">
-                        {m.desc}
-                      </p>
-                      
-                      <div className="border-t border-slate-100 pt-4 mt-4">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Output</span>
-                        <span className="text-xs font-bold text-slate-800 flex items-center space-x-1.5 bg-blue-50/55 text-blue-900 px-3 py-1.5 rounded-lg border border-blue-100 w-fit">
-                          <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
-                          <span>{m.output}</span>
-                        </span>
-                      </div>
+          {/* Detailed methodology step card view */}
+          <div className="min-h-[200px] md:min-h-[250px]">
+            {methodology.map((m, idx) => {
+              if (activeMethodologyStep !== idx) return null;
+              return (
+                <div
+                  key={idx}
+                  className="bg-white border border-slate-200/80 rounded-2xl p-5 md:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start"
+                >
+                  {/* Left Column: Number, Title, Desc */}
+                  <div className="md:col-span-6 space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <span className="font-display font-extrabold text-3xl sm:text-4xl text-blue-600/20">{m.step}</span>
+                      <h3 className="font-display font-extrabold text-lg sm:text-xl text-slate-900">{m.title} Phase</h3>
                     </div>
+                    <p className="text-xs sm:text-sm leading-relaxed text-slate-600">
+                      {m.desc}
+                    </p>
+                    
+                    <div className="border-t border-slate-100 pt-4 mt-4">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Output</span>
+                      <span className="text-xs font-bold text-slate-800 flex items-center space-x-1.5 bg-blue-50/55 text-blue-900 px-3 py-1.5 rounded-lg border border-blue-100 w-fit">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                        <span>{m.output}</span>
+                      </span>
+                    </div>
+                  </div>
 
-                    {/* Right Column: Key Activities List */}
-                    <div className="md:col-span-6 bg-slate-50 border border-slate-100 rounded-xl p-5 sm:p-6 space-y-3.5">
-                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-200/80 pb-2">
-                        Aktivitas Kunci (Key Activities)
-                      </h4>
-                      <ul className="space-y-3">
-                        {m.activities.map((act, aIdx) => (
-                          <li key={aIdx} className="flex items-start space-x-2.5 text-xs text-slate-600 leading-relaxed">
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 mt-2" />
-                            <span>{act}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+                  {/* Right Column: Key Activities List */}
+                  <div className="md:col-span-6 bg-slate-50 border border-slate-100 rounded-xl p-4 sm:p-6 space-y-3">
+                    <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-200/80 pb-2">
+                      Aktivitas Kunci (Key Activities)
+                    </h4>
+                    <ul className="space-y-2.5">
+                      {m.activities.map((act, aIdx) => (
+                        <li key={aIdx} className="flex items-start space-x-2 text-xs text-slate-600 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 mt-2" />
+                          <span>{act}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

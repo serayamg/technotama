@@ -31,9 +31,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>(null);
 
   useEffect(() => {
+    setMounted(true);
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => setSiteConfig(data))
@@ -80,7 +82,7 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isSolidPage = pathname && pathname !== '/' && pathname !== '/academy';
+  const isSolidPage = mounted && pathname && pathname !== '/' && pathname !== '/academy';
 
   return (
     <header
@@ -225,10 +227,10 @@ export default function Navbar() {
           <div className="flex md:hidden items-center space-x-2 relative z-[110]">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer relative z-[110] touch-manipulation"
+              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer relative z-[110] touch-manipulation pointer-events-auto"
               aria-label="Toggle menu"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-6 h-6 pointer-events-none" /> : <Menu className="w-6 h-6 pointer-events-none" />}
             </button>
           </div>
         </div>
@@ -236,7 +238,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-inner overflow-y-auto max-h-[calc(100vh-80px)] relative z-50">
+        <div className="md:hidden absolute left-0 right-0 top-full w-full border-t border-slate-200 bg-white/98 backdrop-blur-md shadow-xl overflow-y-auto max-h-[calc(100vh-80px)] z-[200]">
           <div className="px-4 pt-3 pb-6 space-y-2">
               {siteConfig?.menus?.map((menu: any) => {
                 if (menu.id === 'home') {
