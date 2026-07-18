@@ -471,25 +471,24 @@ export default function Home() {
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <Link
                   href="/request-proposal"
-                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/10 hover:shadow transition-all duration-200"
+                  className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-5 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/10 hover:shadow transition-all duration-200 whitespace-nowrap"
                 >
                   <span>Request Proposal</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
                 <Link
                   href="/online-consultation"
-                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
+                  className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors whitespace-nowrap"
                 >
                   <span>Jadwalkan Konsultasi</span>
                 </Link>
                 <button
                   onClick={() => setIsScannerOpen(true)}
-                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-slate-950 font-extrabold rounded-xl shadow-md hover:shadow transition-all duration-200 cursor-pointer"
+                  className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-5 py-3.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow-md hover:shadow transition-all duration-200 cursor-pointer whitespace-nowrap"
                 >
-                  <Shield className="w-4 h-4 animate-pulse" />
                   <span>Scan Your Domain</span>
                 </button>
               </div>
