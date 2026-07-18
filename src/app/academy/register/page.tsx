@@ -1094,7 +1094,7 @@ export default function AcademyRegisterPage() {
                             className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                           />
                           <span className="text-[10px] leading-relaxed text-slate-500 font-bold">
-                            Saya menyetujui pernyataan persetujuan peserta (poin O) dan memberikan izin pengumpulan data sesuai UU PDP. *
+                            Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pendaftaran program bootcamp RTI Academy ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                           </span>
                         </label>
 
