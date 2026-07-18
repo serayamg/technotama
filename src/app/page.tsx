@@ -1124,7 +1124,7 @@ export default function Home() {
             {testimonials.map((t, idx) => (
               <div 
                 key={idx} 
-                className="min-w-[280px] sm:min-w-[380px] md:min-w-[450px] max-w-[500px] flex-shrink-0 bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
+                className="w-full sm:w-[380px] md:w-[450px] flex-shrink-0 bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
               >
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(t.rating)].map((_, i) => (
@@ -1180,7 +1180,7 @@ export default function Home() {
             {insights.map((article, idx) => (
               <article 
                 key={idx}
-                className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] flex-shrink-0 border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
+                className="w-full sm:w-[340px] md:w-[380px] flex-shrink-0 border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
               >
                 <div className="p-6 space-y-3.5">
                   <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor}`}>
