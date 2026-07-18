@@ -142,17 +142,17 @@ export default function OnlineConsultation() {
                   <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Topik Konsultasi Awal</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {topics.map((t) => (
-                      <button
+                      <div
                         key={t.id}
                         onClick={() => handleSelectTopic(t.name)}
-                        className="p-6 rounded-xl border border-slate-200 hover:border-blue-400 bg-white hover:bg-blue-50/10 text-left transition-all shadow-sm flex items-center justify-between group focus:outline-none cursor-pointer"
+                        className="p-6 rounded-xl border border-slate-200 hover:border-blue-400 bg-white hover:bg-blue-50/10 text-left transition-all shadow-sm flex items-center justify-between group focus:outline-none cursor-pointer select-none"
                       >
-                        <div>
+                        <div className="pointer-events-none">
                           <h3 className="font-display font-extrabold text-sm text-slate-800">{t.name}</h3>
                           <p className="text-[10px] text-slate-400 mt-1">Konsultansi awal gratis selama 45 menit.</p>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors" />
-                      </button>
+                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors pointer-events-none" />
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -320,7 +320,7 @@ export default function OnlineOrder() {
                       .map((svc: any, idx: number) => {
                         const isSelected = selectedServices.some(s => s.name === svc.name);
                         return (
-                          <button
+                          <div
                             key={idx}
                             onClick={() => {
                               setSelectedServices(prev => {
@@ -332,13 +332,13 @@ export default function OnlineOrder() {
                                 return [...prev, svc];
                               });
                             }}
-                            className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[170px] focus:outline-none cursor-pointer ${
+                            className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[170px] focus:outline-none cursor-pointer select-none ${
                               isSelected
                                 ? 'bg-blue-50/10 border-blue-500 shadow-sm ring-1 ring-blue-500'
                                 : 'bg-white border-slate-200 hover:border-blue-300'
                             }`}
                           >
-                            <div className="space-y-1">
+                            <div className="space-y-1 pointer-events-none w-full">
                               <div className="flex justify-between items-center">
                                 <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{svc.tier}</span>
                                 {isSelected && <CheckCircle2 className="w-4.5 h-4.5 text-blue-600" />}
@@ -351,7 +351,7 @@ export default function OnlineOrder() {
                                 </p>
                               )}
                             </div>
-                          </button>
+                          </div>
                         );
                       })}
                   </div>

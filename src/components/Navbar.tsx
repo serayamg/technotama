@@ -84,10 +84,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-[100] transition-all duration-300 ${
         scrolled || isOpen || isSolidPage
           ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
-          : 'bg-transparent border-b border-transparent'
+          : 'bg-transparent border-b border-transparent max-md:bg-white/95 max-md:backdrop-blur-md max-md:border-slate-200/80 max-md:shadow-sm'
       }`}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,10 +222,10 @@ export default function Navbar() {
 
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center space-x-2 relative z-50">
+          <div className="flex md:hidden items-center space-x-2 relative z-[110]">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer relative z-50"
+              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer relative z-[110] touch-manipulation"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
