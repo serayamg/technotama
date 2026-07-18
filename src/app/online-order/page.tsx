@@ -8,7 +8,7 @@ import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { 
   Check, ChevronRight, FileText, Download, CreditCard, 
-  CheckCircle2, ArrowRight, Loader2, Key, Info, HelpCircle
+  CheckCircle2, ArrowRight, Loader2, Key, Info, HelpCircle, Mail
 } from 'lucide-react';
 
 const servicePricings = [
@@ -171,8 +171,8 @@ export default function OnlineOrder() {
     }
   };
 
-  const handleSubmitOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitOrder = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setLoading(true);
 
     try {
@@ -182,12 +182,15 @@ export default function OnlineOrder() {
         body: JSON.stringify({
           serviceType: selectedServices.map(s => s.name).join(', '),
           companyName: formData.companyName,
-          documentName: formData.docName || null
+          documentName: formData.docName || null,
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone
         })
       });
 
       if (response.ok) {
-        setStep(6); // Final success
+        setStep(4); // Final success is now step 4
       }
     } catch (err) {
       console.error('Failed to submit order:', err);
@@ -216,14 +219,12 @@ export default function OnlineOrder() {
 
             {/* Mobile Stepper progress */}
             <div className="md:hidden border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-500">
-              <span>Langkah {step} dari 6</span>
+              <span>Langkah {step} dari 4</span>
               <span className="text-blue-600 uppercase tracking-wider">
                 {step === 1 && 'Pilih Layanan'}
                 {step === 2 && 'Isi Profil'}
                 {step === 3 && 'Dokumen Scoping'}
-                {step === 4 && 'Penawaran'}
-                {step === 5 && 'Pembayaran'}
-                {step === 6 && 'Tracking'}
+                {step === 4 && 'Tracking & Akun'}
               </span>
             </div>
 
@@ -235,11 +236,7 @@ export default function OnlineOrder() {
               <ChevronRight className="w-4.5 h-4.5" />
               <span className={step === 3 ? 'text-blue-600' : 'text-slate-500'}>3. Dokumen Scoping</span>
               <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 4 ? 'text-blue-600' : 'text-slate-500'}>4. Penawaran (Quotation)</span>
-              <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 5 ? 'text-blue-600' : 'text-slate-500'}>5. Pembayaran</span>
-              <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 6 ? 'text-blue-600' : 'text-slate-500'}>6. Tracking</span>
+              <span className={step === 4 ? 'text-blue-600' : 'text-slate-500'}>4. Tracking & Akun</span>
             </div>
 
             {/* Steps Body */}
@@ -441,183 +438,43 @@ export default function OnlineOrder() {
                       Kembali
                     </button>
                     <button
-                      onClick={() => setStep(4)}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                    >
-                      Generate Quotation
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 4: Quotation & Invoice Generation */}
-              {step === 4 && (
-                <div className="space-y-6">
-                  <h2 className="font-display font-extrabold text-base text-slate-900">Quotation Resmi Project Anda</h2>
-                  
-                  <div className="border border-slate-200 rounded-2xl p-6 bg-slate-50/50 space-y-4">
-                    <div className="flex justify-between items-start border-b pb-4">
-                      <div>
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">Perusahaan Pemesan</div>
-                        <div className="text-sm font-bold text-slate-800">{formData.companyName}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-[10px] font-bold text-slate-400 uppercase">Nomor Penawaran</div>
-                        <div className="text-xs font-bold text-slate-800">QT-2026-{Math.floor(100 + Math.random() * 900)}</div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 text-xs">
-                      <div className="flex justify-between font-bold text-slate-700 border-b py-2">
-                        <span>Layanan Keamanan</span>
-                        <span>Biaya Penawaran</span>
-                      </div>
-                      {selectedServices.map((svc: any, idx: number) => (
-                        <div key={idx} className="flex justify-between py-2 text-slate-600 border-b border-slate-100/50 pb-2">
-                          <span>{svc.name} ({svc.tier})</span>
-                          <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
-                        </div>
-                      ))}
-                      <div className="flex justify-between py-2 text-slate-600">
-                        <span>Scoping Dokumen: {formData.docName || 'Consultation Call Schedule'}</span>
-                        <span className="text-[10px] italic text-slate-400">Included</span>
-                      </div>
-                    </div>
-
-                    <div className="border-t pt-4 flex justify-between items-center">
-                      <div className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
-                        <Info className="w-4 h-4 text-blue-500" />
-                        <span>Penawaran final akan dikirimkan oleh customer care consultant setelah scoping selesai.</span>
-                      </div>
-                      <button 
-                        type="button"
-                        onClick={() => alert('Mengunduh draft penawaran resmi... (Mock File Download)')}
-                        className="flex items-center space-x-1 text-xs font-bold text-blue-600 hover:text-blue-700 focus:outline-none"
-                      >
-                        <Download className="w-4 h-4" />
-                        <span>Unduh Quotation (PDF)</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 flex justify-between border-t border-slate-100">
-                    <button
-                      onClick={() => setStep(3)}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                    >
-                      Kembali
-                    </button>
-                    <button
-                      onClick={() => setStep(5)}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                    >
-                      Lanjutkan ke Pembayaran
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 5: Payment Gateway Simulation */}
-              {step === 5 && (
-                <div className="space-y-6">
-                  <h2 className="font-display font-extrabold text-base text-slate-900">Simulasi Pembayaran Termin I (DP 50%)</h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                    <div className="md:col-span-7 space-y-4">
-                      <div className="border border-slate-200 rounded-xl p-5 space-y-4 bg-white">
-                        <div className="flex items-center space-x-3 text-slate-800 font-bold text-xs">
-                          <CreditCard className="w-5 h-5 text-blue-600" />
-                          <span>Pilih Bank Transfer Virtual Account</span>
-                        </div>
-                        <div className="space-y-2 text-xs">
-                          <label className="flex items-center space-x-3 p-3 rounded-lg border border-blue-500 bg-blue-50/10 cursor-pointer">
-                            <input type="radio" defaultChecked name="pay_bank" className="text-blue-600" />
-                            <span className="font-bold">BCA Virtual Account</span>
-                          </label>
-                          <label className="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-50">
-                            <input type="radio" name="pay_bank" className="text-blue-600" />
-                            <span className="font-bold">Mandiri Virtual Account</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-5 bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-4">
-                      <h3 className="font-display font-extrabold text-xs text-slate-800 uppercase tracking-widest">Detail Tagihan</h3>
-                      <div className="space-y-2 text-xs">
-                        <div className="flex justify-between text-slate-600">
-                          <span>Total Kontrak</span>
-                          <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
-                        </div>
-                        <div className="flex justify-between text-slate-600">
-                          <span>Termin I (DP 50%)</span>
-                          <span className="font-bold text-slate-800">TBD (To Be Determined)</span>
-                        </div>
-                      </div>
-                      <div className="border-t pt-3 flex justify-between font-bold text-xs text-slate-800">
-                        <span>Jumlah Harus Dibayar</span>
-                        <span className="text-blue-600">Invoice Terpisah</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 flex justify-between border-t border-slate-100">
-                    <button
-                      onClick={() => setStep(4)}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
-                    >
-                      Kembali
-                    </button>
-                    <button
-                      onClick={handleSubmitOrder}
+                      onClick={() => handleSubmitOrder()}
                       disabled={loading}
-                      className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:bg-emerald-400 text-white font-bold text-xs rounded-xl shadow-md transition-colors flex items-center space-x-1.5 cursor-pointer"
+                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center space-x-1.5"
                     >
-                      {loading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Memproses...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Bayar Termin I & Lacak Progres</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </>
-                      )}
+                      {loading ? 'Memproses...' : 'Kirim Pemesanan & Selesai'}
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* Step 6: Checkout Success with tracking and credentials details */}
-              {step === 6 && (
-                <div className="text-center py-10 space-y-4 max-w-md mx-auto">
+              {/* Step 4: Checkout Success with tracking and credentials details */}
+              {step === 4 && (
+                <div className="text-center py-10 space-y-5 max-w-md mx-auto">
                   <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center mx-auto shadow-sm">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
                   <h2 className="font-display font-extrabold text-xl text-slate-900">Pemesanan Sukses Terkirim!</h2>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    Terima kasih. Pesanan Anda telah tersimpan di sistem kami. Kami telah membuatkan akun di Customer Portal agar Anda bisa mengunggah deliverables, melacak milestones, dan mengunduh invoice resmi.
-                  </p>
-
-                  <div className="bg-slate-900 text-slate-300 p-5 rounded-2xl text-left space-y-3 shadow-inner">
-                    <div className="flex items-center space-x-2 text-white border-b border-slate-800 pb-2">
-                      <Key className="w-4.5 h-4.5 text-blue-500" />
-                      <span className="text-[10px] font-bold uppercase tracking-widest">Kredensial Portal Klien</span>
-                    </div>
-                    <div className="space-y-1 text-xs">
-                      <div>
-                        <span className="text-[10px] text-slate-500 block uppercase">Alamat Email</span>
-                        <span className="font-bold text-white">{formData.email || 'client@bankdki.co.id'}</span>
+                  
+                  <div className="space-y-3.5 text-xs text-slate-500 leading-relaxed">
+                    <p>
+                      Terima kasih banyak atas kepercayaan Anda bermitra dengan <strong>PT Risetin Teknologi Indonesia (RTI) Neo</strong>.
+                    </p>
+                    <p>
+                      Pesanan Anda telah aman terdaftar di database kami. Sebagai langkah awal kolaborasi strategis ini, kami telah membuatkan akun akses resmi Anda untuk masuk ke <strong>Portal Klien RTI</strong>.
+                    </p>
+                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-left text-blue-900 space-y-1.5 shadow-sm">
+                      <div className="font-bold flex items-center space-x-1.5">
+                        <Mail className="w-4 h-4 text-blue-600 shrink-0" />
+                        <span>Kredensial Akses Telah Dikirim!</span>
                       </div>
-                      <div>
-                        <span className="text-[10px] text-slate-500 block uppercase">Default Password</span>
-                        <span className="font-bold text-white">clientpassword123</span>
-                      </div>
+                      <p className="text-[11px] leading-relaxed text-blue-700">
+                        Kami telah mengirimkan detail username dan password sementara untuk login ke email terdaftar Anda: <strong className="font-semibold text-blue-900">{formData.email}</strong>. Harap periksa folder kotak masuk atau spam Anda.
+                      </p>
                     </div>
-                    <div className="text-[9px] text-slate-500 italic mt-2">
-                      * Silakan ganti password Anda setelah login pertama kali demi keamanan informasi.
-                    </div>
+                    <p className="pt-2">
+                      Melalui Portal Klien, Anda dapat langsung mengunggah berkas scoping teknis, memantau milestones pengerjaan proyek secara real-time 24/7, serta mengunduh quotation dan invoice resmi.
+                    </p>
                   </div>
 
                   <div className="pt-6">

@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { sendProposalEmail } from '@/lib/mailer';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { clientId, serviceType, companyName, documentName } = body;
+    const { clientId, serviceType, companyName, documentName, email, name, phone } = body;
 
     if (!serviceType || !companyName) {
       return NextResponse.json(
@@ -50,6 +51,41 @@ export async function POST(request: Request) {
     });
 
     console.log(`[AUDIT LOG] Order created: id=${newOrder.id} company=${newOrder.companyName} service=${newOrder.serviceType}`);
+
+    // Send credentials email to the client
+    if (email) {
+      const emailHtml = `
+        <p>Halo <strong>${name || 'Klien'}</strong>,</p>
+        <p>Terima kasih telah mempercayakan kebutuhan keamanan siber Anda kepada <strong>PT Risetin Teknologi Indonesia (RTI) Neo</strong>.</p>
+        <p>Pemesanan Anda untuk layanan <strong>${serviceType}</strong> dari perusahaan <strong>${companyName}</strong> telah berhasil kami terima dan terdaftar di sistem kami dengan Nomor Proyek: <strong>PROJ-${newOrder.id.substring(0, 8).toUpperCase()}</strong>.</p>
+        
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #0f172a; margin-top: 0; font-size: 14px; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Kredensial Portal Klien</h3>
+          <p style="margin: 8px 0; font-size: 13px;"><strong>Alamat Email:</strong> ${email}</p>
+          <p style="margin: 8px 0; font-size: 13px;"><strong>Password Default:</strong> <code style="background: #e2e8f0; padding: 2px 5px; border-radius: 4px;">clientpassword123</code></p>
+          <p style="margin: 8px 0; font-size: 11px; color: #64748b; font-style: italic;">* Demi keamanan informasi, harap segera mengganti password Anda setelah berhasil melakukan login pertama kali.</p>
+        </div>
+
+        <p>Anda dapat menggunakan portal ini untuk mengunggah berkas scoping awal, memantau milestones pengerjaan proyek secara real-time, serta mengunduh dokumen penawaran (quotation) dan invoice resmi.</p>
+        
+        <p style="margin-top: 25px;">
+          <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3001'}/portal" style="background-color: #2563eb; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 13px;">
+            Masuk ke Portal Klien
+          </a>
+        </p>
+
+        <p style="margin-top: 30px;">Tim konsultan teknis kami akan menghubungi Anda dalam waktu 1x24 jam untuk koordinasi kickoff meeting dan tahap pengumpulan informasi awal.</p>
+        <p>Salam hangat,<br/><strong>RTI Customer Success Team</strong></p>
+      `;
+
+      await sendProposalEmail({
+        to: email,
+        subject: `Aktivasi Akun Portal Klien RTI Neo - ${companyName}`,
+        html: emailHtml
+      }).catch(err => {
+        console.error('[API ERROR] Failed to send activation email:', err);
+      });
+    }
 
     return NextResponse.json(
       { success: true, orderId: newOrder.id },
