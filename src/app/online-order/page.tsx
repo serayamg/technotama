@@ -15,44 +15,114 @@ const servicePricings = [
   { 
     name: 'Cybersecurity Blueprint', 
     tier: 'Governance', 
-    price: 'Rp 110.000.000', 
+    price: 'Hubungi Sales', 
     scope: 'IT Master Plan Alignment & 3-Year Security Roadmap',
     description: 'Perancangan arsitektur dan peta jalan keamanan siber jangka panjang untuk kepatuhan organisasi.'
   },
   { 
     name: 'Policy-SOP Development', 
     tier: 'Governance', 
-    price: 'Rp 85.000.000', 
+    price: 'Hubungi Sales', 
     scope: 'COBIT Maturity Audit, High-Level Policy & Vendor Risk Management',
     description: 'Pengembangan tata kelola TI berbasis COBIT dan kerangka manajemen risiko operasional.'
   },
   { 
     name: 'ISO/IEC Implementation', 
     tier: 'Governance', 
-    price: 'Rp 135.000.000', 
+    price: 'Hubungi Sales', 
     scope: 'ISO 27001 Gap Analysis, Policies Setup & Certification Support',
     description: 'Pendampingan implementasi Sistem Manajemen Keamanan Informasi (SMKI) ISO 27001.'
   },
   { 
+    name: 'BCM-BCP-DRP Services (Cyber Drill)', 
+    tier: 'Governance', 
+    price: 'Hubungi Sales', 
+    scope: 'Business Impact Analysis, Recovery Strategy & Incident Table-Top Exercise',
+    description: 'Penyusunan rencana kelangsungan bisnis dan pemulihan bencana siber yang teruji.'
+  },
+  { 
+    name: 'Digital Maturity Assessment & Security Risk Rating', 
+    tier: 'Governance', 
+    price: 'Hubungi Sales', 
+    scope: 'Security Scorecard, Digital Maturity Audit & Stakeholder Report',
+    description: 'Evaluasi independen tingkat kematangan digital dan postur risiko keamanan siber.'
+  },
+  { 
+    name: 'Awareness & Training', 
+    tier: 'Governance', 
+    price: 'Hubungi Sales', 
+    scope: 'Security Awareness Kit, Phishing Simulation & Employee E-Learning',
+    description: 'Program pelatihan kesadaran keamanan informasi terukur untuk seluruh karyawan.'
+  },
+  { 
+    name: 'IT Audit', 
+    tier: 'Governance', 
+    price: 'Hubungi Sales', 
+    scope: 'Compliance Audit, IT Infrastructure Review & Regulatory Report',
+    description: 'Audit independen infrastruktur TI, kepatuhan regulasi OJK/BI, dan tata kelola sistem.'
+  },
+  { 
+    name: 'Vulnerability Assessment (VA)', 
+    tier: 'Offensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Automated & Manual Vulnerability Scan, Web/Network/API Assessment',
+    description: 'Pemindaian kerentanan sistem siber secara komprehensif untuk mengidentifikasi celah keamanan.'
+  },
+  { 
     name: 'Penetration Testing (Pen-Test)', 
     tier: 'Offensive', 
-    price: 'Rp 55.000.000', 
+    price: 'Hubungi Sales', 
     scope: 'Black/Gray/White Box testing for Web, Mobile, or API',
-    description: 'Uji penetrasi mendalam untuk mengidentifikasi celah keamanan sebelum dieksploitasi penyerang.'
+    description: 'Uji penetrasi mendalam untuk mensimulasikan eksploitasi celah keamanan sebelum diserang peretas.'
+  },
+  { 
+    name: 'Secure SDLC Implementation', 
+    tier: 'Offensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Source Code Review (SAST/DAST) & Secure Coding Guidelines',
+    description: 'Integrasi standar keamanan siber dalam setiap tahap pengembangan siklus hidup perangkat lunak.'
   },
   { 
     name: 'Red Teaming', 
     tier: 'Offensive', 
-    price: 'Rp 125.000.000', 
+    price: 'Hubungi Sales', 
     scope: 'Multi-vector attack simulation & SOC evasion testing',
-    description: 'Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal Anda.'
+    description: 'Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal.'
   },
   { 
-    name: 'Security Operation Center (SOC) 24/7', 
+    name: 'Security Operation Center (SOC)', 
     tier: 'Defensive', 
-    price: 'Rp 180.000.000', 
-    scope: '24/7 SIEM monitoring, Log correlation & Incident alert',
-    description: 'Pemantauan keamanan siber waktu nyata selama 24 jam penuh untuk deteksi ancaman instan.'
+    price: 'Hubungi Sales', 
+    scope: '24/7 Security Monitoring, SIEM/SOAR Operations & Threat Detection',
+    description: 'Pusat pemantauan keamanan siber 24/7 untuk mendeteksi dan merespons ancaman secara real-time.'
+  },
+  { 
+    name: 'Cyber Threat Intelligence (CTI) Solution', 
+    tier: 'Defensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Dark Web Monitoring, IoC Feeds & Tactical Threat Reports',
+    description: 'Analisis intelijen ancaman siber untuk memprediksi dan memitigasi serangan sebelum terjadi.'
+  },
+  { 
+    name: 'Network & Endpoint Hardening', 
+    tier: 'Defensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Firewall Configuration, EDR Setup & System Security Hardening',
+    description: 'Penguatan konfigurasi jaringan dan perangkat akhir (endpoint) untuk mempersempit permukaan serangan.'
+  },
+  { 
+    name: 'Cyber Security Incident Management', 
+    tier: 'Defensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Incident Triage, Containment Strategy & Post-Incident Review',
+    description: 'Penyusunan alur eskalasi, penahanan dampak (containment), dan pemulihan pasca insiden siber.'
+  },
+  { 
+    name: 'Digital Forensic', 
+    tier: 'Defensive', 
+    price: 'Hubungi Sales', 
+    scope: 'Evidence Preservation, Artifact Analysis & Expert Court Report',
+    description: 'Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum.'
   }
 ];
 
