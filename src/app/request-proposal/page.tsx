@@ -450,7 +450,7 @@ export default function RequestProposal() {
                   {/* Captcha */}
                   <div className="flex items-center space-x-3 shrink-0">
                     <div className="bg-slate-200 border border-slate-300 font-display font-extrabold text-sm px-4 py-2.5 rounded-lg select-none tracking-widest text-slate-800 flex items-center space-x-2">
-                      <span>{captcha.num1} + {captcha.num2} = ?</span>
+                      <span>{captcha.num1} + {captcha.num2} =</span>
                     </div>
                     <button
                       type="button"
@@ -476,7 +476,7 @@ export default function RequestProposal() {
                     disabled={submitting}
                     className="w-full md:w-auto flex items-center justify-center space-x-2 px-8 py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/10 transition-colors cursor-pointer"
                   >
-                    <span>{submitting ? 'Mengirim...' : 'Kirim Pengajuan RFP'}</span>
+                    <span>{submitting ? 'Mengirim...' : 'Request Proposal'}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
                 </div>
