@@ -48,6 +48,7 @@ export default function Chatbot() {
     budget: '',
     timeline: '',
   });
+  const [currentContextService, setCurrentContextService] = useState<string | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -75,6 +76,17 @@ export default function Chatbot() {
   }, []);
 
   const triggerBotResponse = async (userAction: string, userText: string) => {
+    // Track context service
+    if (['off_va', 'off_pentest', 'off_ssdlc', 'off_redteam', 'detail_off'].includes(userAction)) {
+      setCurrentContextService('Offensive Cybersecurity (VA/Pentest)');
+    } else if (['gov_blueprint', 'gov_policy', 'gov_iso', 'gov_bcm', 'gov_maturity', 'gov_awareness', 'gov_audit', 'detail_gov'].includes(userAction)) {
+      setCurrentContextService('Cybersecurity Governance (GRC/ISO)');
+    } else if (['def_soc', 'def_cti', 'def_hardening', 'def_incident', 'def_forensic', 'detail_def'].includes(userAction)) {
+      setCurrentContextService('Defensive Cybersecurity (SOC/CTI)');
+    } else if (['main_menu', 'services', 'frameworks', 'consultant'].includes(userAction)) {
+      setCurrentContextService(null);
+    }
+
     setIsTyping(true);
     await new Promise(resolve => setTimeout(resolve, 800));
     setIsTyping(false);
@@ -308,14 +320,52 @@ export default function Chatbot() {
       botText = `Terima kasih Pak/Bu ${text}. Apa nama Perusahaan/Instansi Anda dan apa Jabatan Anda?`;
     } else if (leadStep === 2) {
       currentData.company = text;
-      nextStep = 3;
-      botText = 'Layanan apa yang Anda butuhkan?';
-      options = [
-        { label: 'Offensive Cybersecurity (VA/Pentest)', action: 'lead_off' },
-        { label: 'Cybersecurity Governance (GRC/ISO)', action: 'lead_gov' },
-        { label: 'Defensive Cybersecurity (SOC/CTI)', action: 'lead_def' },
-        { label: 'Lainnya', action: 'lead_other' }
-      ];
+      if (currentData.service) {
+        nextStep = 4;
+        let customText = '';
+        let customOptions: { label: string; action: string }[] = [];
+
+        if (currentData.service === 'Offensive Cybersecurity (VA/Pentest)') {
+          customText = 'Berapa banyak target aplikasi (web/mobile/API) atau IP address yang ingin di-Pentest?';
+          customOptions = [
+            { label: '1-3 Target Aplikasi/IP', action: 'scoping_off_1_3' },
+            { label: '4-10 Target Aplikasi/IP', action: 'scoping_off_4_10' },
+            { label: '10+ Target / Skala Enterprise', action: 'scoping_off_10' }
+          ];
+        } else if (currentData.service === 'Cybersecurity Governance (GRC/ISO)') {
+          customText = 'Apakah Anda memerlukan pemenuhan regulasi tertentu atau sertifikasi?';
+          customOptions = [
+            { label: 'Sertifikasi ISO/IEC 27001', action: 'scoping_gov_iso' },
+            { label: 'Kepatuhan Regulasi BI/OJK/UU PDP', action: 'scoping_gov_reg' },
+            { label: 'Hanya Penyusunan Blueprint / Policy-SOP', action: 'scoping_gov_blue' }
+          ];
+        } else if (currentData.service === 'Defensive Cybersecurity (SOC/CTI)') {
+          customText = 'Apa kebutuhan utama sistem pertahanan siber Anda?';
+          customOptions = [
+            { label: 'Layanan SOC Monitoring 24/7', action: 'scoping_def_soc' },
+            { label: 'Network Hardening & Incident Response', action: 'scoping_def_hard' },
+            { label: 'Cyber Threat Intelligence (CTI)', action: 'scoping_def_cti' }
+          ];
+        } else {
+          customText = 'Apa fokus utama dari bantuan siber yang Anda butuhkan?';
+          customOptions = [
+            { label: 'Persiapan Audit Eksternal / Sertifikasi', action: 'scoping_oth_audit' },
+            { label: 'Pengujian & Perlindungan Rutin Berkala', action: 'scoping_oth_routine' },
+            { label: 'Konsultasi Umum Kebutuhan Siber', action: 'scoping_oth_general' }
+          ];
+        }
+        botText = customText;
+        options = customOptions;
+      } else {
+        nextStep = 3;
+        botText = 'Layanan apa yang Anda butuhkan?';
+        options = [
+          { label: 'Offensive Cybersecurity (VA/Pentest)', action: 'lead_off' },
+          { label: 'Cybersecurity Governance (GRC/ISO)', action: 'lead_gov' },
+          { label: 'Defensive Cybersecurity (SOC/CTI)', action: 'lead_def' },
+          { label: 'Lainnya', action: 'lead_other' }
+        ];
+      }
     } else if (leadStep === 5) {
       currentData.email = text;
       nextStep = 6;
@@ -361,6 +411,17 @@ export default function Chatbot() {
     // Handle lead wizard actions
     if (action === 'start_lead') {
       setLeadStep(1);
+      setLeadData({
+        name: '',
+        company: '',
+        role: '',
+        service: currentContextService || '',
+        scopingDetails: '',
+        email: '',
+        phone: '',
+        budget: '',
+        timeline: '',
+      });
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsTyping(false);
