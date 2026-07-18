@@ -147,7 +147,7 @@ export default function AcademyPage() {
         </section>
 
         {/* Interactive Navigation Tabs */}
-        <section className="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-sm">
+        <section className="bg-white border-b border-slate-200 sticky top-20 z-30 shadow-sm">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex overflow-x-auto py-3 gap-2 scrollbar-none">
               {[

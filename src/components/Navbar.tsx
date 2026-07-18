@@ -83,8 +83,8 @@ export default function Navbar() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/80 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
+        scrolled || isOpen
+          ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
           : 'bg-transparent border-b border-transparent'
       }`}
     >
