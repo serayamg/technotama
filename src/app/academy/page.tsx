@@ -29,7 +29,7 @@ export default function AcademyPage() {
   }, []);
 
   const getCleanWhatsAppNumber = () => {
-    const rawNumber = siteConfig?.general?.whatsappNumber || '0856-6872-2734';
+    const rawNumber = '087883336017';
     const digitsOnly = rawNumber.replace(/\D/g, '');
     if (digitsOnly.startsWith('0')) {
       return '62' + digitsOnly.slice(1);

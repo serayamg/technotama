@@ -80,10 +80,12 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const isSolidPage = pathname && pathname !== '/' && pathname !== '/academy';
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled || isOpen
+        scrolled || isOpen || isSolidPage
           ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
           : 'bg-transparent border-b border-transparent'
       }`}
@@ -99,7 +101,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8 mr-12">
             {siteConfig?.menus?.map((menu: any) => {
               if (menu.id === 'home') {
                 return (
@@ -220,10 +222,10 @@ export default function Navbar() {
 
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center space-x-2">
+          <div className="flex md:hidden items-center space-x-2 relative z-50">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
+              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer relative z-50"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -233,15 +235,9 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-inner"
-          >
-            <div className="px-4 pt-3 pb-6 space-y-2">
+      {isOpen && (
+        <div className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-inner overflow-y-auto max-h-[calc(100vh-80px)] relative z-50">
+          <div className="px-4 pt-3 pb-6 space-y-2">
               {siteConfig?.menus?.map((menu: any) => {
                 if (menu.id === 'home') {
                   return (
@@ -350,9 +346,8 @@ export default function Navbar() {
 
 
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </header>
   );
 }

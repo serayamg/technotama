@@ -173,7 +173,7 @@ export default function RequestProposal() {
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar />
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 pt-24 pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h1 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
