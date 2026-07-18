@@ -1296,7 +1296,7 @@ export default function AdminDashboard() {
                               <span className="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">ID: {svc.id}</span>
                               <span className="text-[9px] text-slate-400 font-medium">Layanan ke-{index + 1}</span>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                               <div>
                                 <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Judul Layanan</label>
                                 <input
@@ -1318,6 +1318,20 @@ export default function AdminDashboard() {
                                   onChange={(e) => {
                                     const updatedServices = [...siteConfig.services];
                                     updatedServices[index] = { ...svc, badge: e.target.value };
+                                    setSiteConfig({ ...siteConfig, services: updatedServices });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">URL Ilustrasi / Infografis</label>
+                                <input
+                                  type="text"
+                                  placeholder="Contoh: /illustrations/governance.png"
+                                  value={svc.imageUrl || ''}
+                                  onChange={(e) => {
+                                    const updatedServices = [...siteConfig.services];
+                                    updatedServices[index] = { ...svc, imageUrl: e.target.value };
                                     setSiteConfig({ ...siteConfig, services: updatedServices });
                                   }}
                                   className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"

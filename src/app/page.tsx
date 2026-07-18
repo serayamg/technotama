@@ -574,7 +574,7 @@ export default function Home() {
                         href={`/online-order?service=${encodeURIComponent(svc.title)}`}
                         className="text-[10px] font-bold text-slate-700 hover:text-blue-600"
                       >
-                        Pesan Sekarang
+                        Order
                       </Link>
                     </div>
                   </div>

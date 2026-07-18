@@ -47,112 +47,128 @@
       "title": "Cybersecurity Blueprint",
       "desc": "Perancangan strategi dan peta jalan (roadmap) keamanan TI yang terintegrasi secara jangka panjang.",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "it-grc",
       "title": "Policy-SOP Development",
       "desc": "Pengembangan kerangka kerja tata kelola TI, struktur kebijakan (High-Level Policy), serta manajemen risiko pihak ketiga.",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "iso-implementation",
       "title": "ISO/IEC Implementation",
       "desc": "Pendampingan implementasi standar internasional (seperti ISO/IEC 27001) menggunakan siklus PDCA.",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "bcm-bcp-drp",
       "title": "BCM-BCP-DRP Services (Cyber Drill)",
       "desc": "Penyusunan Business Continuity Plan (BCP), Disaster Recovery Plan (DRP), dan simulasi kesiapan penanganan insiden siber (Table-Top Exercise/Cyber Drill).",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "digital-maturity",
       "title": "Digital Maturity Assessment & Security Risk Rating",
       "desc": "Evaluasi tingkat kematangan digital dan kuantifikasi postur keamanan organisasi secara terukur.",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "cyber-awareness",
       "title": "Awareness & Training",
       "desc": "Program pelatihan, phishing simulation, dan kampanye keamanan untuk staf non-teknis.",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "it-audit",
       "title": "IT Audit",
       "desc": "Audit menyeluruh terkait tata kelola, infrastruktur, sistem perdagangan (trading), dan kepatuhan regulasi (seperti POJK).",
       "badge": "Governance",
-      "cluster": "governance"
+      "cluster": "governance",
+      "imageUrl": "/illustrations/governance.png"
     },
     {
       "id": "vulnerability-assessment",
       "title": "Vulnerability Assessment (VA)",
       "desc": "Pemetaan dan pemindaian kerentanan sistem atau jaringan secara otomatis dan berkala.",
       "badge": "Offensive",
-      "cluster": "offensive"
+      "cluster": "offensive",
+      "imageUrl": "/illustrations/offensive.png"
     },
     {
       "id": "penetration-testing",
       "title": "Penetration Testing (Pen-Test)",
       "desc": "Simulasi eksploitasi keamanan menggunakan metode Black Box, Gray Box, maupun White Box.",
       "badge": "Offensive",
-      "cluster": "offensive"
+      "cluster": "offensive",
+      "imageUrl": "/illustrations/offensive.png"
     },
     {
       "id": "secure-sdlc",
       "title": "Secure SDLC Implementation",
       "desc": "Integrasi keamanan sejak tahap awal pemrograman dengan pendekatan Shift Left atau DevSecOps.",
       "badge": "Offensive",
-      "cluster": "offensive"
+      "cluster": "offensive",
+      "imageUrl": "/illustrations/offensive.png"
     },
     {
       "id": "red-teaming",
       "title": "Red Teaming",
       "desc": "Simulasi serangan siber multi-vektor secara riil untuk menguji ketahanan sistem dan tim keamanan internal.",
       "badge": "Offensive",
-      "cluster": "offensive"
+      "cluster": "offensive",
+      "imageUrl": "/illustrations/offensive.png"
     },
     {
       "id": "soc",
       "title": "Security Operation Center (SOC)",
       "desc": "Pemantauan keamanan siber 24/7 real-time berbasis infrastruktur SIEM dan tim analis terlatih.",
       "badge": "Defensive",
-      "cluster": "defensive"
+      "cluster": "defensive",
+      "imageUrl": "/illustrations/defensive.png"
     },
     {
       "id": "cyber-threat-intelligence",
       "title": "Cyber Threat Intelligence (CTI) Solution",
       "desc": "Integrasi data ancaman global secara real-time untuk mendeteksi kebocoran data dan kredensial secara dini.",
       "badge": "Defensive",
-      "cluster": "defensive"
+      "cluster": "defensive",
+      "imageUrl": "/illustrations/defensive.png"
     },
     {
       "id": "network-endpoint-hardening",
       "title": "Network & Endpoint Hardening",
       "desc": "Reinforcement konfigurasi sistem, penutupan port, dan penguatan perangkat jaringan serta endpoint.",
       "badge": "Defensive",
-      "cluster": "defensive"
+      "cluster": "defensive",
+      "imageUrl": "/illustrations/defensive.png"
     },
     {
       "id": "incident-management",
       "title": "Cyber Security Incident Management",
       "desc": "Kerangka respons darurat untuk mendeteksi, mengisolasi, dan membasmi ancaman berdasarkan NIST IR Life Cycle.",
       "badge": "Defensive",
-      "cluster": "defensive"
+      "cluster": "defensive",
+      "imageUrl": "/illustrations/defensive.png"
     },
     {
       "id": "digital-forensic",
       "title": "Digital Forensic",
       "desc": "Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum dan regulasi.",
       "badge": "Defensive",
-      "cluster": "defensive"
+      "cluster": "defensive",
+      "imageUrl": "/illustrations/defensive.png"
     }
   ],
   "packages": [
@@ -178,25 +194,95 @@
       "description": "Pendampingan implementasi Sistem Manajemen Keamanan Informasi (SMKI) ISO 27001."
     },
     {
+      "id": "pkg_bcm_bcp",
+      "name": "BCM-BCP-DRP Services (Cyber Drill)",
+      "tier": "Governance",
+      "scope": "Business Impact Analysis, Recovery Strategy & Incident Table-Top Exercise",
+      "description": "Penyusunan rencana kelangsungan bisnis dan pemulihan bencana siber yang teruji."
+    },
+    {
+      "id": "pkg_digital_maturity",
+      "name": "Digital Maturity Assessment & Security Risk Rating",
+      "tier": "Governance",
+      "scope": "Security Scorecard, Digital Maturity Audit & Stakeholder Report",
+      "description": "Evaluasi independen tingkat kematangan digital dan postur risiko keamanan siber."
+    },
+    {
+      "id": "pkg_awareness",
+      "name": "Awareness & Training",
+      "tier": "Governance",
+      "scope": "Security Awareness Kit, Phishing Simulation & Employee E-Learning",
+      "description": "Program pelatihan kesadaran keamanan informasi terukur untuk seluruh karyawan."
+    },
+    {
+      "id": "pkg_it_audit",
+      "name": "IT Audit",
+      "tier": "Governance",
+      "scope": "Compliance Audit, IT Infrastructure Review & Regulatory Report",
+      "description": "Audit independen infrastruktur TI, kepatuhan regulasi OJK/BI, dan tata kelola sistem."
+    },
+    {
+      "id": "pkg_va",
+      "name": "Vulnerability Assessment (VA)",
+      "tier": "Offensive",
+      "scope": "Automated & Manual Vulnerability Scan, Web/Network/API Assessment",
+      "description": "Pemindaian kerentanan sistem siber secara komprehensif untuk mengidentifikasi celah keamanan."
+    },
+    {
       "id": "pkg_pentest",
       "name": "Penetration Testing (Pen-Test)",
       "tier": "Offensive",
       "scope": "Black/Gray/White Box testing for Web, Mobile, or API",
-      "description": "Uji penetrasi mendalam untuk mengidentifikasi celah keamanan sebelum dieksploitasi penyerang."
+      "description": "Uji penetrasi mendalam untuk mensimulasikan eksploitasi celah keamanan sebelum diserang peretas."
+    },
+    {
+      "id": "pkg_secure_sdlc",
+      "name": "Secure SDLC Implementation",
+      "tier": "Offensive",
+      "scope": "Source Code Review (SAST/DAST) & Secure Coding Guidelines",
+      "description": "Integrasi standar keamanan siber dalam setiap tahap pengembangan siklus hidup perangkat lunak."
     },
     {
       "id": "pkg_redteam",
       "name": "Red Teaming",
       "tier": "Offensive",
       "scope": "Multi-vector attack simulation & SOC evasion testing",
-      "description": "Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal Anda."
+      "description": "Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal."
     },
     {
       "id": "pkg_soc",
-      "name": "Security Operation Center (SOC) 24/7",
+      "name": "Security Operation Center (SOC)",
       "tier": "Defensive",
-      "scope": "24/7 SIEM monitoring, Log correlation & Incident alert",
-      "description": "Pemantauan keamanan siber waktu nyata selama 24 jam penuh untuk deteksi ancaman instan."
+      "scope": "24/7 Security Monitoring, SIEM/SOAR Operations & Threat Detection",
+      "description": "Pusat pemantauan keamanan siber 24/7 untuk mendeteksi dan merespons ancaman secara real-time."
+    },
+    {
+      "id": "pkg_cti",
+      "name": "Cyber Threat Intelligence (CTI) Solution",
+      "tier": "Defensive",
+      "scope": "Dark Web Monitoring, IoC Feeds & Tactical Threat Reports",
+      "description": "Analisis intelijen ancaman siber untuk memprediksi dan memitigasi serangan sebelum terjadi."
+    },
+    {
+      "id": "pkg_hardening",
+      "name": "Network & Endpoint Hardening",
+      "tier": "Defensive",
+      "scope": "Firewall Configuration, EDR Setup & System Security Hardening",
+      "description": "Penguatan konfigurasi jaringan dan perangkat akhir (endpoint) untuk mempersempit permukaan serangan."
+    },
+    {
+      "id": "pkg_incident_mgmt",
+      "name": "Cyber Security Incident Management",
+      "tier": "Defensive",
+      "scope": "Incident Triage, Containment Strategy & Post-Incident Review",
+      "description": "Penyusunan alur eskalasi, penahanan dampak (containment), dan pemulihan pasca insiden siber."
+    },
+    {
+      "id": "pkg_forensic",
+      "name": "Digital Forensic",
+      "tier": "Defensive",
+      "scope": "Evidence Preservation, Artifact Analysis & Expert Court Report",
+      "description": "Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum."
     }
   ],
   "integrations": {
