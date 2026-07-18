@@ -487,10 +487,10 @@ export default function Home() {
                 </Link>
                 <button
                   onClick={() => setIsScannerOpen(true)}
-                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs rounded-xl shadow-md hover:shadow transition-all duration-200 cursor-pointer"
+                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-slate-950 font-extrabold rounded-xl shadow-md hover:shadow transition-all duration-200 cursor-pointer"
                 >
                   <Shield className="w-4 h-4 animate-pulse" />
-                  <span>Scan Your</span>
+                  <span>Scan Your Domain</span>
                 </button>
               </div>
 
