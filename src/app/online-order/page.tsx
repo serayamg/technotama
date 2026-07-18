@@ -130,7 +130,8 @@ export default function OnlineOrder() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>(null);
-  const [selectedService, setSelectedService] = useState(servicePricings[0]);
+  const [selectedServices, setSelectedServices] = useState<any[]>([servicePricings[0]]);
+  const [activeCluster, setActiveCluster] = useState('ALL');
   const [formData, setFormData] = useState({
     companyName: '',
     name: '',
@@ -147,7 +148,7 @@ export default function OnlineOrder() {
         if (data) {
           setSiteConfig(data);
           if (data.packages && data.packages.length > 0) {
-            setSelectedService(data.packages[0]);
+            setSelectedServices([data.packages[0]]);
           }
         }
       })
@@ -179,7 +180,7 @@ export default function OnlineOrder() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          serviceType: selectedService.name,
+          serviceType: selectedServices.map(s => s.name).join(', '),
           companyName: formData.companyName,
           documentName: formData.docName || null
         })
@@ -247,39 +248,79 @@ export default function OnlineOrder() {
               {/* Step 1: Select Service */}
               {step === 1 && (
                 <div className="space-y-6">
-                  <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Solusi RTI</h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Solusi RTI</h2>
+                    
+                    {/* Cluster Filter Buttons */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {['ALL', 'GOVERNANCE', 'OFFENSIVE', 'DEFENSIVE'].map((cluster) => {
+                        const label = cluster === 'ALL' ? 'Semua' : cluster.charAt(0) + cluster.slice(1).toLowerCase();
+                        const isActive = activeCluster === cluster;
+                        return (
+                          <button
+                            key={cluster}
+                            type="button"
+                            onClick={() => setActiveCluster(cluster)}
+                            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border focus:outline-none cursor-pointer ${
+                              isActive
+                                ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                                : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:text-slate-800'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(siteConfig?.packages || servicePricings).map((svc: any, idx: number) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedService(svc)}
-                        className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[170px] focus:outline-none cursor-pointer ${
-                          selectedService.name === svc.name
-                            ? 'bg-blue-50/10 border-blue-500 shadow-sm ring-1 ring-blue-500'
-                            : 'bg-white border-slate-200 hover:border-blue-300'
-                        }`}
-                      >
-                        <div className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{svc.tier}</span>
-                            {selectedService.name === svc.name && <CheckCircle2 className="w-4.5 h-4.5 text-blue-600" />}
-                          </div>
-                          <h3 className="font-display font-extrabold text-sm text-slate-800">{svc.name}</h3>
-                          <p className="text-[10px] text-slate-500 leading-normal font-semibold">{svc.scope}</p>
-                          {svc.description && (
-                            <p className="text-[10px] text-slate-400 leading-relaxed mt-2 pt-2 border-t border-slate-100/50">
-                              {svc.description}
-                            </p>
-                          )}
-                        </div>
-                      </button>
-                    ))}
+                    {(siteConfig?.packages || servicePricings)
+                      .filter((svc: any) => activeCluster === 'ALL' || svc.tier?.toUpperCase() === activeCluster)
+                      .map((svc: any, idx: number) => {
+                        const isSelected = selectedServices.some(s => s.name === svc.name);
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setSelectedServices(prev => {
+                                const exists = prev.some(s => s.name === svc.name);
+                                if (exists) {
+                                  if (prev.length <= 1) return prev; // Enforce at least 1 selection
+                                  return prev.filter(s => s.name !== svc.name);
+                                }
+                                return [...prev, svc];
+                              });
+                            }}
+                            className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[170px] focus:outline-none cursor-pointer ${
+                              isSelected
+                                ? 'bg-blue-50/10 border-blue-500 shadow-sm ring-1 ring-blue-500'
+                                : 'bg-white border-slate-200 hover:border-blue-300'
+                            }`}
+                          >
+                            <div className="space-y-1">
+                              <div className="flex justify-between items-center">
+                                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{svc.tier}</span>
+                                {isSelected && <CheckCircle2 className="w-4.5 h-4.5 text-blue-600" />}
+                              </div>
+                              <h3 className="font-display font-extrabold text-sm text-slate-800">{svc.name}</h3>
+                              <p className="text-[10px] text-slate-500 leading-normal font-semibold">{svc.scope}</p>
+                              {svc.description && (
+                                <p className="text-[10px] text-slate-400 leading-relaxed mt-2 pt-2 border-t border-slate-100/50">
+                                  {svc.description}
+                                </p>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
                   </div>
 
                   <div className="pt-6 flex justify-end border-t border-slate-100">
                     <button
                       onClick={() => setStep(2)}
-                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                      disabled={selectedServices.length === 0}
+                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
                     >
                       Lanjutkan ke Profil
                     </button>
@@ -431,10 +472,12 @@ export default function OnlineOrder() {
                         <span>Layanan Keamanan</span>
                         <span>Biaya Penawaran</span>
                       </div>
-                      <div className="flex justify-between py-2 text-slate-600">
-                        <span>{selectedService.name} ({selectedService.tier})</span>
-                        <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
-                      </div>
+                      {selectedServices.map((svc: any, idx: number) => (
+                        <div key={idx} className="flex justify-between py-2 text-slate-600 border-b border-slate-100/50 pb-2">
+                          <span>{svc.name} ({svc.tier})</span>
+                          <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
+                        </div>
+                      ))}
                       <div className="flex justify-between py-2 text-slate-600">
                         <span>Scoping Dokumen: {formData.docName || 'Consultation Call Schedule'}</span>
                         <span className="text-[10px] italic text-slate-400">Included</span>
