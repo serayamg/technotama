@@ -620,7 +620,7 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Mengapa Memilih Kami</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Kombinasi Reputasi Sektor Publik & <span className="whitespace-nowrap">Pengalaman Industri Finansial</span>
+              Kombinasi Reputasi-Track Record Sektor Publik & <span className="whitespace-nowrap">FSI</span>
             </h2>
             <p className="text-sm text-slate-500 mt-3 leading-relaxed">
               Kami membawa pendekatan holistik yang berbasis regulasi nasional dan kerangka kerja terbaik dunia untuk memastikan kepatuhan yang berkelanjutan.
