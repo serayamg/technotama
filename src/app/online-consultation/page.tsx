@@ -19,16 +19,15 @@ const timeSlots = [
 ];
 
 const topics = [
-  { id: 'vapt', name: 'Keamanan Teknis & VA/Pentest' },
-  { id: 'iso', name: 'Kesiapan Kepatuhan ISO (27001/22301)' },
-  { id: 'governance', name: 'COBIT & SPBE Governance' },
-  { id: 'pdp', name: 'UU Pelindungan Data Pribadi (DPO)' }
+  { id: 'governance', name: 'Cybersecurity Governance & IT GRC' },
+  { id: 'offensive', name: 'Offensive Cybersecurity (VA/Pentest/Red Team)' },
+  { id: 'defensive', name: 'Defensive Cybersecurity (SOC/CTI/Incident)' }
 ];
 
 export default function OnlineConsultation() {
   const [step, setStep] = useState(1);
   const [bookingDetails, setBookingDetails] = useState({
-    topic: 'Keamanan Teknis & VA/Pentest',
+    topic: 'Cybersecurity Governance & IT GRC',
     date: '2026-07-20', // Default date
     time: '10:30 - 11:30 WIB',
     platform: 'Google Meet',
@@ -77,8 +76,19 @@ export default function OnlineConsultation() {
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden relative min-h-[450px]">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
 
-            {/* Stepper Header */}
-            <div className="border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-400">
+            {/* Mobile Stepper Header */}
+            <div className="md:hidden border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-500">
+              <span>Langkah {step} dari 4</span>
+              <span className="text-blue-600 uppercase tracking-wider">
+                {step === 1 && 'Pilih Topik'}
+                {step === 2 && 'Jadwal & Waktu'}
+                {step === 3 && 'Detail Kontak'}
+                {step === 4 && 'Konfirmasi'}
+              </span>
+            </div>
+
+            {/* Desktop Stepper Header */}
+            <div className="hidden md:flex border-b border-slate-200 bg-slate-50/50 px-6 py-4 items-center justify-between text-xs font-bold text-slate-400">
               <span className={step === 1 ? 'text-blue-600' : 'text-slate-500'}>1. Pilih Topik</span>
               <ChevronRight className="w-4 h-4" />
               <span className={step === 2 ? 'text-blue-600' : 'text-slate-500'}>2. Jadwal & Waktu</span>

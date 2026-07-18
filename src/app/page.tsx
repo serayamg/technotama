@@ -1,69 +1,150 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import CanvasNetwork from '@/components/CanvasNetwork';
 import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import dynamic from 'next/dynamic';
+
+const CanvasNetwork = dynamic(() => import('@/components/CanvasNetwork'), { ssr: false });
 import { 
   Shield, CheckCircle2, ChevronRight, FileText, Users, Award, 
   HelpCircle, Star, Calendar, ArrowRight, Zap, Target, BookOpen, 
-  Lock, Key, Eye, Layout, Server, AlertCircle, X
+  Lock, Key, Eye, Layout, Server, AlertCircle, X, FileCheck
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Mock Services
 const services = [
   {
-    id: 'vapt',
-    title: 'VA & Penetration Testing',
-    desc: 'Pengujian penetrasi berkala (Web, Mobile, API, Network) untuk mengidentifikasi celah keamanan sebelum dieksploitasi penyerang.',
-    icon: Key,
-    badge: 'Margin Tinggi & Cepat'
-  },
-  {
-    id: 'standards',
-    title: 'Standard Implementation',
-    desc: 'Pendampingan sertifikasi ISO/IEC 27001 (Keamanan Informasi), ISO 20000 (Layanan TI), dan ISO 22301 (BCMS/DRC).',
-    icon: Award,
-    badge: 'Paling Populer'
-  },
-  {
-    id: 'it-governance',
-    title: 'IT Governance, Risk & Compliance',
-    desc: 'Penyusunan kerangka tata kelola I&T (COBIT), asesmen kematangan TI, SPBE, serta mitigasi risiko kepatuhan OJK/BI.',
-    icon: FileText,
-    badge: 'Rekomendasi SPBE'
-  },
-  {
-    id: 'cyber-strategy',
-    title: 'Cybersecurity Strategy',
-    desc: 'Penyusunan Rencana Induk Keamanan Informasi (Cyber Security Blueprint) yang selaras dengan rencana jangka panjang organisasi.',
+    id: 'cyber-blueprint',
+    title: 'Cybersecurity Blueprint',
+    desc: 'Perancangan strategi dan peta jalan (roadmap) keamanan TI yang terintegrasi secara jangka panjang.',
     icon: Shield,
-    badge: 'Enterprise Ready'
+    badge: 'Governance',
+    cluster: 'governance'
   },
   {
-    id: 'cyber-compliance',
-    title: 'Compliance Review',
-    desc: 'Audit kesenjangan kepatuhan terhadap regulasi perbankan, fintech, serta perlindungan data pribadi sesuai UU PDP No. 27/2022.',
+    id: 'it-grc',
+    title: 'Policy-SOP Development',
+    desc: 'Pengembangan kerangka kerja tata kelola TI, struktur kebijakan (High-Level Policy), serta manajemen risiko pihak ketiga.',
+    icon: FileText,
+    badge: 'Governance',
+    cluster: 'governance'
+  },
+  {
+    id: 'iso-implementation',
+    title: 'ISO/IEC Implementation',
+    desc: 'Pendampingan implementasi standar internasional (seperti ISO/IEC 27001) menggunakan siklus PDCA.',
+    icon: Award,
+    badge: 'Governance',
+    cluster: 'governance'
+  },
+  {
+    id: 'bcm-bcp-drp',
+    title: 'BCM-BCP-DRP Services (Cyber Drill)',
+    desc: 'Penyusunan Business Continuity Plan (BCP), Disaster Recovery Plan (DRP), dan simulasi kesiapan penanganan insiden siber (Table-Top Exercise/Cyber Drill).',
+    icon: Server,
+    badge: 'Governance',
+    cluster: 'governance'
+  },
+  {
+    id: 'digital-maturity',
+    title: 'Digital Maturity Assessment & Security Risk Rating',
+    desc: 'Evaluasi tingkat kematangan digital dan kuantifikasi postur keamanan organisasi secara terukur.',
+    icon: Zap,
+    badge: 'Governance',
+    cluster: 'governance'
+  },
+  {
+    id: 'cyber-awareness',
+    title: 'Awareness & Training',
+    desc: 'Program pelatihan, phishing simulation, dan kampanye keamanan untuk staf non-teknis.',
+    icon: BookOpen,
+    badge: 'Governance',
+    cluster: 'governance'
+  },
+  {
+    id: 'it-audit',
+    title: 'IT Audit',
+    desc: 'Audit menyeluruh terkait tata kelola, infrastruktur, sistem perdagangan (trading), dan kepatuhan regulasi (seperti POJK).',
     icon: CheckCircle2,
-    badge: 'UU PDP Mandate'
+    badge: 'Governance',
+    cluster: 'governance'
   },
   {
-    id: 'tech-strategy',
-    title: 'Technology Strategy',
-    desc: 'Penyusunan Cetak Biru Sistem Informasi (IT Master Plan) dan perencanaan kapasitas server / Core Banking DRC.',
-    icon: Layout,
-    badge: 'Strategic'
+    id: 'vulnerability-assessment',
+    title: 'Vulnerability Assessment (VA)',
+    desc: 'Pemetaan dan pemindaian kerentanan sistem atau jaringan secara otomatis dan berkala.',
+    icon: Eye,
+    badge: 'Offensive',
+    cluster: 'offensive'
   },
   {
-    id: 'training',
-    title: 'CyberTroops Academy',
-    desc: 'Bootcamp intensif penyiapan talenta ofensif (Red Team) & defensif (Blue Team), tersalurkan ke industri yang membutuhkan.',
-    icon: Users,
-    badge: 'Recurring Flywheel'
+    id: 'penetration-testing',
+    title: 'Penetration Testing (Pen-Test)',
+    desc: 'Simulasi eksploitasi keamanan menggunakan metode Black Box, Gray Box, maupun White Box.',
+    icon: Key,
+    badge: 'Offensive',
+    cluster: 'offensive'
+  },
+  {
+    id: 'secure-sdlc',
+    title: 'Secure SDLC Implementation',
+    desc: 'Integrasi keamanan sejak tahap awal pemrograman dengan pendekatan Shift Left atau DevSecOps.',
+    icon: Lock,
+    badge: 'Offensive',
+    cluster: 'offensive'
+  },
+  {
+    id: 'red-teaming',
+    title: 'Red Teaming',
+    desc: 'Simulasi serangan siber multi-vektor secara riil untuk menguji ketahanan sistem dan tim keamanan internal.',
+    icon: Target,
+    badge: 'Offensive',
+    cluster: 'offensive'
+  },
+  {
+    id: 'soc',
+    title: 'Security Operation Center (SOC)',
+    desc: 'Pemantauan keamanan siber 24/7 real-time berbasis infrastruktur SIEM dan tim analis terlatih.',
+    icon: Shield,
+    badge: 'Defensive',
+    cluster: 'defensive'
+  },
+  {
+    id: 'cyber-threat-intelligence',
+    title: 'Cyber Threat Intelligence (CTI) Solution',
+    desc: 'Integrasi data ancaman global secara real-time untuk mendeteksi kebocoran data dan kredensial secara dini.',
+    icon: Zap,
+    badge: 'Defensive',
+    cluster: 'defensive'
+  },
+  {
+    id: 'network-endpoint-hardening',
+    title: 'Network & Endpoint Hardening',
+    desc: 'Reinforcement konfigurasi sistem, penutupan port, dan penguatan perangkat jaringan serta endpoint.',
+    icon: Server,
+    badge: 'Defensive',
+    cluster: 'defensive'
+  },
+  {
+    id: 'incident-management',
+    title: 'Cyber Security Incident Management',
+    desc: 'Kerangka respons darurat untuk mendeteksi, mengisolasi, dan membasmi ancaman berdasarkan NIST IR Life Cycle.',
+    icon: AlertCircle,
+    badge: 'Defensive',
+    cluster: 'defensive'
+  },
+  {
+    id: 'digital-forensic',
+    title: 'Digital Forensic',
+    desc: 'Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum dan regulasi.',
+    icon: FileCheck,
+    badge: 'Defensive',
+    cluster: 'defensive'
   }
 ];
 
@@ -91,15 +172,85 @@ const frameworks = [
   { name: 'PCI DSS', desc: 'Payment Card Industry Data Security Standard. Standar wajib untuk keamanan transaksi kartu kredit. RTI mendampingi payment gateway dan fintech meraih sertifikasi ini.' }
 ];
 
-// Project Methodology Phases
+// Project Methodology Phases with detailed bullet points and outcomes to avoid layout squishing
 const methodology = [
-  { step: '01', title: 'Discover', desc: 'Melakukan pemetaan awal infrastruktur siber, kondisi tata kelola saat ini (as-is), serta penentuan ruang lingkup asesmen.' },
-  { step: '02', title: 'Assess', desc: 'Melakukan gap analysis kepatuhan standar, vulnerability assessment, penetration testing, serta asesmen risiko siber.' },
-  { step: '03', title: 'Design', desc: 'Merancang arsitektur keamanan (to-be), menyusun kebijakan/SOP tata kelola, dan menyusun roadmap peningkatan kapabilitas.' },
-  { step: '04', title: 'Implement', desc: 'Mendampingi implementasi kontrol siber teknis & organisasional, serta penyusunan Business Continuity Plan (BCP).' },
-  { step: '05', title: 'Validate', desc: 'Melakukan re-test (audit surveillance) untuk memastikan seluruh temuan celah keamanan telah ditutup.' },
-  { step: '06', title: 'Train', desc: 'Memberikan awareness pelatihan keamanan informasi bagi staf umum hingga pelatihan teknis bagi tim TI (Red/Blue Team).' },
-  { step: '07', title: 'Support', desc: 'Mendampingi audit sertifikasi oleh Lembaga Sertifikasi independen serta menyediakan retainer support kepatuhan tahunan.' }
+  { 
+    step: '01', 
+    title: 'Discover', 
+    desc: 'Melakukan pemetaan awal infrastruktur siber, kondisi tata kelola saat ini (as-is), serta penentuan ruang lingkup asesmen.',
+    activities: [
+      'Identifikasi seluruh aset kritis, proses bisnis utama, dan regulasi kepatuhan.',
+      'Kick-off meeting bersama pemangku kepentingan (C-Level & IT Team).',
+      'Penentuan ruang lingkup proyek (scoping) dan penyusunan Project Charter.'
+    ],
+    output: 'Project Charter & Scope Definition Document'
+  },
+  { 
+    step: '02', 
+    title: 'Assess', 
+    desc: 'Melakukan gap analysis kepatuhan standar, vulnerability assessment, penetration testing, serta asesmen risiko siber.',
+    activities: [
+      'Pengujian penetrasi ofensif (VAPT) untuk menemukan kerentanan sistem.',
+      'Analisis kesenjangan (gap analysis) terhadap standar industri (ISO/PCI DSS/UU PDP).',
+      'Asesmen risiko TI untuk memetakan ancaman dan dampaknya bagi bisnis.'
+    ],
+    output: 'Gap Analysis Report & VAPT Vulnerability Findings'
+  },
+  { 
+    step: '03', 
+    title: 'Design', 
+    desc: 'Merancang arsitektur keamanan (to-be), menyusun kebijakan/SOP tata kelola, dan menyusun roadmap peningkatan kapabilitas.',
+    activities: [
+      'Penyusunan draf kebijakan keamanan informasi dan standar operasional prosedur (SOP).',
+      'Perancangan arsitektur jaringan aman dan perimeter pertahanan siber.',
+      'Penyusunan rencana aksi taktis dan jangka panjang (3-year Cybersecurity Roadmap).'
+    ],
+    output: 'Security Architecture Blueprint & SOP Drafts'
+  },
+  { 
+    step: '04', 
+    title: 'Implement', 
+    desc: 'Mendampingi implementasi kontrol siber teknis & organisasional, serta penyusunan Business Continuity Plan (BCP).',
+    activities: [
+      'Pendampingan konfigurasi kontrol keamanan di server dan infrastruktur cloud.',
+      'Penerapan kebijakan baru di tingkat operasional dan manajemen SDM.',
+      'Penyusunan Business Continuity Plan (BCP) & Disaster Recovery Plan (DRP).'
+    ],
+    output: 'BCP/DRP Policy & Deployed Security Controls'
+  },
+  { 
+    step: '05', 
+    title: 'Validate', 
+    desc: 'Melakukan re-test (audit surveillance) untuk memastikan seluruh temuan celah keamanan telah ditutup.',
+    activities: [
+      'Audit internal independen terhadap kepatuhan SOP yang telah berjalan.',
+      'Pengujian ulang (re-test VAPT) untuk memvalidasi efektivitas perbaikan (remediation).',
+      'Surveilans kesiapan sertifikasi sebelum audit final eksternal.'
+    ],
+    output: 'Internal Audit Report & Remediation Validation Report'
+  },
+  { 
+    step: '06', 
+    title: 'Train', 
+    desc: 'Memberikan awareness pelatihan keamanan informasi bagi staf umum hingga pelatihan teknis bagi tim TI (Red/Blue Team).',
+    activities: [
+      'Penyelenggaraan Security Awareness Training untuk seluruh jajaran staf non-teknis.',
+      'Pelatihan teknis intensif (VAPT, Incident Response) untuk tim operasional TI.',
+      'Kampanye kesadaran keamanan informasi (phishing simulation berkala).'
+    ],
+    output: 'Security Training Certificates & Awareness Analytics'
+  },
+  { 
+    step: '07', 
+    title: 'Support', 
+    desc: 'Mendampingi audit sertifikasi oleh Lembaga Sertifikasi independen serta menyediakan retainer support kepatuhan tahunan.',
+    activities: [
+      'Pendampingan penuh selama proses audit sertifikasi resmi (sertifikasi ISO/PCI).',
+      'Dukungan kepatuhan regulasi tahunan (retainer security consultant).',
+      'Review dan peningkatan berkelanjutan (continuous improvement) sistem tata kelola siber.'
+    ],
+    output: 'ISO/PCI DSS Certificate & Annual Retainer SLA'
+  }
 ];
 
 // Case Studies based on profile
@@ -155,6 +306,48 @@ export default function Home() {
   const [activeClientGroup, setActiveClientGroup] = useState<keyof typeof clients>('Government');
   const [selectedFramework, setSelectedFramework] = useState<typeof frameworks[0] | null>(null);
   const [activeCaseStudyIdx, setActiveCaseStudyIdx] = useState(0);
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+  const [activeMethodologyStep, setActiveMethodologyStep] = useState(0);
+  const [selectedServiceTab, setSelectedServiceTab] = useState('all');
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSiteConfig(data))
+      .catch(err => console.log('Settings fallback used on Home.'));
+  }, []);
+
+  const getServiceIcon = (id: string) => {
+    switch (id) {
+      case 'cyber-blueprint': return Shield;
+      case 'it-grc': return FileText;
+      case 'iso-implementation': return Award;
+      case 'bcm-bcp-drp': return Server;
+      case 'cyber-drill': return Target;
+      case 'digital-maturity': return Zap;
+      case 'cyber-awareness': return BookOpen;
+      case 'it-audit': return CheckCircle2;
+      case 'vulnerability-assessment': return Eye;
+      case 'penetration-testing': return Key;
+      case 'secure-sdlc': return Lock;
+      case 'red-teaming': return Target;
+      case 'soc': return Shield;
+      case 'cyber-threat-intelligence': return Zap;
+      case 'network-endpoint-hardening': return Server;
+      case 'incident-management': return AlertCircle;
+      case 'digital-forensic': return FileCheck;
+      default: return Shield;
+    }
+  };
+
+  const activeServices = siteConfig?.services?.map((s: any) => ({
+    id: s.id,
+    title: s.title,
+    desc: s.desc,
+    badge: s.badge,
+    cluster: s.cluster,
+    icon: getServiceIcon(s.id)
+  })) || services;
 
   return (
     <>
@@ -174,19 +367,25 @@ export default function Home() {
               <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200/80 px-3 py-1.5 rounded-full">
                 <Shield className="w-4 h-4 text-blue-600" />
                 <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider">
-                  Partner Keamanan Siber Terpercaya Sejak 2014
+                  {siteConfig?.hero?.badge || 'Partner Keamanan Siber Terpercaya Sejak 2014'}
                 </span>
               </div>
 
               <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight text-slate-900 tracking-tight">
-                Secure Your Digital Future with{' '}
-                <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-amber-500 bg-clip-text text-transparent">
-                  Enterprise Cybersecurity Excellence
-                </span>
+                {siteConfig?.hero?.title ? (
+                  siteConfig.hero.title
+                ) : (
+                  <>
+                    Secure Your Digital Future with{' '}
+                    <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-amber-500 bg-clip-text text-transparent">
+                      Enterprise Cybersecurity Excellence
+                    </span>
+                  </>
+                )}
               </h1>
 
               <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-xl mx-auto lg:mx-0">
-                PT Riset Teknologi Indonesia membantu kementerian, lembaga pemerintah, BUMN, perbankan, fintech, dan perusahaan swasta membangun tata kelola TI, keamanan siber, kepatuhan regulasi, serta mitigasi insiden berbasis standar internasional.
+                {siteConfig?.hero?.subtitle || 'PT Riset Teknologi Indonesia membantu kementerian, lembaga pemerintah, BUMN, perbankan, fintech, dan perusahaan swasta membangun tata kelola TI, keamanan siber, kepatuhan regulasi, serta mitigasi insiden berbasis standar internasional.'}
               </p>
 
               {/* CTAs */}
@@ -230,7 +429,7 @@ export default function Home() {
       {/* Trust Stats Counter Section */}
       <section className="bg-white border-y border-slate-200 py-10 shadow-sm relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-100">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:divide-x md:divide-slate-100">
             <div>
               <div className="font-display font-extrabold text-3xl lg:text-4xl text-blue-600">12+ Tahun</div>
               <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Pengalaman Industri</div>
@@ -301,7 +500,7 @@ export default function Home() {
             <div className="max-w-2xl">
               <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Layanan Komprehensif</div>
               <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-                Solusi End-to-End Tata Kelola TI & Keamanan Siber
+                Solusi End-to-End Tata Kelola TI & <span className="whitespace-nowrap">Keamanan Siber</span>
               </h2>
             </div>
             <Link 
@@ -313,50 +512,74 @@ export default function Home() {
             </Link>
           </div>
 
+          {/* Tabs for clusters */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+            {[
+              { id: 'all', name: 'Semua Layanan' },
+              { id: 'governance', name: 'Governance & Strategy' },
+              { id: 'offensive', name: 'Offensive Cybersecurity' },
+              { id: 'defensive', name: 'Defensive Cybersecurity' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedServiceTab(tab.id)}
+                className={`px-5 py-2 rounded-full text-xs font-extrabold transition-all duration-200 focus:outline-none cursor-pointer border ${
+                  selectedServiceTab === tab.id
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-100'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                }`}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((svc) => {
-              const IconComp = svc.icon;
-              return (
-                <div 
-                  key={svc.id}
-                  className="glass-panel glass-panel-hover p-6 rounded-2xl flex flex-col justify-between h-[250px] transition-all"
-                >
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div className="p-3 rounded-xl bg-blue-50 text-blue-600">
-                        <IconComp className="w-6 h-6" />
+            {activeServices
+              .filter((svc: any) => selectedServiceTab === 'all' || svc.cluster === selectedServiceTab)
+              .map((svc: any) => {
+                const IconComp = svc.icon || Shield;
+                return (
+                  <div 
+                    key={svc.id}
+                    className="glass-panel glass-panel-hover p-6 rounded-2xl flex flex-col justify-between h-[260px] transition-all"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-start">
+                        <div className="p-3 rounded-xl bg-blue-50 text-blue-600">
+                          <IconComp className="w-6 h-6" />
+                        </div>
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                          {svc.badge}
+                        </span>
                       </div>
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-2 py-1 rounded">
-                        {svc.badge}
-                      </span>
+                      <div>
+                        <h3 className="font-display font-extrabold text-xs text-slate-900 mb-1.5 line-clamp-1">
+                          {svc.title}
+                        </h3>
+                        <p className="text-[11px] leading-relaxed text-slate-500 line-clamp-3">
+                          {svc.desc}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-display font-extrabold text-base text-slate-900 mb-1.5">
-                        {svc.title}
-                      </h3>
-                      <p className="text-xs leading-relaxed text-slate-500">
-                        {svc.desc}
-                      </p>
+                    <div className="pt-4 flex items-center justify-between border-t border-slate-100">
+                      <Link
+                        href={`/services/${svc.id}`}
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                      >
+                        <span>Pelajari Detail</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                      <Link
+                        href={`/online-order?service=${encodeURIComponent(svc.title)}`}
+                        className="text-[10px] font-bold text-slate-700 hover:text-blue-600"
+                      >
+                        Pesan Sekarang
+                      </Link>
                     </div>
                   </div>
-                  <div className="pt-4 flex items-center justify-between border-t border-slate-100">
-                    <Link
-                      href={`/services/${svc.id}`}
-                      className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center space-x-1"
-                    >
-                      <span>Pelajari Detail</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
-                    <Link
-                      href={`/online-order?service=${encodeURIComponent(svc.title)}`}
-                      className="text-[10px] font-bold text-slate-700 hover:text-blue-600"
-                    >
-                      Pesan Sekarang
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </section>
@@ -368,7 +591,7 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Mengapa Memilih Kami</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Kombinasi Reputasi Sektor Publik & Pengalaman Industri Finansial
+              Kombinasi Reputasi Sektor Publik & <span className="whitespace-nowrap">Pengalaman Industri Finansial</span>
             </h2>
             <p className="text-sm text-slate-500 mt-3 leading-relaxed">
               Kami membawa pendekatan holistik yang berbasis regulasi nasional dan kerangka kerja terbaik dunia untuk memastikan kepatuhan yang berkelanjutan.
@@ -434,7 +657,7 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-6">
               <div className="text-xs font-bold text-blue-600 uppercase tracking-widest">Kepatuhan Standardisasi</div>
               <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight leading-tight">
-                Integrasi Standar & Framework Siber Internasional
+                Integrasi Standar & <span className="whitespace-nowrap">Framework Siber Internasional</span>
               </h2>
               <p className="text-sm leading-relaxed text-slate-500">
                 Seluruh metodologi asesmen dan audit kami menyelaraskan kerangka kerja keamanan siber kelas dunia agar sesuai dengan regulasi kepatuhan Indonesia.
@@ -500,28 +723,105 @@ export default function Home() {
       </section>
 
       {/* Project Methodology Section */}
-      <section className="py-20 bg-slate-50 cyber-grid">
+      <section className="py-20 bg-slate-50 cyber-grid overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Metodologi Proyek</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Siklus Implementasi Proyek Berbasis Siklus Hidup PDCA
+              Siklus Implementasi Proyek Berbasis <span className="whitespace-nowrap">Siklus Hidup PDCA</span>
             </h2>
+            <p className="text-xs text-slate-500 mt-2">
+              Pendekatan terstruktur dan terukur untuk memastikan kualitas implementasi tata kelola dan perlindungan siber Anda.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 relative">
-            {methodology.map((m, idx) => (
-              <div 
-                key={idx}
-                className="bg-white border border-slate-200/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between h-[200px]"
-              >
-                <div>
-                  <div className="font-display font-extrabold text-2xl text-blue-600/20">{m.step}</div>
-                  <h3 className="font-display font-extrabold text-sm text-slate-800 mt-2">{m.title}</h3>
-                  <p className="text-[11px] leading-relaxed text-slate-500 mt-1.5">{m.desc}</p>
-                </div>
-              </div>
-            ))}
+          {/* Interactive Timeline pipeline */}
+          <div className="relative mb-10 pb-6 border-b border-slate-200">
+            {/* Connection line background */}
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -translate-y-1/2 z-0 hidden lg:block" />
+            
+            {/* Grid layout of timeline nodes */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 relative z-10">
+              {methodology.map((m, idx) => {
+                const isActive = activeMethodologyStep === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveMethodologyStep(idx)}
+                    className="flex flex-col items-center text-center focus:outline-none cursor-pointer group"
+                  >
+                    {/* Circle Node */}
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center font-display font-extrabold text-base border-2 transition-all duration-300 ${
+                      isActive 
+                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20 scale-110' 
+                        : 'bg-white border-slate-200 text-slate-400 group-hover:border-blue-400 group-hover:text-blue-500'
+                    }`}>
+                      {m.step}
+                    </div>
+                    {/* Circle Label */}
+                    <span className={`text-xs font-bold mt-2.5 transition-colors ${
+                      isActive ? 'text-blue-600 font-extrabold' : 'text-slate-500 group-hover:text-slate-800'
+                    }`}>
+                      {m.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Detailed methodology step card view with animations */}
+          <div className="min-h-[250px]">
+            <AnimatePresence mode="wait">
+              {methodology.map((m, idx) => {
+                if (activeMethodologyStep !== idx) return null;
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.25 }}
+                    className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-start"
+                  >
+                    {/* Left Column: Number, Title, Desc */}
+                    <div className="md:col-span-6 space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <span className="font-display font-extrabold text-4xl text-blue-600/20">{m.step}</span>
+                        <h3 className="font-display font-extrabold text-xl text-slate-900">{m.title} Phase</h3>
+                      </div>
+                      <p className="text-xs sm:text-sm leading-relaxed text-slate-600">
+                        {m.desc}
+                      </p>
+                      
+                      <div className="border-t border-slate-100 pt-4 mt-4">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Output</span>
+                        <span className="text-xs font-bold text-slate-800 flex items-center space-x-1.5 bg-blue-50/55 text-blue-900 px-3 py-1.5 rounded-lg border border-blue-100 w-fit">
+                          <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                          <span>{m.output}</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Key Activities List */}
+                    <div className="md:col-span-6 bg-slate-50 border border-slate-100 rounded-xl p-5 sm:p-6 space-y-3.5">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-200/80 pb-2">
+                        Aktivitas Kunci (Key Activities)
+                      </h4>
+                      <ul className="space-y-3">
+                        {m.activities.map((act, aIdx) => (
+                          <li key={aIdx} className="flex items-start space-x-2.5 text-xs text-slate-600 leading-relaxed">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 mt-2" />
+                            <span>{act}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </div>
       </section>
@@ -532,7 +832,7 @@ export default function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Kisah Sukses</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Studi Kasus Proyek Enterprise & Sektor Publik
+              Studi Kasus Proyek Enterprise & <span className="whitespace-nowrap">Sektor Publik</span>
             </h2>
           </div>
 
@@ -605,7 +905,7 @@ export default function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Testimoni Klien</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Apa Kata Pemimpin TI Tentang RTI
+              Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang RTI</span>
             </h2>
           </div>
 
@@ -650,7 +950,7 @@ export default function Home() {
             <div className="max-w-2xl">
               <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Pusat Informasi & Riset</div>
               <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-                Riset Siber, Kepatuhan Regulasi & Update Ancaman
+                Riset Siber, Kepatuhan Regulasi & <span className="whitespace-nowrap">Update Ancaman</span>
               </h2>
             </div>
           </div>

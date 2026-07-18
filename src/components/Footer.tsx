@@ -1,9 +1,42 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Shield, Phone, Mail, MapPin, Award, ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSiteConfig(data))
+      .catch(err => console.log('Settings fallback used in Footer.'));
+  }, []);
+
+  const getMenuName = (id: string, defaultName: string) => {
+    if (!siteConfig?.menus) return defaultName;
+    const found = siteConfig.menus.find((m: any) => m.id === id);
+    return found ? found.name : defaultName;
+  };
+
+  const getMenuPath = (id: string, defaultPath: string) => {
+    if (!siteConfig?.menus) return defaultPath;
+    const found = siteConfig.menus.find((m: any) => m.id === id);
+    return found ? found.path : defaultPath;
+  };
+
+  const servicesList = siteConfig?.services?.map((s: any) => ({ id: s.id, name: s.title })) || [
+    { id: 'cyber-blueprint', name: 'Cybersecurity Blueprint' },
+    { id: 'it-grc', name: 'IT GRC & Tata Kelola' },
+    { id: 'iso-implementation', name: 'ISO/IEC Implementation' },
+    { id: 'bcm-bcp-drp', name: 'BCM & BCP-DRP' },
+    { id: 'penetration-testing', name: 'Penetration Testing (Pen-Test)' },
+    { id: 'red-teaming', name: 'Red Teaming Simulation' },
+    { id: 'soc', name: 'Managed SOC 24/7' },
+    { id: 'cyber-threat-intelligence', name: 'Cyber Threat Intelligence' }
+  ];
 
   return (
     <footer className="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
@@ -12,19 +45,21 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="md:col-span-1 space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-600 shadow-md shadow-blue-500/20">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="Logo PT Riset Teknologi Indonesia" 
+                className="w-9 h-9 object-contain bg-white rounded-md p-0.5"
+              />
               <span className="font-display font-bold text-white text-lg tracking-tight">
-                RTI Cybersecurity
+                {siteConfig?.general?.companyShortName || 'RTI Cybersecurity'}
               </span>
             </div>
             <p className="text-xs leading-relaxed text-slate-400">
-              PT Riset Teknologi Indonesia (RTI) adalah konsultan teknologi siber dan tata kelola TI nasional. Kami mendampingi pemerintah, sektor keuangan, dan korporasi mewujudkan kepatuhan dan ketahanan siber berbasis best practice internasional.
+              {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'} adalah konsultan teknologi siber dan tata kelola TI nasional. Kami mendampingi pemerintah, sektor keuangan, dan korporasi mewujudkan kepatuhan dan ketahanan siber berbasis best practice internasional.
             </p>
             <div className="flex items-center space-x-4 pt-2">
               <a 
-                href="https://linkedin.com/company/riset-teknologi-indonesia" 
+                href={siteConfig?.general?.linkedin || "https://linkedin.com/company/riset-teknologi-indonesia"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-blue-500 transition-colors"
@@ -37,7 +72,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a 
-                href="https://youtube.com" 
+                href={siteConfig?.general?.youtube || "https://youtube.com"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-red-500 transition-colors"
@@ -57,23 +92,30 @@ export default function Footer() {
               Tautan Cepat
             </h3>
             <ul className="space-y-2.5 text-xs">
-              <li>
-                <Link href="/" className="hover:text-white transition-colors">Beranda</Link>
-              </li>
-              <li>
-                <Link href="/case-studies" className="hover:text-white transition-colors">Studi Kasus & Portofolio</Link>
-              </li>
-              <li>
-                <Link href="/online-order" className="hover:text-white transition-colors">Pemesanan Layanan</Link>
-              </li>
+              {siteConfig?.menus?.map((menu: any) => (
+                <li key={menu.id}>
+                  <Link href={menu.path} className="hover:text-white transition-colors">
+                    {menu.name}
+                  </Link>
+                </li>
+              )) || (
+                <>
+                  <li>
+                    <Link href="/" className="hover:text-white transition-colors">Beranda</Link>
+                  </li>
+                  <li>
+                    <Link href="/case-studies" className="hover:text-white transition-colors">Studi Kasus & Portofolio</Link>
+                  </li>
+                  <li>
+                    <Link href="/online-order" className="hover:text-white transition-colors">Pemesanan Layanan</Link>
+                  </li>
+                  <li>
+                    <Link href="/portal" className="hover:text-white transition-colors">Portal Pelanggan</Link>
+                  </li>
+                </>
+              )}
               <li>
                 <Link href="/request-proposal" className="hover:text-white transition-colors">Minta Proposal (RFP)</Link>
-              </li>
-              <li>
-                <Link href="/portal" className="hover:text-white transition-colors">Portal Pelanggan</Link>
-              </li>
-              <li>
-                <Link href="/admin" className="hover:text-white transition-colors">CMS Administrator</Link>
               </li>
             </ul>
           </div>
@@ -84,24 +126,13 @@ export default function Footer() {
               Layanan Utama
             </h3>
             <ul className="space-y-2.5 text-xs">
-              <li>
-                <Link href="/services/vapt" className="hover:text-white transition-colors">Vulnerability Assessment & Pentest</Link>
-              </li>
-              <li>
-                <Link href="/services/standards" className="hover:text-white transition-colors">Implementasi ISO 27001 / 20000</Link>
-              </li>
-              <li>
-                <Link href="/services/it-governance" className="hover:text-white transition-colors">Tata Kelola TI (COBIT & SPBE)</Link>
-              </li>
-              <li>
-                <Link href="/services/cyber-strategy" className="hover:text-white transition-colors">Cybersecurity Strategy Blueprint</Link>
-              </li>
-              <li>
-                <Link href="/services/cyber-compliance" className="hover:text-white transition-colors">Compliance & UU PDP Review</Link>
-              </li>
-              <li>
-                <Link href="/services/training" className="hover:text-white transition-colors">CyberTroops Training Academy</Link>
-              </li>
+              {servicesList.map((service: any) => (
+                <li key={service.id}>
+                  <Link href={`/services/${service.id}`} className="hover:text-white transition-colors">
+                    {service.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -114,17 +145,17 @@ export default function Footer() {
               <li className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190
+                  {siteConfig?.general?.address || 'Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190'}
                 </span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-blue-500 shrink-0" />
-                <span>0856-6872-2734</span>
+                <span>{siteConfig?.general?.phone || '0856-6872-2734'}</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href="mailto:admin@risetin.co.id" className="hover:text-white transition-colors">
-                  admin@risetin.co.id
+                <a href={`mailto:${siteConfig?.general?.email || 'admin@risetin.co.id'}`} className="hover:text-white transition-colors">
+                  {siteConfig?.general?.email || 'admin@risetin.co.id'}
                 </a>
               </li>
             </ul>
@@ -149,7 +180,7 @@ export default function Footer() {
         {/* Bottom copyright */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
           <span>
-            &copy; {currentYear} PT Riset Teknologi Indonesia (RTI). Hak Cipta Dilindungi Undang-Undang.
+            &copy; {currentYear} {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'}. Hak Cipta Dilindungi Undang-Undang.
           </span>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">

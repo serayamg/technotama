@@ -278,10 +278,10 @@ export default function CustomerPortal() {
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 {/* Left tab bar */}
-                <div className="lg:col-span-3 flex flex-col gap-2">
+                <div className="lg:col-span-3 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 scrollbar-thin max-w-full">
                   <button
                     onClick={() => setActiveTab('progress')}
-                    className={`p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 ${
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'progress'
                         ? 'bg-blue-600 text-white border-blue-600 shadow'
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -292,7 +292,7 @@ export default function CustomerPortal() {
                   </button>
                   <button
                     onClick={() => setActiveTab('documents')}
-                    className={`p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 ${
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'documents'
                         ? 'bg-blue-600 text-white border-blue-600 shadow'
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -303,7 +303,7 @@ export default function CustomerPortal() {
                   </button>
                   <button
                     onClick={() => setActiveTab('billing')}
-                    className={`p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 ${
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'billing'
                         ? 'bg-blue-600 text-white border-blue-600 shadow'
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -314,7 +314,7 @@ export default function CustomerPortal() {
                   </button>
                   <button
                     onClick={() => setActiveTab('tickets')}
-                    className={`p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 ${
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'tickets'
                         ? 'bg-blue-600 text-white border-blue-600 shadow'
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
@@ -348,12 +348,41 @@ export default function CustomerPortal() {
                               </div>
                             </div>
 
-                            {/* Horizontal timeline milestones */}
-                            <div className="pt-6 relative flex justify-between items-start">
+                            {/* Mobile timeline (vertical) */}
+                            <div className="flex flex-col space-y-6 md:hidden pt-4">
                               {order.progress?.map((prog: any, pIdx: number) => (
-                                <div key={pIdx} className="flex flex-col items-center text-center w-1/7 relative">
+                                <div key={pIdx} className="flex items-start space-x-4">
+                                  <div className="flex flex-col items-center">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 z-10 shrink-0 ${
+                                      prog.status === 'COMPLETED'
+                                        ? 'bg-blue-600 border-blue-600 text-white shadow'
+                                        : prog.status === 'IN_PROGRESS'
+                                        ? 'bg-amber-400 border-amber-400 text-slate-900 animate-pulse'
+                                        : 'bg-white border-slate-200 text-slate-400'
+                                    }`}>
+                                      {pIdx + 1}
+                                    </div>
+                                    {pIdx < order.progress.length - 1 && (
+                                      <div className={`w-0.5 h-12 -my-1 ${prog.status === 'COMPLETED' ? 'bg-blue-600' : 'bg-slate-200'}`} />
+                                    )}
+                                  </div>
+                                  <div className="pt-1">
+                                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wide">{prog.stage}</h4>
+                                    <span className="text-[10px] text-slate-500 font-medium">
+                                      {prog.status === 'COMPLETED' ? 'Selesai' : prog.status === 'IN_PROGRESS' ? 'Aktif' : 'Antrean'}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Desktop timeline (horizontal) */}
+                            <div className="hidden md:flex justify-between items-start pt-6 relative">
+                              <div className="absolute top-4 left-0 right-0 h-0.5 bg-slate-100 z-0" />
+                              {order.progress?.map((prog: any, pIdx: number) => (
+                                <div key={pIdx} className="flex flex-col items-center text-center w-1/7 relative z-10">
                                   {/* Dot */}
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 z-10 ${
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 ${
                                     prog.status === 'COMPLETED'
                                       ? 'bg-blue-600 border-blue-600 text-white shadow'
                                       : prog.status === 'IN_PROGRESS'
@@ -362,10 +391,10 @@ export default function CustomerPortal() {
                                   }`}>
                                     {pIdx + 1}
                                   </div>
-                                  <span className="text-[9px] font-bold text-slate-600 mt-2 uppercase tracking-wide">
+                                  <span className="text-[9px] font-bold text-slate-600 mt-2 uppercase tracking-wide max-w-[100px] mx-auto line-clamp-2">
                                     {prog.stage}
                                   </span>
-                                  <span className="text-[8px] text-slate-400 font-medium">
+                                  <span className="text-[8px] text-slate-400 font-medium mt-0.5">
                                     {prog.status === 'COMPLETED' ? 'Selesai' : prog.status === 'IN_PROGRESS' ? 'Aktif' : 'Antrean'}
                                   </span>
                                 </div>

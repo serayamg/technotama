@@ -51,6 +51,9 @@ model Proposal {
   budget      String
   timeline    String
   status      String   @default("PENDING") // "PENDING", "REVIEWING", "SENT", "APPROVED", "REJECTED"
+  generatedContent String?
+  proposalTitle    String?
+  sentAt      DateTime?
   createdAt   DateTime @default(now())
 }
 

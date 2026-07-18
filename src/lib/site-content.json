@@ -1,0 +1,212 @@
+{
+  "general": {
+    "companyName": "PT Riset Teknologi Indonesia",
+    "companyShortName": "RTI Cybersecurity",
+    "email": "admin@risetin.co.id",
+    "phone": "0856-6872-2734",
+    "address": "Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190",
+    "linkedin": "https://linkedin.com/company/riset-teknologi-indonesia",
+    "youtube": "https://youtube.com",
+    "whatsappNumber": "0856-6872-2734"
+  },
+  "hero": {
+    "badge": "Partner Keamanan Siber Terpercaya Sejak 2014",
+    "title": "Secure Your Digital Future with Enterprise Cybersecurity Excellence",
+    "subtitle": "PT Riset Teknologi Indonesia membantu mengamankan infrastruktur digital, kepatuhan tata kelola TI, dan audit keamanan sistem finansial nasional."
+  },
+  "menus": [
+    {
+      "id": "home",
+      "name": "Beranda",
+      "path": "/"
+    },
+    {
+      "id": "case-studies",
+      "name": "Studi Kasus",
+      "path": "/case-studies"
+    },
+    {
+      "id": "online-order",
+      "name": "Pesan Layanan",
+      "path": "/online-order"
+    },
+    {
+      "id": "academy",
+      "name": "RTI Academy",
+      "path": "/academy"
+    },
+    {
+      "id": "portal",
+      "name": "Portal Klien",
+      "path": "/portal"
+    }
+  ],
+  "services": [
+    {
+      "id": "cyber-blueprint",
+      "title": "Cybersecurity Blueprint",
+      "desc": "Perancangan strategi dan peta jalan (roadmap) keamanan TI yang terintegrasi secara jangka panjang.",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "it-grc",
+      "title": "Policy-SOP Development",
+      "desc": "Pengembangan kerangka kerja tata kelola TI, struktur kebijakan (High-Level Policy), serta manajemen risiko pihak ketiga.",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "iso-implementation",
+      "title": "ISO/IEC Implementation",
+      "desc": "Pendampingan implementasi standar internasional (seperti ISO/IEC 27001) menggunakan siklus PDCA.",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "bcm-bcp-drp",
+      "title": "BCM-BCP-DRP Services (Cyber Drill)",
+      "desc": "Penyusunan Business Continuity Plan (BCP), Disaster Recovery Plan (DRP), dan simulasi kesiapan penanganan insiden siber (Table-Top Exercise/Cyber Drill).",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "digital-maturity",
+      "title": "Digital Maturity Assessment & Security Risk Rating",
+      "desc": "Evaluasi tingkat kematangan digital dan kuantifikasi postur keamanan organisasi secara terukur.",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "cyber-awareness",
+      "title": "Awareness & Training",
+      "desc": "Program pelatihan, phishing simulation, dan kampanye keamanan untuk staf non-teknis.",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "it-audit",
+      "title": "IT Audit",
+      "desc": "Audit menyeluruh terkait tata kelola, infrastruktur, sistem perdagangan (trading), dan kepatuhan regulasi (seperti POJK).",
+      "badge": "Governance",
+      "cluster": "governance"
+    },
+    {
+      "id": "vulnerability-assessment",
+      "title": "Vulnerability Assessment (VA)",
+      "desc": "Pemetaan dan pemindaian kerentanan sistem atau jaringan secara otomatis dan berkala.",
+      "badge": "Offensive",
+      "cluster": "offensive"
+    },
+    {
+      "id": "penetration-testing",
+      "title": "Penetration Testing (Pen-Test)",
+      "desc": "Simulasi eksploitasi keamanan menggunakan metode Black Box, Gray Box, maupun White Box.",
+      "badge": "Offensive",
+      "cluster": "offensive"
+    },
+    {
+      "id": "secure-sdlc",
+      "title": "Secure SDLC Implementation",
+      "desc": "Integrasi keamanan sejak tahap awal pemrograman dengan pendekatan Shift Left atau DevSecOps.",
+      "badge": "Offensive",
+      "cluster": "offensive"
+    },
+    {
+      "id": "red-teaming",
+      "title": "Red Teaming",
+      "desc": "Simulasi serangan siber multi-vektor secara riil untuk menguji ketahanan sistem dan tim keamanan internal.",
+      "badge": "Offensive",
+      "cluster": "offensive"
+    },
+    {
+      "id": "soc",
+      "title": "Security Operation Center (SOC)",
+      "desc": "Pemantauan keamanan siber 24/7 real-time berbasis infrastruktur SIEM dan tim analis terlatih.",
+      "badge": "Defensive",
+      "cluster": "defensive"
+    },
+    {
+      "id": "cyber-threat-intelligence",
+      "title": "Cyber Threat Intelligence (CTI) Solution",
+      "desc": "Integrasi data ancaman global secara real-time untuk mendeteksi kebocoran data dan kredensial secara dini.",
+      "badge": "Defensive",
+      "cluster": "defensive"
+    },
+    {
+      "id": "network-endpoint-hardening",
+      "title": "Network & Endpoint Hardening",
+      "desc": "Reinforcement konfigurasi sistem, penutupan port, dan penguatan perangkat jaringan serta endpoint.",
+      "badge": "Defensive",
+      "cluster": "defensive"
+    },
+    {
+      "id": "incident-management",
+      "title": "Cyber Security Incident Management",
+      "desc": "Kerangka respons darurat untuk mendeteksi, mengisolasi, dan membasmi ancaman berdasarkan NIST IR Life Cycle.",
+      "badge": "Defensive",
+      "cluster": "defensive"
+    },
+    {
+      "id": "digital-forensic",
+      "title": "Digital Forensic",
+      "desc": "Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum dan regulasi.",
+      "badge": "Defensive",
+      "cluster": "defensive"
+    }
+  ],
+  "packages": [
+    {
+      "id": "pkg_blueprint",
+      "name": "Cybersecurity Blueprint",
+      "tier": "Governance",
+      "scope": "IT Master Plan Alignment & 3-Year Security Roadmap",
+      "description": "Perancangan arsitektur dan peta jalan keamanan siber jangka panjang untuk kepatuhan organisasi."
+    },
+    {
+      "id": "pkg_it_grc",
+      "name": "Policy-SOP Development",
+      "tier": "Governance",
+      "scope": "COBIT Maturity Audit, High-Level Policy & Vendor Risk Management",
+      "description": "Pengembangan tata kelola TI berbasis COBIT dan kerangka manajemen risiko operasional."
+    },
+    {
+      "id": "pkg_iso",
+      "name": "ISO/IEC Implementation",
+      "tier": "Governance",
+      "scope": "ISO 27001 Gap Analysis, Policies Setup & Certification Support",
+      "description": "Pendampingan implementasi Sistem Manajemen Keamanan Informasi (SMKI) ISO 27001."
+    },
+    {
+      "id": "pkg_pentest",
+      "name": "Penetration Testing (Pen-Test)",
+      "tier": "Offensive",
+      "scope": "Black/Gray/White Box testing for Web, Mobile, or API",
+      "description": "Uji penetrasi mendalam untuk mengidentifikasi celah keamanan sebelum dieksploitasi penyerang."
+    },
+    {
+      "id": "pkg_redteam",
+      "name": "Red Teaming",
+      "tier": "Offensive",
+      "scope": "Multi-vector attack simulation & SOC evasion testing",
+      "description": "Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal Anda."
+    },
+    {
+      "id": "pkg_soc",
+      "name": "Security Operation Center (SOC) 24/7",
+      "tier": "Defensive",
+      "scope": "24/7 SIEM monitoring, Log correlation & Incident alert",
+      "description": "Pemantauan keamanan siber waktu nyata selama 24 jam penuh untuk deteksi ancaman instan."
+    }
+  ],
+  "integrations": {
+    "geminiApiKey": "",
+    "smtpHost": "",
+    "smtpPort": "587",
+    "smtpUser": "admin@risetin.co.id",
+    "smtpPassword": "",
+    "smtpFrom": "customercare@risetin.co.id",
+    "whatsappGatewayUrl": "",
+    "whatsappToken": ""
+  }
+}

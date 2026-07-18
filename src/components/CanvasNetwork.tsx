@@ -14,12 +14,17 @@ interface Node {
 
 export default function CanvasNetwork() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mounted, setMounted] = useState(false);
   const [stats, setStats] = useState({
     threatsBlocked: 14280,
     scanningSpeed: '942.5 GB/s',
     nodesOnline: 65,
     integrity: '99.98%'
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Simulated live counters
   useEffect(() => {
@@ -196,6 +201,14 @@ export default function CanvasNetwork() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  if (!mounted) {
+    return (
+      <div className="relative w-full h-[400px] lg:h-[500px] rounded-2xl border border-slate-200/80 bg-slate-50/50 shadow-xl overflow-hidden animate-pulse">
+        <div className="absolute inset-0 cyber-grid opacity-30" />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[400px] lg:h-[500px] rounded-2xl border border-slate-200/80 bg-white/40 shadow-xl overflow-hidden backdrop-blur-sm">

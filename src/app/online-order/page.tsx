@@ -12,16 +12,54 @@ import {
 } from 'lucide-react';
 
 const servicePricings = [
-  { name: 'VA & Penetration Testing', tier: 'Professional', price: 'Rp 65.000.000', scope: '1 Web App + 1 Mobile App + 1 API' },
-  { name: 'Standard Implementation (ISO 27001)', tier: 'SMKI Complete', price: 'Rp 145.000.000', scope: 'Analisis Gap, Pembuatan Kebijakan, Audit Internal, Sertifikasi' },
-  { name: 'IT Governance, Risk & Compliance', tier: 'COBIT Maturity', price: 'Rp 85.000.000', scope: 'IT Maturity Level Audit & SOP Tata Kelola Baru' },
-  { name: 'Cybersecurity Strategy Blueprint', tier: 'Enterprise Strategy', price: 'Rp 120.000.000', scope: 'Security Blueprint & 3-Year Implementation Roadmap' },
-  { name: 'Cybersecurity Compliance Review (UU PDP)', tier: 'PDP Readiness', price: 'Rp 75.000.000', scope: 'Audit Kepatuhan UU PDP & Penyusunan DPIA/DPO framework' }
+  { 
+    name: 'Cybersecurity Blueprint', 
+    tier: 'Governance', 
+    price: 'Rp 110.000.000', 
+    scope: 'IT Master Plan Alignment & 3-Year Security Roadmap',
+    description: 'Perancangan arsitektur dan peta jalan keamanan siber jangka panjang untuk kepatuhan organisasi.'
+  },
+  { 
+    name: 'Policy-SOP Development', 
+    tier: 'Governance', 
+    price: 'Rp 85.000.000', 
+    scope: 'COBIT Maturity Audit, High-Level Policy & Vendor Risk Management',
+    description: 'Pengembangan tata kelola TI berbasis COBIT dan kerangka manajemen risiko operasional.'
+  },
+  { 
+    name: 'ISO/IEC Implementation', 
+    tier: 'Governance', 
+    price: 'Rp 135.000.000', 
+    scope: 'ISO 27001 Gap Analysis, Policies Setup & Certification Support',
+    description: 'Pendampingan implementasi Sistem Manajemen Keamanan Informasi (SMKI) ISO 27001.'
+  },
+  { 
+    name: 'Penetration Testing (Pen-Test)', 
+    tier: 'Offensive', 
+    price: 'Rp 55.000.000', 
+    scope: 'Black/Gray/White Box testing for Web, Mobile, or API',
+    description: 'Uji penetrasi mendalam untuk mengidentifikasi celah keamanan sebelum dieksploitasi penyerang.'
+  },
+  { 
+    name: 'Red Teaming', 
+    tier: 'Offensive', 
+    price: 'Rp 125.000.000', 
+    scope: 'Multi-vector attack simulation & SOC evasion testing',
+    description: 'Simulasi serangan siber nyata secara rahasia untuk menguji kesiapan tim pertahanan internal Anda.'
+  },
+  { 
+    name: 'Security Operation Center (SOC) 24/7', 
+    tier: 'Defensive', 
+    price: 'Rp 180.000.000', 
+    scope: '24/7 SIEM monitoring, Log correlation & Incident alert',
+    description: 'Pemantauan keamanan siber waktu nyata selama 24 jam penuh untuk deteksi ancaman instan.'
+  }
 ];
 
 export default function OnlineOrder() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<any>(null);
   const [selectedService, setSelectedService] = useState(servicePricings[0]);
   const [formData, setFormData] = useState({
     companyName: '',
@@ -31,6 +69,20 @@ export default function OnlineOrder() {
     docName: '',
     paymentMethod: 'Bank Transfer (BCA Virtual Account)'
   });
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSiteConfig(data);
+          if (data.packages && data.packages.length > 0) {
+            setSelectedService(data.packages[0]);
+          }
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData(prev => ({
@@ -91,8 +143,21 @@ export default function OnlineOrder() {
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden relative">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
 
-            {/* Stepper progress */}
-            <div className="border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex flex-wrap items-center justify-between gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            {/* Mobile Stepper progress */}
+            <div className="md:hidden border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-500">
+              <span>Langkah {step} dari 6</span>
+              <span className="text-blue-600 uppercase tracking-wider">
+                {step === 1 && 'Pilih Layanan'}
+                {step === 2 && 'Isi Profil'}
+                {step === 3 && 'Dokumen Scoping'}
+                {step === 4 && 'Penawaran'}
+                {step === 5 && 'Pembayaran'}
+                {step === 6 && 'Tracking'}
+              </span>
+            </div>
+
+            {/* Desktop Stepper progress */}
+            <div className="hidden md:flex border-b border-slate-200 bg-slate-50/50 px-6 py-4 items-center justify-between gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
               <span className={step === 1 ? 'text-blue-600' : 'text-slate-500'}>1. Pilih Layanan</span>
               <ChevronRight className="w-4.5 h-4.5" />
               <span className={step === 2 ? 'text-blue-600' : 'text-slate-500'}>2. Isi Profil</span>
@@ -112,13 +177,13 @@ export default function OnlineOrder() {
               {/* Step 1: Select Service */}
               {step === 1 && (
                 <div className="space-y-6">
-                  <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Layanan & Paket Transparan</h2>
+                  <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Solusi RTI</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {servicePricings.map((svc, idx) => (
+                    {(siteConfig?.packages || servicePricings).map((svc: any, idx: number) => (
                       <button
                         key={idx}
                         onClick={() => setSelectedService(svc)}
-                        className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between h-[180px] focus:outline-none cursor-pointer ${
+                        className={`p-6 rounded-xl border text-left transition-all flex flex-col justify-between min-h-[170px] focus:outline-none cursor-pointer ${
                           selectedService.name === svc.name
                             ? 'bg-blue-50/10 border-blue-500 shadow-sm ring-1 ring-blue-500'
                             : 'bg-white border-slate-200 hover:border-blue-300'
@@ -130,10 +195,12 @@ export default function OnlineOrder() {
                             {selectedService.name === svc.name && <CheckCircle2 className="w-4.5 h-4.5 text-blue-600" />}
                           </div>
                           <h3 className="font-display font-extrabold text-sm text-slate-800">{svc.name}</h3>
-                          <p className="text-[10px] text-slate-500 leading-normal">{svc.scope}</p>
-                        </div>
-                        <div className="font-display font-extrabold text-base text-slate-900 border-t border-slate-100 pt-3 mt-3 w-full">
-                          {svc.price} <span className="text-[10px] font-semibold text-slate-400">/ Project</span>
+                          <p className="text-[10px] text-slate-500 leading-normal font-semibold">{svc.scope}</p>
+                          {svc.description && (
+                            <p className="text-[10px] text-slate-400 leading-relaxed mt-2 pt-2 border-t border-slate-100/50">
+                              {svc.description}
+                            </p>
+                          )}
                         </div>
                       </button>
                     ))}
@@ -296,7 +363,7 @@ export default function OnlineOrder() {
                       </div>
                       <div className="flex justify-between py-2 text-slate-600">
                         <span>{selectedService.name} ({selectedService.tier})</span>
-                        <span className="font-bold text-slate-800">{selectedService.price}</span>
+                        <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
                       </div>
                       <div className="flex justify-between py-2 text-slate-600">
                         <span>Scoping Dokumen: {formData.docName || 'Consultation Call Schedule'}</span>
@@ -307,7 +374,7 @@ export default function OnlineOrder() {
                     <div className="border-t pt-4 flex justify-between items-center">
                       <div className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
                         <Info className="w-4 h-4 text-blue-500" />
-                        <span>Harga final sudah termasuk PPN 11% & Jasa Retest ulang gratis.</span>
+                        <span>Penawaran final akan dikirimkan oleh customer care consultant setelah scoping selesai.</span>
                       </div>
                       <button 
                         type="button"
@@ -367,20 +434,16 @@ export default function OnlineOrder() {
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between text-slate-600">
                           <span>Total Kontrak</span>
-                          <span className="font-bold text-slate-800">{selectedService.price}</span>
+                          <span className="font-bold text-slate-800">Hubungi Customer Care (Custom Quote)</span>
                         </div>
                         <div className="flex justify-between text-slate-600">
                           <span>Termin I (DP 50%)</span>
-                          <span className="font-bold text-slate-800">
-                            Rp {(parseInt(selectedService.price.replace(/[^\d]/g, '')) / 2).toLocaleString('id-ID')}.000
-                          </span>
+                          <span className="font-bold text-slate-800">TBD (To Be Determined)</span>
                         </div>
                       </div>
                       <div className="border-t pt-3 flex justify-between font-bold text-xs text-slate-800">
                         <span>Jumlah Harus Dibayar</span>
-                        <span className="text-blue-600">
-                          Rp {(parseInt(selectedService.price.replace(/[^\d]/g, '')) / 2).toLocaleString('id-ID')}.000
-                        </span>
+                        <span className="text-blue-600">Invoice Terpisah</span>
                       </div>
                     </div>
                   </div>

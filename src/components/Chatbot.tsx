@@ -16,7 +16,24 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSiteConfig(data))
+      .catch(err => console.log('WhatsApp fallback used in Chatbot.'));
+  }, []);
+
+  const getCleanWhatsAppNumber = () => {
+    const rawNumber = siteConfig?.general?.whatsappNumber || '0856-6872-2734';
+    const clean = rawNumber.replace(/\D/g, '');
+    if (clean.startsWith('0')) {
+      return '62' + clean.slice(1);
+    }
+    return clean.startsWith('62') ? clean : '62' + clean;
+  };
 
   // Lead Collection State Flow
   const [leadStep, setLeadStep] = useState(0); // 0 = not in flow, 1 = Name, 2 = Company, 3 = Service, 4 = Email, 5 = Phone, 6 = Budget/Timeline, 7 = Done
@@ -66,25 +83,25 @@ export default function Chatbot() {
 
     switch (userAction) {
       case 'services':
-        botText = 'RTI menawarkan 5 pilar layanan utama:\n1. Technology Strategy (ITMP & Arsitektur SPBE)\n2. IT Governance, Risk & Compliance (COBIT & Manajemen Risiko)\n3. Cybersecurity Offense (VAPT & Red Teaming)\n4. Cybersecurity Defense (MDR & Managed SOC)\n5. Cyber Academy & Deployment (CyberTroops Bootcamp)';
+        botText = 'RTI menawarkan 3 kluster layanan utama:\n1. Cybersecurity Governance RTI (Rencana Induk, IT GRC, ISO, BCM, Cyber Drill, Audit TI)\n2. Offensive Cybersecurity RTI (VA, Penetration Testing, Secure SDLC, Red Teaming)\n3. Defensive Cybersecurity (SOC 24/7, Threat Intelligence, Hardening, Incident Response, Forensik)';
         options = [
           { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '🔍 Detail VAPT', action: 'detail_vapt' },
-          { label: '📘 Detail ISO 27001', action: 'detail_iso' },
+          { label: '⚔️ Detail Ofensif (VAPT)', action: 'detail_vapt' },
+          { label: '🛡️ Detail Tata Kelola & ISO', action: 'detail_iso' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
       case 'detail_vapt':
-        botText = 'Layanan Cybersecurity Offense (VAPT) kami mencakup penetration testing untuk Web, Mobile, API, dan Jaringan berdasarkan standar OWASP, didukung laporan teknis & eksekutif untuk kepatuhan OJK/BI.';
+        botText = 'Layanan Offensive Cybersecurity RTI mencakup Vulnerability Assessment (VA), Penetration Testing (Web, Mobile, API, Network), Secure SDLC, dan Red Teaming simulator rahasia untuk kepatuhan regulasi.';
         options = [
-          { label: '💰 Estimasi Biaya Pentest', action: 'start_lead' },
+          { label: '💰 Estimasi Ofensif', action: 'start_lead' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
       case 'detail_iso':
-        botText = 'Kami membantu penyusunan dokumen Kebijakan Keamanan (SMKI), analisis kesenjangan (Gap Analysis), hingga pendampingan audit sertifikasi ISO/IEC 27001:2022 untuk perbankan, fintech, dan instansi pemerintah.';
+        botText = 'Layanan Cybersecurity Governance RTI mencakup Rencana Induk/Blueprint Siber, IT GRC (COBIT), implementasi ISO 27001/20000/22301, BCM/BCP-DRP, Cyber Drill Simulation, Digital Maturity, Kesadaran Siber, dan IT Audit.';
         options = [
-          { label: '💰 Estimasi ISO', action: 'start_lead' },
+          { label: '💰 Estimasi Governance', action: 'start_lead' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
@@ -144,9 +161,9 @@ export default function Chatbot() {
       nextStep = 3;
       botText = 'Layanan apa yang Anda butuhkan?';
       options = [
-        { label: 'VA & Penetration Testing', action: 'lead_vapt' },
-        { label: 'Sertifikasi ISO 27001', action: 'lead_iso' },
-        { label: 'Tata Kelola TI (COBIT/SPBE)', action: 'lead_gov' },
+        { label: 'Offensive Cybersecurity (VA/Pentest)', action: 'lead_off' },
+        { label: 'Cybersecurity Governance (GRC/ISO)', action: 'lead_gov' },
+        { label: 'Defensive Cybersecurity (SOC/CTI)', action: 'lead_def' },
         { label: 'Lainnya', action: 'lead_other' }
       ];
     } else if (leadStep === 4) {
@@ -208,9 +225,9 @@ export default function Chatbot() {
 
     if (leadStep === 3 && action.startsWith('lead_')) {
       const servicesMap: Record<string, string> = {
-        lead_vapt: 'VA & Penetration Testing',
-        lead_iso: 'Sertifikasi ISO 27001',
-        lead_gov: 'Tata Kelola TI (COBIT/SPBE)',
+        lead_off: 'Offensive Cybersecurity (VA/Pentest)',
+        lead_gov: 'Cybersecurity Governance (GRC/ISO)',
+        lead_def: 'Defensive Cybersecurity (SOC/CTI)',
         lead_other: 'Lainnya'
       };
       setLeadData(prev => ({ ...prev, service: servicesMap[action] }));
@@ -270,7 +287,7 @@ export default function Chatbot() {
 
       // Generate WhatsApp Link
       const waText = `Halo RTI, saya tertarik menggunakan layanan berikut: ${finalData.service}.\nNama: ${finalData.name}\nPerusahaan: ${finalData.company}\nEmail: ${finalData.email}\nNomor HP: ${finalData.phone}\nTimeline: ${finalData.timeline}\nBudget: ${finalData.budget}`;
-      const waLink = `https://wa.me/6285668722734?text=${encodeURIComponent(waText)}`;
+      const waLink = `https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(waText)}`;
 
       setMessages(prev => [
         ...prev,
@@ -352,9 +369,11 @@ export default function Chatbot() {
             {/* Header */}
             <div className="bg-slate-900 text-white px-4 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600">
-                  <Shield className="w-4.5 h-4.5 text-white" />
-                </div>
+                <img 
+                  src="/logo.png" 
+                  alt="Logo PT Riset Teknologi Indonesia" 
+                  className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
+                />
                 <div>
                   <div className="font-display font-extrabold text-sm leading-tight">RTI Cyber Assistant</div>
                   <div className="text-[10px] text-slate-400 font-semibold flex items-center space-x-1">
@@ -392,8 +411,8 @@ export default function Chatbot() {
                     </div>
                   </div>
 
-                  {/* Render Options */}
-                  {msg.options && msg.options.length > 0 && (
+                  {/* Render Options (Only for the latest message) */}
+                  {msg.options && msg.options.length > 0 && messages[messages.length - 1].id === msg.id && (
                     <div className="flex flex-wrap gap-2 pl-9">
                       {msg.options.map((opt, idx) => (
                         <button

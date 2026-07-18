@@ -8,12 +8,13 @@ import Footer from '@/components/Footer';
 import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { 
-  Key, Award, FileText, Shield, CheckCircle2, Layout, Users, 
-  ArrowLeft, Calendar, FileCheck, HelpCircle, Check, Play, Clock, AlertCircle
+  Key, Award, FileText, Shield, CheckCircle2, Layout, Users, BookOpen,
+  ArrowLeft, Calendar, FileCheck, HelpCircle, Check, Play, Clock, AlertCircle,
+  Eye, Server, Target, Zap, Lock
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// Complete detail profiles of the 7 core services based on profile
+// Complete detail profiles of the 17 new services based on profile
 const servicesDetails: Record<string, {
   title: string;
   icon: any;
@@ -24,195 +25,404 @@ const servicesDetails: Record<string, {
   timeline: string;
   faq: { q: string; a: string }[];
 }> = {
-  vapt: {
-    title: 'VA & Penetration Testing',
-    icon: Key,
-    overview: 'Layanan Cybersecurity Offense (VAPT) kami dirancang untuk menguji ketahanan infrastruktur digital, aplikasi web, mobile app, dan API dengan mensimulasikan serangan nyata di dunia nyata. Layanan ini memastikan kepatuhan penuh terhadap Surat Edaran Bank Indonesia dan Peraturan Otoritas Jasa Keuangan (POJK).',
+  'cyber-blueprint': {
+    title: 'Cybersecurity Blueprint',
+    icon: Shield,
+    overview: 'Layanan Cybersecurity Blueprint menyusun rencana induk keamanan informasi jangka panjang (3-5 tahun) yang selaras dengan arsitektur TOGAF/IT Master Plan korporasi Anda untuk memastikan investasi pertahanan siber yang strategis dan terarah.',
     benefits: [
-      'Mendeteksi dan memetakan kerentanan (vulnerabilities) sebelum disalahgunakan oleh pihak ketiga.',
-      'Memenuhi syarat audit kepatuhan regulasi OJK (POJK APU-PPT) dan Bank Indonesia terkait sistem pembayaran.',
-      'Melindungi reputasi merek dan mencegah kerugian finansial akibat kebocoran data.',
-      'Mendapatkan panduan mitigasi celah teknis (remediation plan) yang sistematis.'
+      'Memetakan postur keamanan informasi saat ini terhadap target perlindungan di masa depan.',
+      'Menyelaraskan investasi teknologi siber dengan peta jalan pertumbuhan bisnis korporasi.',
+      'Memastikan arsitektur pertahanan mengadopsi prinsip Zero Trust dan Defense-in-Depth.'
     ],
     methodology: [
-      'Information Gathering & Reconnaissance - Pemetaan footprint sistem target.',
-      'Vulnerability Assessment - Scanning otomatis mendeteksi celah keamanan standar.',
-      'Exploitation & Penetration Testing - Upaya penetrasi manual (ethical hacking) untuk mengukur dampak.',
-      'Reporting & Remediation Guidance - Penyusunan laporan temuan dan rapat penjelasan teknis.',
-      'Re-testing (Validation) - Pengujian ulang gratis setelah pihak klien melakukan perbaikan.'
+      'Assess - Evaluasi mendalam terhadap arsitektur keamanan siber saat ini.',
+      'Blueprint Design - Merancang cetak biru arsitektur target siber.',
+      'Roadmap & CapEx Planning - Menyusun prioritas implementasi beserta estimasi anggaran belanja.'
     ],
     deliverables: [
-      'Executive Summary Report (Laporan Kepatuhan Manajemen / Non-Teknis).',
-      'Technical Vulnerability Assessment & Pentest Report (Laporan Detail Celah Keamanan).',
-      'Remediation Plan & Validation Report (Rencana Perbaikan & Hasil Tes Ulang).'
-    ],
-    timeline: '2 - 3 Minggu',
-    faq: [
-      { q: 'Berapa sering VAPT harus dilakukan?', a: 'Sesuai regulasi OJK dan praktik terbaik, VAPT minimal dilakukan 1 kali setahun, atau setiap kali ada perubahan arsitektur aplikasi mayor.' },
-      { q: 'Apakah pengujian pentest dapat mengganggu operasional sistem?', a: 'RTI melakukan pengujian di lingkungan pementasan (staging/development). Jika terpaksa di production, kami menjadwalkannya di luar jam sibuk (window maintenance) dengan pengawasan ketat.' }
-    ]
-  },
-  standards: {
-    title: 'Standard Implementation (ISO)',
-    icon: Award,
-    overview: 'Pendampingan konsultansi dan sertifikasi standar manajemen kualitas internasional. Kami membantu organisasi Anda merancang, mengimplementasikan, dan mengaudit Sistem Manajemen Keamanan Informasi (ISO/IEC 27001), Manajemen Layanan TI (ISO 20000), serta Sistem Manajemen Kelangsungan Bisnis / DRC (ISO 22301).',
-    benefits: [
-      'Meningkatkan brand trust dan authority organisasi sebagai penyedia layanan berstandar internasional.',
-      'Memenuhi regulasi pemerintah (Kominfo/BSSN) tentang kewajiban SMKI SPBE bagi penyelenggara sistem elektronik.',
-      'Menyusun proses operasional TI yang terdokumentasi dengan baik, mengurangi kegagalan operasional.',
-      'Meminimalkan waktu henti (downtime) bisnis melalui manajemen pemulihan bencana (DRC).'
-    ],
-    methodology: [
-      'Gap Analysis & Assessment - Memetakan kondisi operasional saat ini terhadap standar ISO target.',
-      'Awareness Training - Pelatihan pentingnya ISO untuk staf dan manajemen puncak.',
-      'Document Design & Development - Penyusunan Kebijakan Keamanan, SOP, dan Dokumen Kontrol Kontribusi.',
-      'Internal Audit & Management Review - Simulasi audit mandiri sebelum kedatangan auditor eksternal.',
-      'Certification Audit Support - Pendampingan penuh saat audit Stage 1 & Stage 2 oleh Lembaga Sertifikasi.'
-    ],
-    deliverables: [
-      'Dokumen Kebijakan & SOP Manajemen Layanan/Keamanan Informasi.',
-      'Laporan Hasil Gap Analysis & Internal Audit Report.',
-      'Sertifikat ISO Resmi dari Lembaga Sertifikasi Terakreditasi.'
-    ],
-    timeline: '3 - 6 Bulan',
-    faq: [
-      { q: 'Apakah sertifikat ISO berlaku selamanya?', a: 'Sertifikat ISO berlaku selama 3 tahun. Namun, organisasi wajib melakukan Audit Surveillance tahunan di tahun ke-1 dan ke-2 untuk memastikan kepatuhan yang berkelanjutan.' },
-      { q: 'Apa perbedaan ISO 27001 versi 2013 dengan 2022?', a: 'Versi 2022 melakukan simplifikasi struktur kontrol keamanan (dari 14 klausul menjadi 4 tema utama) serta menambahkan kontrol baru seperti threat intelligence dan keamanan komputasi awan.' }
-    ]
-  },
-  'it-governance': {
-    title: 'IT Governance, Risk & Compliance',
-    icon: FileText,
-    overview: 'Asesmen tata kelola teknologi informasi berbasis framework COBIT 2019 dan SPBE. Layanan ini membantu auditor internal, manajemen puncak, dan tim teknis menyelaraskan inisiatif investasi TI dengan tujuan strategi bisnis perusahaan serta memitigasi risiko hukum operasional.',
-    benefits: [
-      'Menjembatani kesenjangan antara kebijakan bisnis, regulasi tata kelola, dan implementasi teknis.',
-      'Meningkatkan nilai indeks kematangan SPBE (Sistem Pemerintahan Berbasis Elektronik) bagi kementerian/daerah.',
-      'Mengurangi tumpang tindih anggaran TI dan meningkatkan efisiensi pembelanjaan infrastruktur.',
-      'Membangun budaya kesadaran risiko siber di tingkat pimpinan direksi.'
-    ],
-    methodology: [
-      'Identify Business Goals & IT Alignment - Pemetaan sasaran korporasi.',
-      'Maturity Assessment - Pengukuran tingkat kematangan tata kelola TI as-is berbasis COBIT.',
-      'Gap & Target Definition - Penetapan level target kematangan.',
-      'Governance SOP Formulation - Pembuatan kebijakan kontrol tata kelola TI.',
-      'Roadmap Implementation - Penetapan peta jalan perbaikan.'
-    ],
-    deliverables: [
-      'Dokumen Asesmen Kematangan Tata Kelola TI (Maturity Assessment Report).',
-      'Kebijakan & SOP Tata Kelola TI Baru.',
-      'Peta Jalan (Roadmap) Peningkatan Kapabilitas Tata Kelola.'
+      'Buku Cetak Biru Keamanan Siber (Cybersecurity Blueprint).',
+      'Peta Jalan Implementasi Program Keamanan (Security Roadmap).',
+      'Rencana Anggaran Belanja (Cyber CAPEX/OPEX Plan).'
     ],
     timeline: '2 - 3 Bulan',
     faq: [
-      { q: 'Mengapa menggunakan COBIT 2019?', a: 'COBIT 2019 adalah standar global paling diterima untuk tata kelola I&T enterprise karena memberikan pedoman berorientasi bisnis yang dapat diadaptasikan sesuai ukuran organisasi.' }
+      { q: 'Mengapa memerlukan Cybersecurity Blueprint terpisah dari ITMP?', a: 'Keamanan siber bukan sekadar sub-divisi TI, melainkan manajemen risiko tata kelola. Blueprint siber yang mandiri memastikan pengawasan independen terhadap operasional TI.' }
     ]
   },
-  'cyber-strategy': {
-    title: 'Cybersecurity Strategy',
-    icon: Shield,
-    overview: 'Penyusunan Rencana Induk Keamanan Informasi (Cyber Security Blueprint & Roadmap). Layanan ini dirancang untuk memetakan arah investasi dan implementasi pertahanan siber organisasi Anda secara jangka panjang, selaras dengan arsitektur TOGAF / IT Master Plan.',
+  'it-grc': {
+    title: 'Policy-SOP Development',
+    icon: FileText,
+    overview: 'Layanan pengembangan tata kelola TI berbasis COBIT 2019, perancangan kebijakan tingkat tinggi (High-Level Policy), audit kematangan TI SPBE, serta manajemen risiko pihak ketiga (Third-Party Risk Management) untuk memitigasi risiko hukum dan operasional.',
     benefits: [
-      'Membangun cetak biru perlindungan siber jangka panjang (3 - 5 tahun).',
-      'Menyelaraskan belanja keamanan siber dengan proses pertumbuhan bisnis perusahaan.',
-      'Meningkatkan kesiapan penanganan insiden di seluruh unit organisasi.',
-      'Mengadopsi pendekatan Zero Trust dan Secure by Design secara holistik.'
+      'Menjembatani kesenjangan antara kebijakan bisnis, regulasi tata kelola, dan kepatuhan hukum.',
+      'Mengurangi tumpang tindih anggaran TI serta meningkatkan efisiensi operasional.',
+      'Meminimalisir risiko siber dari vendor dan penyedia jasa luar (pihak ketiga).'
     ],
     methodology: [
-      'Business & Threat Profile Mapping - Analisis profil ancaman khusus industri.',
-      'Architecture Evaluation - Review arsitektur pertahanan saat ini berbasis SABSA/NIST.',
-      'Target Blueprinting - Desain arsitektur to-be yang aman.',
-      'Security Strategy Formulation - Formulasi inisiatif dan program keamanan.',
-      'Roadmap & Capital Planning - Penyusunan anggaran dan prioritas eksekusi.'
+      'Identify Goals - Pemetaan sasaran korporasi dan penyelarasan TI.',
+      'Maturity Audit - Asesmen kematangan tata kelola TI as-is berbasis COBIT.',
+      'Framework Development - Penyusunan dokumen kebijakan tingkat tinggi (SOP).',
+      'Third-Party Review - Asesmen risiko vendor pihak ketiga secara komparatif.'
     ],
     deliverables: [
-      'Buku Cetak Biru Keamanan Siber (Cyber Security Blueprint).',
-      'Peta Jalan Implementasi Program Keamanan Siber (Security Roadmap).',
-      'Rencana Anggaran & Belanja Keamanan (Cyber CAPEX/OPEX Plan).'
+      'Laporan Asesmen Kematangan Tata Kelola TI (Maturity Assessment Report).',
+      'Buku Kebijakan & SOP Tata Kelola TI Baru.',
+      'Kerangka Manajemen Risiko Vendor Pihak Ketiga.'
     ],
-    timeline: '3 Bulan',
+    timeline: '2 - 3 Bulan',
     faq: [
-      { q: 'Mengapa blueprint siber harus terpisah dari ITMP?', a: 'Keamanan siber bukan sekadar sub-divisi TI, melainkan manajemen risiko tata kelola. Blueprint siber yang mandiri memastikan pengawasan independen terhadap operasional TI.' }
+      { q: 'Bagaimana RTI menilai kematangan tata kelola TI?', a: 'Kami menggunakan metrik COBIT 2019 yang mengklasifikasikan tingkat kematangan dari Level 0 (Incomplete) hingga Level 5 (Optimizing).' }
     ]
   },
-  'cyber-compliance': {
-    title: 'Cybersecurity Compliance Review',
-    icon: CheckCircle2,
-    overview: 'Layanan audit kesenjangan kepatuhan terhadap peraturan perundang-undangan nasional, seperti UU Pelindungan Data Pribadi (UU PDP No. 27/2022), regulasi OJK (POJK APU-PPT), dan regulasi Bank Indonesia terkait sistem pembayaran digital.',
+  'iso-implementation': {
+    title: 'ISO/IEC Implementation',
+    icon: Award,
+    overview: 'Pendampingan implementasi standar internasional manajemen kualitas keamanan informasi (seperti ISO/IEC 27001, ISO 20000, ISO 22301) secara holistik menggunakan siklus Plan-Do-Check-Act (PDCA) untuk kesiapan sertifikasi resmi.',
     benefits: [
-      'Mencegah risiko denda administratif UU PDP hingga 2% dari total pendapatan tahunan.',
-      'Membantu penyiapan pejabat DPO (Data Protection Officer) dan dokumen DPIA (Data Protection Impact Assessment).',
-      'Memastikan seluruh sistem pembayaran e-channel memenuhi standar audit wajib Bank Indonesia.',
-      'Memberikan ketenangan hukum bagi jajaran direksi dari gugatan kebocoran data pribadi.'
+      'Meningkatkan reputasi korporasi dan brand trust di tingkat global.',
+      'Memenuhi kewajiban SMKI SPBE bagi penyelenggara sistem pemerintahan dan keuangan.',
+      'Menyusun proses bisnis yang terdokumentasi rapi untuk mengurangi kegagalan operasional.'
     ],
     methodology: [
-      'Scope Definition - Pemetaan sistem penampung data pribadi / transaksi keuangan.',
-      'Compliance Checklist Audit - Pengujian kepatuhan terhadap klausul UU PDP/Regulasi BI.',
-      'Data Flow Analysis - Pemetaan aliran data masuk, proses, simpan, dan hapus.',
-      'Policy Review & Advisory - Asesmen kebijakan privasi dan hak subjek data.',
-      'Remediation Roadmap - Rekomendasi teknis penutupan celah kepatuhan.'
+      'Gap Analysis (Plan) - Memetakan kondisi operasional saat ini terhadap standar ISO.',
+      'Awareness & Design (Do) - Pelatihan staf dan pembuatan dokumen kebijakan.',
+      'Internal Audit (Check) - Simulasi audit mandiri sebelum audit eksternal.',
+      'Certification (Act) - Pendampingan audit oleh badan sertifikasi resmi.'
     ],
     deliverables: [
-      'Laporan Audit Kepatuhan UU PDP (PDP Gap Assessment Report).',
-      'Rancangan Kebijakan Privasi (Privacy Policy) & Dokumen DPIA.',
-      'Daftar Perbaikan Kepatuhan Teknis (Compliance Remediation Checklist).'
+      'Dokumen Kebijakan & SOP ISMS (Sistem Manajemen Keamanan Informasi).',
+      'Laporan Hasil Gap Analysis & Internal Audit.',
+      'Sertifikat ISO Resmi dari Lembaga Akreditasi Terpercaya.'
+    ],
+    timeline: '3 - 6 Bulan',
+    faq: [
+      { q: 'Berapa lama sertifikat ISO berlaku?', a: 'Sertifikat ISO berlaku selama 3 tahun dengan kewajiban audit surveillance tahunan untuk memastikan standar tetap dijalankan.' }
+    ]
+  },
+  'bcm-bcp-drp': {
+    title: 'BCM-BCP-DRP Services (Cyber Drill)',
+    icon: Server,
+    overview: 'Layanan penyusunan Business Continuity Plan (BCP) dan Disaster Recovery Plan (DRP) terpadu berdasarkan analisis dampak bisnis (BIA) yang dikombinasikan dengan pengujian kesiapan insiden melalui simulasi Cyber Drill (Table-Top Exercise, Phishing Simulation, dan Cyber Range).',
+    benefits: [
+      'Meminimalisir downtime operasional saat terjadi bencana fisik atau serangan siber ransomware.',
+      'Melatih kesiapan tim penanganan insiden siber (CSIRT) merespons serangan secara taktis.',
+      'Menentukan Recovery Time Objective (RTO) and Recovery Point Objective (RPO) yang terukur.',
+      'Menjamin kepatuhan terhadap regulasi Bank Indonesia/OJK tentang keandalan operasional.'
+    ],
+    methodology: [
+      'BIA (Business Impact Analysis) - Pemetaan dampak bisnis dari kegagalan sistem.',
+      'Risk Assessment & Scenario Design - Analisis ancaman bencana alam/siber dan penyusunan skenario simulasi.',
+      'Strategy & Planning - Desain dokumen BCP, DRP, dan struktur redundansi.',
+      'Cyber Drill & Simulation - Pelaksanaan Table-Top Exercise dan simulasi serangan siber nyata.'
+    ],
+    deliverables: [
+      'Dokumen Analisis Dampak Bisnis (BIA Report).',
+      'Buku Rencana Kelangsungan Bisnis (BCP) & Rencana Pemulihan Bencana (DRP).',
+      'Laporan Evaluasi Simulasi Uji Coba Kesiapan Insiden (Cyber Drill & Phishing Report).'
+    ],
+    timeline: '2 - 3 Bulan',
+    faq: [
+      { q: 'Apa perbedaan BCP dan DRP?', a: 'BCP berfokus pada keberlanjutan proses bisnis secara holistik (staf, komunikasi, lokasi alternatif), sedangkan DRP berfokus pada aspek pemulihan teknis infrastruktur IT (server, database, cloud).' },
+      { q: 'Apa itu Table-Top Exercise (TTE) dalam Cyber Drill?', a: 'TTE adalah simulasi berbasis diskusi di mana tim kunci berkumpul untuk membedah skenario serangan siber dan menguji alur eskalasi keputusan tanpa mengganggu sistem operasional.' }
+    ]
+  },
+  'digital-maturity': {
+    title: 'Digital Maturity Assessment & Security Risk Rating',
+    icon: Zap,
+    overview: 'Evaluasi independen terhadap tingkat kematangan digital organisasi dan kuantifikasi postur risiko keamanan siber menggunakan metrik terukur untuk memberi pemahaman yang jelas bagi direksi.',
+    benefits: [
+      'Mendapatkan penilaian objektif kematangan digital dibanding industri sejenis.',
+      'Mengidentifikasi celah tata kelola siber yang paling mendesak untuk diperbaiki.',
+      'Memperoleh potret metrik risiko (Security Risk Rating) untuk laporan dewan komisaris.'
+    ],
+    methodology: [
+      'Data Gathering - Pengumpulan metrik TI dan kuesioner wawancara.',
+      'Evaluation Framework - Penilaian tingkat kematangan menggunakan standar BSSN/NIST.',
+      'Risk Quantification - Kuantifikasi probabilitas dan dampak finansial risiko.',
+      'Reporting - Penyusunan dasbor postur keamanan siber.'
+    ],
+    deliverables: [
+      'Laporan Kematangan Digital (Digital Maturity Assessment Report).',
+      'Dasbor Security Risk Rating.',
+      'Rekomendasi Strategis Peningkatan Kematangan.'
     ],
     timeline: '1 - 2 Bulan',
     faq: [
-      { q: 'Kapan sanksi UU PDP berlaku penuh?', a: 'Masa transisi UU PDP telah berakhir, artinya sanksi denda administratif, penghentian operasional, hingga tuntutan pidana terhadap korporasi yang lalai melindungi data pribadi sudah berlaku penuh sekarang.' }
+      { q: 'Siapa yang memerlukan penilaian ini?', a: 'Sektor perbankan, perusahaan energi, dan startup e-commerce yang ingin mengukur postur siber mereka di mata regulator maupun investor.' }
     ]
   },
-  'tech-strategy': {
-    title: 'Technology Strategy',
-    icon: Layout,
-    overview: 'Penyusunan Cetak Biru Teknologi (IT Master Plan / ITMP) dan perancangan infrastruktur kapasitas. Kami mendampingi perancangan server core banking, pemulihan bencana (DRC), migrasi cloud, serta strategi transformasi digital yang hemat biaya dan andal.',
+  'cyber-awareness': {
+    title: 'Awareness & Training',
+    icon: BookOpen,
+    overview: 'Program edukasi kesadaran keamanan siber yang komprehensif bagi staf non-teknis, mencakup modul e-learning interaktif, simulasi phishing berkala, dan kampanye budaya sadar keamanan.',
     benefits: [
-      'Mencegah salah investasi pembelian kapasitas server dan infrastruktur TI.',
-      'Memiliki rancangan topologi DRC (Disaster Recovery Center) yang tangguh dan teruji.',
-      'Menyusun rencana pengembangan TI jangka panjang yang modular dan fleksibel.',
-      'Mempercepat migrasi dari sistem legacy ke teknologi web modern/cloud.'
+      'Mengurangi tingkat keberhasilan serangan social engineering hingga 90%.',
+      'Membangun pertahanan lapis pertama (human firewall) yang kuat di organisasi Anda.',
+      'Memenuhi klausul kepatuhan standar keamanan informasi ISO 27001 dan regulasi PDP.'
     ],
     methodology: [
-      'Enterprise Analysis - Analisis kebutuhan proses bisnis organisasi.',
-      'Application & Data Architecture Design - Perancangan struktur aplikasi.',
-      'Infrastructure & Capacity Planning - Perhitungan spesifikasi server/cloud.',
-      'Disaster Recovery Architecture - Perancangan redundansi DRC.',
-      'IT Master Plan Formulation - Penyusunan dokumen final ITMP.'
+      'Baseline Test - Uji coba awal kerawanan phishing karyawan.',
+      'E-Learning Training - Pelatihan kesadaran siber berbasis modul interaktif.',
+      'Phishing Simulation - Uji coba email phishing jebakan berkala.',
+      'Reporting - Penyusunan dasbor kelulusan dan nilai kewaspadaan staf.'
     ],
     deliverables: [
-      'Buku IT Master Plan (ITMP).',
-      'Desain Arsitektur Infrastruktur & Kapasitas Server.',
-      'Dokumen SOP Disaster Recovery & Business Continuity (DRC/BCP).'
+      'Modul E-learning & Kuis Interaktif.',
+      'Laporan Hasil Simulasi Phishing Karyawan.',
+      'Materi Kampanye Sadar Keamanan (Security Awareness Kit).'
     ],
-    timeline: '3 Bulan',
+    timeline: 'Rutin (1 - 3 Bulan)',
     faq: [
-      { q: 'Apakah RTI merekomendasikan merk hardware tertentu?', a: 'Tidak. RTI bersifat Vendor Independent. Kami memberikan rekomendasi kapasitas dan spesifikasi teknis objektif, bukan merekomendasikan merk produk tertentu.' }
+      { q: 'Mengapa fokus pada non-IT?', a: 'Lebih dari 90% kebocoran data berawal dari kesalahan manusia (human error) seperti mengklik tautan mencurigakan. Melatih staf non-IT memitigasi celah terbesar ini.' }
     ]
   },
-  training: {
-    title: 'CyberTroops Academy',
-    icon: Users,
-    overview: 'Bootcamp intensif penyiapan talenta keamanan siber bersertifikasi. Kami menyelenggarakan pelatihan bagi tim internal organisasi maupun B2C untuk spesialisasi Ofensif (Red Team/Pentester) dan Defensif (Blue Team/SOC Analyst), dengan kurikulum selaras Peta Okupasi Keamanan Siber BSSN.',
+  'it-audit': {
+    title: 'IT Audit',
+    icon: CheckCircle2,
+    overview: 'Audit independen menyeluruh terhadap infrastruktur TI, aplikasi, tata kelola, sistem perdagangan (trading system), serta kepatuhan kepatuhan regulasi OJK (POJK).',
     benefits: [
-      'Mengatasi kelangkaan talenta keamanan siber internal organisasi Anda.',
-      'Kurikulum praktek langsung di lab range, bukan sekadar teori kelas.',
-      'Instruktur ahli yang merupakan praktisi pentester aktif bersertifikasi OSCP/CEH/CISA.',
-      'Staf dibekali pemahaman mendalam insiden penanganan siber.'
+      'Memastikan trading system atau core business berjalan stabil tanpa anomali.',
+      'Menjamin kepatuhan penuh terhadap audit wajib OJK/BI untuk industri jasa keuangan.',
+      'Mendeteksi celah kebocoran keuangan atau inefisiensi arsitektur TI.'
     ],
     methodology: [
-      'Curriculum Alignment - Penyelarasan materi sesuai okupasi BSSN.',
-      'Hands-on Lab Practice - Latihan penyerangan & bertahan di Cyber Range simulator.',
-      'Security Awareness Campaigns - Edukasi kepedulian keamanan untuk staf umum.',
-      'Certification Assessment - Ujian kelayakan kompetensi siber.',
-      'Talent Deployment - Penyaluran talenta handal langsung bekerja.'
+      'Pre-Audit - Penentuan ruang lingkup dan checklist kepatuhan regulasi.',
+      'Fieldwork - Audit langsung ke server, database, dan kebijakan konfigurasi.',
+      'Analysis - Pencocokan temuan dengan regulasi standar.',
+      'Reporting - Penyusunan laporan temuan audit formal.'
     ],
     deliverables: [
-      'Silabus & Modul Pelatihan Keamanan Siber (Red/Blue Team).',
-      'Sertifikat Kompetensi Pelatihan Akademi RTI.',
-      'Laporan Hasil Evaluasi Kompetensi Staf Peserta.'
+      'Laporan Audit TI Resmi (IT Audit Report).',
+      'Daftar Temuan & Status Kepatuhan Regulasi (Compliance Checklist).',
+      'Rencana Aksi Korektif (Corrective Action Plan).'
     ],
-    timeline: '1 - 2 Bulan (Tergantung Modul)',
+    timeline: '1 - 2 Bulan',
     faq: [
-      { q: 'Siapa saja yang bisa mengikuti pelatihan ini?', a: 'Mulai dari fresh graduate yang ingin berkarir di bidang siber, administrator sistem yang ingin meningkatkan keahlian, hingga tim keamanan internal korporasi.' }
+      { q: 'Apakah IT Audit sama dengan VAPT?', a: 'Tidak. VAPT fokus pada pengujian celah keamanan teknis (hacking), sedangkan IT Audit mengevaluasi kepatuhan operasional, kelayakan kontrol internal, stabilitas sistem, dan kesesuaian kebijakan regulasi.' }
+    ]
+  },
+  'vulnerability-assessment': {
+    title: 'Vulnerability Assessment (VA)',
+    icon: Eye,
+    overview: 'Pemindaian kerentanan sistem komputer, jaringan, dan aplikasi web secara otomatis menggunakan pemindai terpercaya untuk mendeteksi kelemahan konfigurasi dasar.',
+    benefits: [
+      'Mengidentifikasi celah keamanan standar secara cepat dan efisien.',
+      'Memberikan laporan inventarisasi aset yang rentan terhadap eksploitasi.',
+      'Menjaga postur keamanan dasar secara berkala dengan biaya ekonomis.'
+    ],
+    methodology: [
+      'Target Scope - Mendefinisikan IP Address atau domain target.',
+      'Automated Scanning - Menjalankan pemindaian kerentanan otomatis.',
+      'Result Filtering - Menyaring temuan false-positive oleh analis siber RTI.',
+      'Prioritization - Mengklasifikasikan celah dari High, Medium, ke Low.'
+    ],
+    deliverables: [
+      'Laporan Hasil Pemindaian Kerentanan (VA Report).',
+      'Daftar Prioritas Mitigasi Teknis.'
+    ],
+    timeline: '1 Minggu',
+    faq: [
+      { q: 'Apakah pemindaian kerentanan sama dengan pentest?', a: 'VA adalah pemindaian otomatis untuk mencari celah yang diketahui tanpa mencoba mengeksploitasinya, sedangkan pentest (Penetration Testing) melibatkan upaya aktif manusia untuk menembus pertahanan.' }
+    ]
+  },
+  'penetration-testing': {
+    title: 'Penetration Testing (Pen-Test)',
+    icon: Key,
+    overview: 'Simulasi serangan siber aktif secara terkendali oleh ethical hacker RTI untuk menembus pertahanan aplikasi web, mobile app, API, dan jaringan internal/eksternal klien.',
+    benefits: [
+      'Menguji ketahanan sistem secara nyata terhadap skenario eksploitasi canggih.',
+      'Memenuhi kepatuhan regulasi OJK terkait audit keamanan berkala sistem keuangan.',
+      'Menemukan celah logika bisnis (business logic flaws) yang tidak terdeteksi mesin.'
+    ],
+    methodology: [
+      'Reconnaissance - Pengumpulan informasi target.',
+      'Vulnerability Scanning - Pemetaan celah potensial.',
+      'Manual Exploitation - Upaya menembus sistem dan mengambil alih hak akses.',
+      'Reporting & Remediation - Rapat penjelasan teknis dan penyerahan dokumentasi temuan.'
+    ],
+    deliverables: [
+      'Executive Summary Report (Laporan Manajemen).',
+      'Technical Penetration Testing Report (Laporan Detail Eksploitasi).',
+      'Validation Report (Laporan Tes Ulang Pasca-Mitigasi).'
+    ],
+    timeline: '2 - 3 Minggu',
+    faq: [
+      { q: 'Apakah pentest mengganggu operasional?', a: 'Kami mengutamakan pengujian di staging. Jika dilakukan di production, pengujian dijadwalkan di luar jam sibuk dengan pengawasan ketat.' }
+    ]
+  },
+  'secure-sdlc': {
+    title: 'Secure SDLC Implementation',
+    icon: Lock,
+    overview: 'Integrasi kontrol keamanan di setiap tahapan siklus pengembangan perangkat lunak (SDLC) menggunakan pendekatan Shift Left dan praktek DevSecOps untuk memastikan aplikasi aman dari baris kode pertama.',
+    benefits: [
+      'Memperbaiki celah keamanan perangkat lunak saat biaya perbaikan masih murah (tahap coding).',
+      'Membangun budaya pemrogaman aman (secure coding) bagi tim developer internal.',
+      'Mengotomatiskan pemindaian kode (SAST/DAST) di dalam pipeline CI/CD.'
+    ],
+    methodology: [
+      'Requirement Assessment - Menentukan standar keamanan aplikasi.',
+      'Threat Modeling - Desain pemodelan ancaman sebelum coding dimulai.',
+      'Static & Dynamic Scan (SAST/DAST) - Pemindaian kode sumber otomatis.',
+      'Secure Code Review - Review manual baris kode kritis (misal: otentikasi).'
+    ],
+    deliverables: [
+      'Buku Panduan Pemrograman Aman (Secure Coding Guidelines).',
+      'Laporan Audit CI/CD Pipeline & DevSecOps Setup.',
+      'Laporan Source Code Review (SAST/DAST Report).'
+    ],
+    timeline: '1 - 2 Bulan',
+    faq: [
+      { q: 'Apa itu pendekatan Shift Left?', a: 'Shift Left berarti memindahkan pengujian keamanan ke tahap seawal mungkin dalam siklus pengembangan (ke kiri pada timeline), bukan menguji keamanan hanya saat aplikasi sudah selesai dikembangkan.' }
+    ]
+  },
+  'red-teaming': {
+    title: 'Red Teaming',
+    icon: Target,
+    overview: 'Simulasi serangan siber rahasia multi-vektor secara riil (termasuk physical intrusion, social engineering, dan cyber attack) untuk menguji ketahanan tim pertahanan internal (Blue Team) dan sensor pertahanan Anda.',
+    benefits: [
+      'Menguji respon deteksi dan eskalasi tim keamanan internal (SOC/CSIRT) di dunia nyata.',
+      'Menilai efektivitas pertahanan fisik, teknologi, dan kewaspadaan karyawan sekaligus.',
+      'Menguji respon mitigasi insiden siber secara holistik tanpa pemberitahuan staf.'
+    ],
+    methodology: [
+      'Scoping & Rules of Engagement - Penentuan batas pengujian yang aman.',
+      'Recon & Intelligence - Intelijen terbuka terhadap staf dan infrastruktur.',
+      'Active Intrusion - Serangan siber rahasia dan upaya bypass sistem deteksi.',
+      'Post-Simulation Debrief - Rekonsiliasi temuan serangan bersama tim Blue Team klien.'
+    ],
+    deliverables: [
+      'Laporan Simulasi Serangan Red Team (Red Team Report).',
+      'Laporan Kinerja Deteksi Blue Team (Detection Matrix Report).',
+      'Rekomendasi Peningkatan Sensor Deteksi (SIEM/EDR rule updates).'
+    ],
+    timeline: '1 - 2 Bulan',
+    faq: [
+      { q: 'Apakah karyawan akan tahu tentang simulasi ini?', a: 'Tidak. Simulasi Red Team dilakukan secara rahasia, hanya manajemen puncak (sponsor proyek) yang mengetahuinya untuk mengukur respon riil staf.' }
+    ]
+  },
+  'soc': {
+    title: 'Security Operation Center (SOC)',
+    icon: Shield,
+    overview: 'Layanan pemantauan keamanan siber 24/7 real-time berbasis Security Information and Event Management (SIEM) untuk mendeteksi, menganalisis, dan melaporkan ancaman keamanan secara cepat.',
+    benefits: [
+      'Pemantauan siber real-time 24 jam penuh tanpa menguras sumber daya internal.',
+      'Deteksi dini upaya serangan ransomware, malware, atau pembobolan data.',
+      'Analisis insiden oleh tim bersertifikasi siber profesional.'
+    ],
+    methodology: [
+      'Ingestion - Menghubungkan log server, firewall, dan endpoint ke SIEM.',
+      'Correlation - Menulis aturan deteksi korelasi ancaman.',
+      'Monitoring - Analisis siaga 24/7 oleh tim Security Analyst.',
+      'Triage & Alert - Notifikasi eskalasi cepat untuk insiden tingkat kritis.'
+    ],
+    deliverables: [
+      'Dasbor Pemantauan Keamanan SIEM.',
+      'Laporan Insiden Siber Real-time (Incident Alerts).',
+      'Laporan Kepatuhan Keamanan Bulanan (Monthly Security Report).'
+    ],
+    timeline: 'Layanan Berkelanjutan (Tahunan)',
+    faq: [
+      { q: 'Bagaimana tim SOC merespon serangan?', a: 'Saat mendeteksi serangan, tim SOC kami akan melakukan triage, memblokir IP penyerang di firewall klien (sesuai persetujuan), mengisolasi host yang terinfeksi, dan memandu tim internal klien melakukan penanganan.' }
+    ]
+  },
+  'cyber-threat-intelligence': {
+    title: 'Cyber Threat Intelligence (CTI) Solution',
+    icon: Zap,
+    overview: 'Layanan pengumpulan dan analisis data ancaman siber global secara real-time dari Dark Web, forum peretas, dan repositori malware untuk mendeteksi kebocoran kredensial atau rencana serangan terhadap organisasi Anda secara dini.',
+    benefits: [
+      'Mengetahui rencana serangan peretas sebelum eksploitasi terjadi.',
+      'Mendeteksi kebocoran data rahasia atau kredensial karyawan di forum Dark Web.',
+      'Meningkatkan kesiapan filter firewall dengan data ancaman global (IoC feeds).'
+    ],
+    methodology: [
+      'Collection - Mengumpulkan data feeds dari Dark Web dan threat database.',
+      'Analysis - Menyaring info untuk menemukan korelasi nama domain/klien.',
+      'Dissemination - Mengirim laporan intelijen ancaman yang mendesak.',
+      'Integration - Memasukkan daftar IP/domain berbahaya ke firewall klien.'
+    ],
+    deliverables: [
+      'Laporan Intelijen Kebocoran Data (Dark Web Leak Report).',
+      'Feed Indikator Serangan (IoC Feeds Integration).',
+      'Laporan Profil Ancaman Industri Berkala.'
+    ],
+    timeline: 'Layanan Berkelanjutan (Tahunan)',
+    faq: [
+      { q: 'Apa itu IoC (Indicator of Compromise)?', a: 'IoC adalah bukti digital seperti hash file malware, alamat IP penyerang, atau domain phishing yang menunjukkan bahwa suatu sistem telah disusupi.' }
+    ]
+  },
+  'network-endpoint-hardening': {
+    title: 'Network & Endpoint Hardening',
+    icon: Server,
+    overview: 'Layanan penguatan konfigurasi sistem operasi, penutupan port tidak aman, pembatasan hak akses administrative, serta pengetatan konfigurasi perangkat jaringan dan endpoint (EDR).',
+    benefits: [
+      'Memperkecil celah serangan (attack surface) pada server dan perangkat kerja.',
+      'Mencegah penyebaran malware secara lateral (lateral movement) di jaringan internal.',
+      'Memastikan kepatuhan konfigurasi dasar sistem terhadap standar industri CIS Benchmarks.'
+    ],
+    methodology: [
+      'Baseline Audit - Evaluasi konfigurasi saat ini terhadap CIS Benchmarks.',
+      'Hardening Execution - Pengetatan kebijakan grup (GPO), firewall host, dan registry.',
+      'Port & Service Cleanup - Mematikan layanan dan port yang tidak diperlukan.',
+      'Validation - Uji coba fungsional pasca-hardening untuk mencegah kegagalan aplikasi.'
+    ],
+    deliverables: [
+      'Dokumen Panduan Penguatan Sistem (Hardening Guidelines).',
+      'Laporan Hasil Audit CIS Benchmarks.',
+      'Laporan Konfigurasi Hasil Akhir Hardening.'
+    ],
+    timeline: '2 - 3 Minggu',
+    faq: [
+      { q: 'Apakah hardening bisa merusak fungsi aplikasi?', a: 'Tindakan hardening dilakukan secara bertahap di lingkungan tes, lalu divalidasi fungsinya sebelum diterapkan ke lingkungan produksi untuk menghindari gangguan layanan.' }
+    ]
+  },
+  'incident-management': {
+    title: 'Cyber Security Incident Management',
+    icon: AlertCircle,
+    overview: 'Penyusunan kerangka kerja respons insiden siber berdasarkan standar NIST Incident Response Life Cycle, serta penanganan insiden darurat untuk mengisolasi, menyelidiki, dan membasmi ancaman siber aktif.',
+    benefits: [
+      'Memiliki alur penanganan insiden siber yang terstruktur untuk membatasi kerusakan.',
+      'Mengurangi downtime sistem dan memulihkan operasional bisnis dengan aman dan cepat.',
+      'Mencegah terjadinya insiden siber yang serupa di masa mendatang.'
+    ],
+    methodology: [
+      'Preparation - Penyusunan SOP penanganan dan pembentukan tim CSIRT.',
+      'Detection & Analysis - Identifikasi jenis serangan dan cakupan infeksinya.',
+      'Containment & Eradication - Mengisolasi host terinfeksi dan menghapus malware.',
+      'Recovery & Post-Incident - Pemulihan sistem secara aman dan evaluasi pembelajaran.'
+    ],
+    deliverables: [
+      'Buku Panduan Respons Insiden (Incident Response Playbook).',
+      'Laporan Analisis Penanganan Insiden Pasca-Serangan (Post-Mortem Report).',
+      'Laporan Evaluasi Kerentanan & Saran Pencegahan Ulang.'
+    ],
+    timeline: '1 - 2 Bulan (Penyusunan SOP) / Respon Cepat (Saat Insiden)',
+    faq: [
+      { q: 'Berapa cepat tim respon insiden RTI merespon?', a: 'Untuk insiden aktif (ransomware/data breach), tim tanggap darurat kami siap berkoordinasi dalam waktu kurang dari 2 jam setelah laporan diterima.' }
+    ]
+  },
+  'digital-forensic': {
+    title: 'Digital Forensic',
+    icon: FileCheck,
+    overview: 'Layanan identifikasi, akuisisi, preservasi, dan analisis bukti digital dari harddisk, memori, log server, atau perangkat seluler pasca-insiden siber secara forensik untuk keperluan hukum.',
+    benefits: [
+      'Memperoleh bukti digital yang sah dan tidak rusak (memenuhi standar hukum).',
+      'Menemukan akar penyebab (root cause) pembobolan data dan jejak peretas.',
+      'Mendapatkan laporan forensik resmi untuk kebutuhan kepatuhan hukum / asuransi.'
+    ],
+    methodology: [
+      'Acquisition - Kloning media penyimpanan secara forensik (write-blocked).',
+      'Preservation - Pemeliharaan integritas data menggunakan nilai hash (MD5/SHA256).',
+      'Analysis - Pencarian bukti tersembunyi, log yang dihapus, dan artefak malware.',
+      'Reporting - Penyusunan laporan keterangan ahli forensik digital.'
+    ],
+    deliverables: [
+      'Laporan Analisis Forensik Digital (Digital Forensic Report).',
+      'Bukti Digital Terpreservasi & Bersertifikasi hash.',
+      'Laporan Keterangan Ahli untuk Keperluan Hukum.'
+    ],
+    timeline: '2 - 3 Minggu',
+    faq: [
+      { q: 'Mengapa kloning harus menggunakan write-blocker?', a: 'Write-blocker mencegah perubahan sekecil apapun pada media bukti asli saat dianalisis, menjaga keabsahannya sebagai alat bukti sah di pengadilan.' }
     ]
   }
 };

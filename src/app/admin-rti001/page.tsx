@@ -1,0 +1,1930 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Chatbot from '@/components/Chatbot';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import { 
+  Lock, Mail, AlertCircle, RefreshCw, LayoutDashboard, 
+  Users, Briefcase, FileText, CheckCircle2, TrendingUp, 
+  Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo, Key,
+  Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X
+} from 'lucide-react';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
+export default function AdminDashboard() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [adminUser, setAdminUser] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'proposals' | 'orders' | 'blogs' | 'settings'>('analytics');
+
+  // CMS Website Editor States
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  // AI Proposal Builder States
+  const [selectedProposal, setSelectedProposal] = useState<any>(null);
+  const [isBuilderOpen, setIsBuilderOpen] = useState(false);
+  const [additionalInstructions, setAdditionalInstructions] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState('');
+  
+  // Proposal Editor States
+  const [proposalTitle, setProposalTitle] = useState('');
+  const [proposalContent, setProposalContent] = useState('');
+  
+  // Email Dispatch States
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailBody, setEmailBody] = useState('');
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailSendStatus, setEmailSendStatus] = useState<{ success?: boolean; error?: string; simulated?: boolean; logPath?: string } | null>(null);
+
+  // Login form state
+  const [email, setEmail] = useState('admin@risetin.co.id');
+  const [password, setPassword] = useState('adminpassword123');
+  const [captchaInput, setCaptchaInput] = useState('');
+  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: 0 });
+  const [loginError, setLoginError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Stats & Data states
+  const [stats, setStats] = useState<any>(null);
+  const [leads, setLeads] = useState<any[]>([]);
+  const [proposals, setProposals] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
+
+  // Blog publishing state
+  const [blogTitle, setBlogTitle] = useState('');
+  const [blogCategory, setBlogCategory] = useState('NEWS');
+  const [blogSummary, setBlogSummary] = useState('');
+  const [blogContent, setBlogContent] = useState('');
+  const [blogSuccess, setBlogSuccess] = useState(false);
+
+  const generateCaptcha = () => {
+    const num1 = Math.floor(Math.random() * 9) + 1;
+    const num2 = Math.floor(Math.random() * 9) + 1;
+    setCaptcha({
+      num1,
+      num2,
+      answer: num1 + num2
+    });
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+    checkSession();
+  }, []);
+
+  const checkSession = async () => {
+    try {
+      const res = await fetch('/api/auth/me');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.authenticated && (data.user.role === 'ADMIN' || data.user.role === 'ADMIN_SALES' || data.user.role === 'ADMIN_CUSTOMER_CARE')) {
+          setAdminUser(data.user);
+          setIsLoggedIn(true);
+          fetchAdminData();
+        }
+      }
+    } catch (err) {
+      console.log('No admin session.');
+    }
+  };
+
+  const fetchAdminData = async () => {
+    try {
+      // 1. Fetch dashboard stats
+      const resStats = await fetch('/api/dashboard/stats');
+      if (resStats.ok) {
+        const dataStats = await resStats.json();
+        setStats(dataStats);
+      }
+
+      // 2. Fetch all leads
+      const resLeads = await fetch('/api/leads');
+      if (resLeads.ok) {
+        const dataLeads = await resLeads.json();
+        setLeads(dataLeads);
+      }
+
+      // 3. Fetch all proposals
+      const resProposals = await fetch('/api/proposals');
+      if (resProposals.ok) {
+        const dataProposals = await resProposals.json();
+        setProposals(dataProposals);
+      }
+
+      // 4. Fetch all orders
+      const resOrders = await fetch('/api/orders');
+      if (resOrders.ok) {
+        const dataOrders = await resOrders.json();
+        setOrders(dataOrders);
+      }
+
+      // 5. Fetch website settings
+      const resSettings = await fetch('/api/settings');
+      if (resSettings.ok) {
+        const dataSettings = await resSettings.json();
+        setSiteConfig(dataSettings);
+      }
+    } catch (err) {
+      console.error('Failed to fetch admin data:', err);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setLoading(true);
+
+    if (parseInt(captchaInput) !== captcha.answer) {
+      setLoginError('Captcha verification failed. Please try again.');
+      setLoading(false);
+      generateCaptcha();
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        if (data.user.role !== 'ADMIN' && data.user.role !== 'ADMIN_SALES' && data.user.role !== 'ADMIN_CUSTOMER_CARE') {
+          setLoginError('Access denied. Administrator privileges required.');
+          generateCaptcha();
+          setLoading(false);
+          return;
+        }
+        setAdminUser(data.user);
+        setIsLoggedIn(true);
+        fetchAdminData();
+      } else {
+        setLoginError(data.error || 'Authentication failed.');
+        generateCaptcha();
+      }
+    } catch (err) {
+      setLoginError('Server error. Failed to establish connection.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setIsLoggedIn(false);
+      setAdminUser(null);
+      setEmail('');
+      setPassword('');
+      setCaptchaInput('');
+      generateCaptcha();
+    } catch (err) {
+      console.error('Failed to log out:', err);
+    }
+  };
+
+  const handlePublishBlog = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBlogSuccess(true);
+    setBlogTitle('');
+    setBlogSummary('');
+    setBlogContent('');
+    setTimeout(() => setBlogSuccess(false), 3000);
+  };
+
+  const handleSubmitSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    setSettingsSuccess(false);
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(siteConfig)
+      });
+
+      if (res.ok) {
+        setSettingsSuccess(true);
+        setTimeout(() => setSettingsSuccess(false), 3000);
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Gagal menyimpan pengaturan.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan jaringan.');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  };
+
+  const handleAddMenu = () => {
+    if (!siteConfig) return;
+    const newMenuId = `menu_${Date.now()}`;
+    const newMenus = [
+      ...(siteConfig.menus || []),
+      { id: newMenuId, name: 'Menu Baru', path: '/new-path' }
+    ];
+    setSiteConfig({ ...siteConfig, menus: newMenus });
+  };
+
+  const handleDeleteMenu = (idToDelete: string) => {
+    if (!siteConfig) return;
+    const confirmDelete = window.confirm('Apakah Anda yakin ingin menghapus menu navigasi ini?');
+    if (!confirmDelete) return;
+    const newMenus = siteConfig.menus.filter((m: any) => m.id !== idToDelete);
+    setSiteConfig({ ...siteConfig, menus: newMenus });
+  };
+
+  const handleAddPackage = () => {
+    if (!siteConfig) return;
+    const newPkgId = `pkg_${Date.now()}`;
+    const newPackages = [
+      ...(siteConfig.packages || []),
+      { 
+        id: newPkgId, 
+        name: 'Paket Baru', 
+        tier: 'Tier Baru', 
+        scope: '1 Web App', 
+        description: 'Deskripsi ringkas layanan.' 
+      }
+    ];
+    setSiteConfig({ ...siteConfig, packages: newPackages });
+  };
+
+  const handleDeletePackage = (idToDelete: string) => {
+    if (!siteConfig) return;
+    const confirmDelete = window.confirm('Apakah Anda yakin ingin menghapus paket layanan ini?');
+    if (!confirmDelete) return;
+    const newPackages = siteConfig.packages.filter((p: any) => p.id !== idToDelete);
+    setSiteConfig({ ...siteConfig, packages: newPackages });
+  };
+
+  // AI Proposal Builder Helper Functions
+  const convertMarkdownToHtml = (markdown: string): string => {
+    if (!markdown) return '';
+    let html = markdown;
+    
+    // Sanitize basic tags before adding html
+    html = html
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+      
+    html = html.replace(/^#\s+(.*?)$/gm, '<h1 style="color: #0f172a; font-size: 20px; font-weight: 800; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-top: 24px;">$1</h1>');
+    html = html.replace(/^##\s+(.*?)$/gm, '<h2 style="color: #0f172a; font-size: 16px; font-weight: 700; margin-top: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px;">$1</h2>');
+    html = html.replace(/^###\s+(.*?)$/gm, '<h3 style="color: #1e293b; font-size: 14px; font-weight: 700; margin-top: 16px;">$1</h3>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/^\s*-\s+(.*?)$/gm, '<li style="margin-bottom: 6px;">$1</li>');
+    html = html.replace(/^---$/gm, '<hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />');
+    
+    // Basic Markdown Table Converter
+    const lines = html.split('\n');
+    let inTable = false;
+    let tableHtml = '';
+    const processedLines = lines.map(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        const cells = trimmed.split('|').map(c => c.trim()).filter((_, i, arr) => i > 0 && i < arr.length - 1);
+        if (trimmed.includes('---')) return '';
+        inTable = true;
+        const isHeader = !tableHtml.includes('<thead>');
+        let row = '<tr>';
+        cells.forEach(cell => {
+          row += isHeader 
+            ? `<th style="border: 1px solid #e2e8f0; padding: 10px; text-align: left; background-color: #f1f5f9; font-weight: bold; color: #334155;">${cell}</th>` 
+            : `<td style="border: 1px solid #e2e8f0; padding: 10px; text-align: left;">${cell}</td>`;
+        });
+        row += '</tr>';
+        if (isHeader) {
+          tableHtml = `<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px;"><thead>${row}</thead><tbody>`;
+          return 'TABLE_START';
+        } else {
+          return row;
+        }
+      } else {
+        if (inTable) {
+          inTable = false;
+          return 'TABLE_END\n' + line;
+        }
+        return line;
+      }
+    });
+    
+    let finalHtml = '';
+    let activeTable = '';
+    processedLines.forEach(line => {
+      if (line === 'TABLE_START') {
+        activeTable = '<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px;">';
+      } else if (line.startsWith('TABLE_END')) {
+        activeTable += '</tbody></table>';
+        finalHtml += activeTable + '\n' + line.substring(9);
+        activeTable = '';
+      } else if (activeTable && line) {
+        if (line.includes('style="border: 1px solid #e2e8f0; padding: 10px; text-align: left; background-color: #f1f5f9; font-weight: bold; color: #334155;"')) {
+          activeTable = activeTable.replace('<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px;">', '<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px;"><thead>' + line + '</thead><tbody>');
+        } else {
+          activeTable += line;
+        }
+      } else if (line !== '') {
+        if (!line.startsWith('<h') && !line.startsWith('<li') && !line.startsWith('<hr') && !line.startsWith('<table')) {
+          finalHtml += `<p style="margin-bottom: 14px; font-size: 14px; color: #334155;">${line}</p>\n`;
+        } else {
+          finalHtml += line + '\n';
+        }
+      }
+    });
+    
+    finalHtml = finalHtml.replace(/(<li style="margin-bottom: 6px;">.*?<\/li>\n?)+/g, (match) => {
+      return `<ul style="margin-bottom: 14px; padding-left: 20px;">\n${match}</ul>\n`;
+    });
+    
+    return finalHtml;
+  };
+
+  const downloadWord = (title: string, markdownContent: string) => {
+    const htmlContent = convertMarkdownToHtml(markdownContent);
+    const fullHtml = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><title>${title}</title>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        h1 { color: #0f172a; font-size: 20pt; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; }
+        h2 { color: #1e293b; font-size: 16pt; margin-top: 20px; }
+        h3 { color: #334155; font-size: 14pt; }
+        p, li { font-size: 11pt; color: #334155; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; font-size: 10.5pt; }
+        th { background-color: #f1f5f9; font-weight: bold; }
+      </style>
+      </head>
+      <body>
+        ${htmlContent}
+      </body>
+      </html>
+    `;
+    const blob = new Blob(['\ufeff' + fullHtml], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadPdf = (title: string, markdownContent: string) => {
+    const htmlContent = convertMarkdownToHtml(markdownContent);
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+        <head>
+          <title>${title}</title>
+          <style>
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+              padding: 40px; 
+              color: #334155; 
+              max-width: 800px;
+              margin: 0 auto;
+              line-height: 1.6;
+            }
+            h1 { color: #0f172a; font-size: 24px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 30px; }
+            h2 { color: #1e293b; font-size: 18px; margin-top: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 5px; }
+            h3 { color: #334155; font-size: 15px; margin-top: 20px; }
+            p { margin-bottom: 15px; font-size: 14px; }
+            li { margin-bottom: 8px; font-size: 14px; }
+            ul { margin-bottom: 15px; }
+            table { border-collapse: collapse; width: 100%; margin: 25px 0; font-size: 13px; }
+            th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+            th { background-color: #f8fafc; font-weight: bold; color: #1e293b; }
+            blockquote {
+              border-left: 4px solid #cbd5e1;
+              padding-left: 15px;
+              margin-left: 0;
+              color: #64748b;
+              font-style: italic;
+            }
+            @media print {
+              body { padding: 20px; }
+            }
+          </style>
+        </head>
+        <body>
+          <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px double #e2e8f0; padding-bottom: 20px;">
+            <h1 style="border: none; margin: 0; font-size: 28px; text-transform: uppercase;">PT Risetin Teknologi Indonesia</h1>
+            <p style="margin: 5px 0 0 0; font-size: 12px; color: #64748b; letter-spacing: 2px;">CYBERSECURITY & TECHNOLOGY CONSULTING</p>
+          </div>
+          ${htmlContent}
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() { window.close(); }, 500);
+            };
+          </script>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+
+  const handleOpenProposalBuilder = (proposal: any) => {
+    setSelectedProposal(proposal);
+    setProposalTitle(proposal.proposalTitle || `Proposal Layanan Keamanan Siber ${proposal.serviceType} - ${proposal.company}`);
+    setProposalContent(proposal.generatedContent || '');
+    setAdditionalInstructions('');
+    setEmailSubject(proposal.proposalTitle || `Penawaran Resmi: ${proposal.serviceType} - RTI Neo`);
+    setEmailBody(proposal.generatedContent ? convertMarkdownToHtml(proposal.generatedContent) : '');
+    setEmailSendStatus(null);
+    setIsBuilderOpen(true);
+  };
+
+  const handleGenerateProposal = async () => {
+    if (!selectedProposal) return;
+    setIsGenerating(true);
+    setGenerationProgress('Menghubungi Gemini AI...');
+    
+    const steps = [
+      'Menghubungi Gemini AI...',
+      'Menganalisis profil perusahaan & sektor industri...',
+      'Merancang cakupan pekerjaan (Scope of Work)...',
+      'Menyusun metodologi pengerjaan...',
+      'Menyusun timeline & hasil akhir (Deliverables)...',
+      'Mematangkan draf proposal...'
+    ];
+    
+    let stepIdx = 0;
+    const interval = setInterval(() => {
+      if (stepIdx < steps.length - 1) {
+        stepIdx++;
+        setGenerationProgress(steps[stepIdx]);
+      }
+    }, 2000);
+
+    try {
+      const res = await fetch('/api/proposals/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proposalId: selectedProposal.id,
+          additionalInstructions
+        })
+      });
+
+      const data = await res.json();
+      clearInterval(interval);
+
+      if (res.ok) {
+        setProposalTitle(data.title);
+        setProposalContent(data.content);
+        setEmailSubject(`Penawaran Resmi: ${selectedProposal.serviceType} - RTI Neo`);
+        setEmailBody(convertMarkdownToHtml(data.content));
+        
+        fetchAdminData();
+      } else {
+        alert(data.error || 'Gagal menghasilkan proposal.');
+      }
+    } catch (err) {
+      clearInterval(interval);
+      alert('Terjadi kesalahan koneksi.');
+    } finally {
+      setIsGenerating(false);
+      setGenerationProgress('');
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    if (!selectedProposal) return;
+    try {
+      const res = await fetch('/api/proposals/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proposalId: selectedProposal.id,
+          title: proposalTitle,
+          content: proposalContent
+        })
+      });
+      if (res.ok) {
+        alert('Draf proposal berhasil disimpan.');
+        fetchAdminData();
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Gagal menyimpan draf.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan jaringan.');
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!selectedProposal) return;
+    setIsSendingEmail(true);
+    setEmailSendStatus(null);
+
+    try {
+      const res = await fetch('/api/proposals/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          proposalId: selectedProposal.id,
+          emailSubject,
+          emailBody,
+          toEmail: selectedProposal.email
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setEmailSendStatus({
+          success: true,
+          simulated: data.simulated,
+          logPath: data.logPath,
+          error: data.error
+        });
+        
+        fetchAdminData();
+      } else {
+        setEmailSendStatus({
+          success: false,
+          error: data.error || 'Gagal mengirim email.'
+        });
+      }
+    } catch (err) {
+      setEmailSendStatus({
+        success: false,
+        error: 'Terjadi kesalahan jaringan.'
+      });
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
+  // Status Color Mapper
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'NEW': return 'bg-blue-50 text-blue-600 border-blue-200';
+      case 'CONTACTED': return 'bg-amber-50 text-amber-600 border-amber-200';
+      case 'CONVERTED': return 'bg-emerald-50 text-emerald-600 border-emerald-200';
+      case 'PENDING': return 'bg-slate-50 text-slate-600 border-slate-200';
+      case 'DOC_UPLOADED': return 'bg-cyan-50 text-cyan-600 border-cyan-200';
+      default: return 'bg-slate-50 text-slate-600 border-slate-200';
+    }
+  };
+
+  // Recharts Chart Config
+  const COLORS = ['#2563eb', '#06b6d4', '#d97706', '#10b981', '#6366f1'];
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      <Navbar />
+
+      <main className="flex-1 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {!isLoggedIn ? (
+            /* Login Admin */
+            <div className="max-w-md mx-auto">
+              <div className="text-center mb-8">
+                <h1 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight">RTI Administrator CMS</h1>
+                <p className="text-xs text-slate-500 mt-1">Gunakan otentikasi admin untuk masuk ke konsol manajemen leads.</p>
+              </div>
+
+              <div className="bg-white border border-slate-200/80 p-8 rounded-2xl shadow-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+                
+                {/* Admin credentials tips */}
+                <div className="bg-slate-900 text-slate-300 p-4 rounded-xl text-xs mb-6 space-y-3">
+                  <div className="flex items-center space-x-1.5 text-white font-bold">
+                    <Key className="w-4 h-4 text-blue-500" />
+                    <span>Akses Administrator & Customer Care (Demo)</span>
+                  </div>
+                  <div className="font-mono space-y-2">
+                    <div>
+                      <span className="text-blue-400 font-semibold text-[10px]">Role Admin:</span>
+                      <div className="pl-2.5 mt-0.5">Email: admin@risetin.co.id</div>
+                      <div className="pl-2.5">Password: adminpassword123</div>
+                    </div>
+                    <div className="border-t border-slate-800 pt-2">
+                      <span className="text-amber-400 font-semibold text-[10px]">Role Customer Care:</span>
+                      <div className="pl-2.5 mt-0.5">Email: customercare@risetin.co.id</div>
+                      <div className="pl-2.5">Password: customercarepassword123</div>
+                    </div>
+                  </div>
+                </div>
+
+                <form onSubmit={handleLogin} className="space-y-4">
+                  {loginError && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-100 flex items-start space-x-2 text-xs text-red-700">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      <span>{loginError}</span>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email Admin</label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="admin@risetin.co.id"
+                      className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Password</label>
+                    <input
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                    />
+                  </div>
+
+                  {/* Captcha */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Verifikasi Captcha</label>
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-slate-100 border border-slate-200 px-3 py-2 rounded-lg font-mono font-bold text-xs select-none">
+                        {captcha.num1} + {captcha.num2} = ?
+                      </div>
+                      <button
+                        type="button"
+                        onClick={generateCaptcha}
+                        className="p-2.5 rounded bg-white hover:bg-slate-50 border border-slate-200 text-slate-500 focus:outline-none"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                      </button>
+                      <input
+                        type="number"
+                        required
+                        value={captchaInput}
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        placeholder="Jawaban"
+                        className="flex-1 text-xs font-bold text-center border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center space-x-1 cursor-pointer"
+                  >
+                    <span>{loading ? 'Authenticating...' : 'Sign In as Admin'}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          ) : (
+            /* Admin Workspace Dashboard */
+            <div className="space-y-8">
+              {/* Header profile */}
+              <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-display font-extrabold text-lg">
+                    A
+                  </div>
+                  <div>
+                    <h1 className="font-display font-extrabold text-lg text-slate-900 leading-tight">Console Administrator</h1>
+                    <p className="text-[10px] font-semibold text-slate-500">Log In sebagai: <strong>{adminUser.email}</strong> (Role: ADMIN)</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="text-xs font-bold text-slate-500 hover:text-red-600 px-4 py-2 border border-slate-200 rounded-lg hover:border-red-100 transition-colors focus:outline-none cursor-pointer"
+                >
+                  Log Out
+                </button>
+              </div>
+
+              {/* Layout workspace */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Left tab bar */}
+                <div className="lg:col-span-3 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-3 lg:pb-0 scrollbar-thin max-w-full">
+                  <button
+                    onClick={() => setActiveTab('analytics')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'analytics'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <LayoutDashboard className="w-4.5 h-4.5" />
+                    <span>Analytics Overview</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('leads')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'leads'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Users className="w-4.5 h-4.5" />
+                    <span>Lead Management</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('proposals')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'proposals'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <FileText className="w-4.5 h-4.5" />
+                    <span>Proposals (RFP)</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('orders')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'orders'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Briefcase className="w-4.5 h-4.5" />
+                    <span>Project Orders</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('blogs')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'blogs'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Plus className="w-4.5 h-4.5" />
+                    <span>Publish Insight/Blog</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'settings'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Wand2 className="w-4.5 h-4.5" />
+                    <span>Pengaturan Web (CMS)</span>
+                  </button>
+                </div>
+
+                {/* Right Content Tab Container */}
+                <div className="lg:col-span-9 bg-white border border-slate-200/80 rounded-2xl shadow-sm p-8">
+                  
+                  {/* Analytics Dashboard */}
+                  {activeTab === 'analytics' && stats && (
+                    <div className="space-y-8">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Statistik Leads & Conversions</h2>
+                      
+                      {/* Metric cards */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Total Leads</span>
+                          <span className="font-display font-extrabold text-xl text-slate-900">{stats.leadsCount}</span>
+                        </div>
+                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Total Proposals</span>
+                          <span className="font-display font-extrabold text-xl text-slate-900">{stats.proposalsCount}</span>
+                        </div>
+                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Orders Aktif</span>
+                          <span className="font-display font-extrabold text-xl text-slate-900">{stats.ordersCount}</span>
+                        </div>
+                        <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Conversion Rate</span>
+                          <span className="font-display font-extrabold text-xl text-blue-600">{stats.conversionRate}</span>
+                        </div>
+                      </div>
+
+                      {/* Charts and Distributions */}
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pt-4">
+                        <div className="md:col-span-7 bg-slate-50/50 border border-slate-100 p-6 rounded-2xl">
+                          <h3 className="font-display font-extrabold text-xs text-slate-800 uppercase tracking-widest mb-4">Distribusi Order Layanan</h3>
+                          <div className="w-full h-[240px]">
+                            {stats.chartData?.length > 0 ? (
+                              <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                  <Pie
+                                    data={stats.chartData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                  >
+                                    {stats.chartData.map((entry: any, index: number) => (
+                                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                  </Pie>
+                                  <Tooltip />
+                                  <Legend wrapperStyle={{ fontSize: 10, fontWeight: 700 }} />
+                                </PieChart>
+                              </ResponsiveContainer>
+                            ) : (
+                              <div className="h-full flex items-center justify-center text-xs text-slate-400">Belum ada statistik grafik pemesanan.</div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Recent logs audit */}
+                        <div className="md:col-span-5 space-y-4">
+                          <h3 className="font-display font-extrabold text-xs text-slate-800 uppercase tracking-widest border-b pb-2">Audit Aktivitas Terbaru</h3>
+                          <div className="space-y-3">
+                            {stats.recentActivity?.map((act: any) => (
+                              <div key={act.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-start space-x-2 text-xs">
+                                <Activity className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                                <div>
+                                  <div className="font-bold text-slate-800">{act.title}</div>
+                                  <div className="text-[10px] text-slate-500 mt-0.5">{act.detail}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Leads Management */}
+                  {activeTab === 'leads' && (
+                    <div className="space-y-6">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Daftar Qualified Leads</h2>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase text-[9px] tracking-wider bg-slate-50/50">
+                              <th className="py-3 px-4">Nama / Company</th>
+                              <th className="py-3 px-4">Kontak</th>
+                              <th className="py-3 px-4">Kebutuhan</th>
+                              <th className="py-3 px-4">Source</th>
+                              <th className="py-3 px-4">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {leads.map((lead) => (
+                              <tr key={lead.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                <td className="py-4 px-4">
+                                  <div className="font-bold text-slate-800">{lead.name}</div>
+                                  <div className="text-[10px] text-slate-400 mt-0.5">{lead.company} ({lead.role})</div>
+                                </td>
+                                <td className="py-4 px-4 font-mono text-[11px] text-slate-600">
+                                  <div>{lead.email}</div>
+                                  <div>{lead.phone}</div>
+                                </td>
+                                <td className="py-4 px-4 max-w-[200px] leading-relaxed text-slate-600">{lead.needs}</td>
+                                <td className="py-4 px-4">
+                                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">
+                                    {lead.source}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <span className={`text-[9px] font-bold border px-2 py-0.5 rounded ${getStatusColor(lead.status)}`}>
+                                    {lead.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Proposals Tracker */}
+                  {activeTab === 'proposals' && (
+                    <div className="space-y-6">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Pelacakan Dokumen RFP/Tender</h2>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase text-[9px] tracking-wider bg-slate-50/50">
+                              <th className="py-3 px-4">Company / PIC</th>
+                              <th className="py-3 px-4">Layanan</th>
+                              <th className="py-3 px-4">Budget / Timeline</th>
+                              <th className="py-3 px-4">Dokumen TOR</th>
+                              <th className="py-3 px-4">Status</th>
+                              <th className="py-3 px-4 text-right">Aksi</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {proposals.map((prop) => (
+                              <tr key={prop.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                <td className="py-4 px-4">
+                                  <div className="font-bold text-slate-800">{prop.company}</div>
+                                  <div className="text-[10px] text-slate-400 mt-0.5">{prop.name} ({prop.email})</div>
+                                </td>
+                                <td className="py-4 px-4 text-slate-600 font-semibold">{prop.serviceType}</td>
+                                <td className="py-4 px-4 text-slate-600">
+                                  <div>Budget: {prop.budget}</div>
+                                  <div>Timeline: {prop.timeline}</div>
+                                </td>
+                                <td className="py-4 px-4">
+                                  {prop.fileName ? (
+                                    <button 
+                                      onClick={() => alert(`Mengunduh dokumen: ${prop.fileName}`)}
+                                      className="flex items-center space-x-1 font-bold text-blue-600 hover:text-blue-700 underline focus:outline-none cursor-pointer"
+                                    >
+                                      <FileText className="w-4 h-4 shrink-0" />
+                                      <span className="truncate max-w-[120px]">{prop.fileName}</span>
+                                    </button>
+                                  ) : (
+                                    <span className="text-slate-400 italic">No Upload</span>
+                                  )}
+                                </td>
+                                <td className="py-4 px-4">
+                                  <span className={`text-[9px] font-bold border px-2 py-0.5 rounded ${getStatusColor(prop.status)}`}>
+                                    {prop.status}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-4 text-right">
+                                  <button 
+                                    onClick={() => handleOpenProposalBuilder(prop)}
+                                    className="inline-flex items-center space-x-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition-colors cursor-pointer"
+                                  >
+                                    <Sparkles className="w-3 h-3 text-blue-200" />
+                                    <span>AI Builder</span>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Orders manager */}
+                  {activeTab === 'orders' && (
+                    <div className="space-y-6">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Project Orders & Invoicing</h2>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase text-[9px] tracking-wider bg-slate-50/50">
+                              <th className="py-3 px-4">Company Name</th>
+                              <th className="py-3 px-4">Service Type</th>
+                              <th className="py-3 px-4">Invoice / Quotation</th>
+                              <th className="py-3 px-4">Tanggal Order</th>
+                              <th className="py-3 px-4">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {orders.map((ord) => (
+                              <tr key={ord.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                <td className="py-4 px-4 font-bold text-slate-800">{ord.companyName}</td>
+                                <td className="py-4 px-4 text-slate-600 font-semibold">{ord.serviceType}</td>
+                                <td className="py-4 px-4 font-mono text-[10px] text-slate-500">
+                                  <div>Quote: {ord.quotationPath}</div>
+                                  <div>Inv: {ord.invoicePath}</div>
+                                </td>
+                                <td className="py-4 px-4 text-slate-500">{new Date(ord.createdAt).toLocaleDateString()}</td>
+                                <td className="py-4 px-4">
+                                  <span className={`text-[9px] font-bold border px-2 py-0.5 rounded ${getStatusColor(ord.status)}`}>
+                                    {ord.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Publish Blog */}
+                  {activeTab === 'blogs' && (
+                    <form onSubmit={handlePublishBlog} className="space-y-6 max-w-xl">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Buat Artikel Baru (Insight / Threat Warning)</h2>
+                      {blogSuccess && (
+                        <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 flex items-start space-x-2 text-xs text-emerald-700">
+                          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                          <span>Artikel sukses dipublikasikan ke halaman utama.</span>
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                        <div className="md:col-span-8">
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Judul Artikel *</label>
+                          <input
+                            type="text"
+                            required
+                            value={blogTitle}
+                            onChange={(e) => setBlogTitle(e.target.value)}
+                            placeholder="Contoh: Ancaman Malware Terbaru"
+                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                          />
+                        </div>
+                        <div className="md:col-span-4">
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kategori Artikel</label>
+                          <select
+                            value={blogCategory}
+                            onChange={(e) => setBlogCategory(e.target.value)}
+                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all"
+                          >
+                            <option value="NEWS">NEWS / UPDATE</option>
+                            <option value="THREAT">THREAT INTELLIGENCE</option>
+                            <option value="REGULATION">REGULATION UPDATE</option>
+                            <option value="TREND">TECHNOLOGY TREND</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ringkasan Singkat (SEO Meta Description) *</label>
+                        <input
+                          type="text"
+                          required
+                          value={blogSummary}
+                          onChange={(e) => setBlogSummary(e.target.value)}
+                          placeholder="Ringkasan 1-2 kalimat untuk snippet pencarian..."
+                          className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Isi Artikel Lengkap *</label>
+                        <textarea
+                          required
+                          rows={6}
+                          value={blogContent}
+                          onChange={(e) => setBlogContent(e.target.value)}
+                          placeholder="Ketik konten artikel secara lengkap..."
+                          className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
+                      >
+                        Publish Artikel
+                      </button>
+                    </form>
+                  )}
+
+                  {/* Settings CMS View */}
+                  {activeTab === 'settings' && siteConfig && (
+                    <form onSubmit={handleSubmitSettings} className="space-y-8">
+                      <div className="flex items-center justify-between border-b pb-3">
+                        <h2 className="font-display font-extrabold text-base text-slate-900">Pengaturan Konten Website RTI</h2>
+                        {settingsSuccess && (
+                          <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-lg">
+                            Pengaturan Berhasil Disimpan!
+                          </span>
+                        )}
+                      </div>
+
+                      {/* General parameters */}
+                      <div className="space-y-4">
+                        <h3 className="text-xs font-bold text-slate-700 border-b pb-1 uppercase tracking-wider">Parameter & Kontak Umum</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nama Perusahaan (Panjang)</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.companyName || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, companyName: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nama Perusahaan (Pendek)</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.companyShortName || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, companyShortName: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email Resmi</label>
+                            <input
+                              type="email"
+                              value={siteConfig.general.email || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, email: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nomor Telepon</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.phone || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, phone: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nomor WhatsApp</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.whatsappNumber || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, whatsappNumber: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">LinkedIn URL</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.linkedin || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, linkedin: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Alamat Kantor Resmi</label>
+                          <textarea
+                            rows={2}
+                            value={siteConfig.general.address || ''}
+                            onChange={(e) => setSiteConfig({
+                              ...siteConfig,
+                              general: { ...siteConfig.general, address: e.target.value }
+                            })}
+                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hero Section */}
+                      <div className="space-y-4 pt-4 border-t border-slate-100">
+                        <h3 className="text-xs font-bold text-slate-700 border-b pb-1 uppercase tracking-wider">Konten Hero Landing Page</h3>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Badge (Text Kecil Atas)</label>
+                            <input
+                              type="text"
+                              value={siteConfig.hero.badge || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                hero: { ...siteConfig.hero, badge: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Judul Utama (Title)</label>
+                            <input
+                              type="text"
+                              value={siteConfig.hero.title || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                hero: { ...siteConfig.hero, title: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Sub-judul Deskripsi (Subtitle)</label>
+                            <textarea
+                              rows={3}
+                              value={siteConfig.hero.subtitle || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                hero: { ...siteConfig.hero, subtitle: e.target.value }
+                            })}
+                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Menus Manager */}
+                    <div className="space-y-4 pt-4 border-t border-slate-100">
+                      <div className="flex items-center justify-between border-b pb-1">
+                        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Perubahan Menu Navigasi</h3>
+                        <button
+                          type="button"
+                          onClick={handleAddMenu}
+                          className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 text-[10px] font-bold rounded-lg border border-blue-200 flex items-center space-x-1 cursor-pointer transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Menu Navigasi</span>
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {siteConfig.menus && siteConfig.menus.map((menu: any, index: number) => (
+                          <div key={menu.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center border border-slate-100 p-3 rounded-xl bg-slate-50/50">
+                            <div className="sm:col-span-2 text-[10px] font-bold uppercase text-slate-400">ID: {menu.id}</div>
+                            <div className="sm:col-span-4">
+                              <label className="block text-[9px] font-bold text-slate-400 uppercase mb-0.5">Nama Menu</label>
+                              <input
+                                type="text"
+                                value={menu.name}
+                                onChange={(e) => {
+                                  const updatedMenus = [...siteConfig.menus];
+                                  updatedMenus[index] = { ...menu, name: e.target.value };
+                                  setSiteConfig({ ...siteConfig, menus: updatedMenus });
+                                }}
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                            <div className="sm:col-span-4">
+                              <label className="block text-[9px] font-bold text-slate-400 uppercase mb-0.5">Path / URL</label>
+                              <input
+                                type="text"
+                                value={menu.path}
+                                onChange={(e) => {
+                                  const updatedMenus = [...siteConfig.menus];
+                                  updatedMenus[index] = { ...menu, path: e.target.value };
+                                  setSiteConfig({ ...siteConfig, menus: updatedMenus });
+                                }}
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                            <div className="sm:col-span-2 flex justify-end pt-2 sm:pt-0">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteMenu(menu.id)}
+                                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg border border-transparent hover:border-red-100 transition-colors cursor-pointer flex items-center space-x-1"
+                                title="Hapus Menu"
+                              >
+                                <X className="w-4 h-4" />
+                                <span className="sm:hidden text-xs font-semibold">Hapus</span>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Services Manager */}
+                    <div className="space-y-4 pt-4 border-t border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-700 border-b pb-1 uppercase tracking-wider">Perubahan Fitur & Layanan Utama</h3>
+                      <div className="space-y-4">
+                        {siteConfig.services && siteConfig.services.map((svc: any, index: number) => (
+                          <div key={svc.id} className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50 relative">
+                            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                              <span className="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">ID: {svc.id}</span>
+                              <span className="text-[9px] text-slate-400 font-medium">Layanan ke-{index + 1}</span>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Judul Layanan</label>
+                                <input
+                                  type="text"
+                                  value={svc.title}
+                                  onChange={(e) => {
+                                    const updatedServices = [...siteConfig.services];
+                                    updatedServices[index] = { ...svc, title: e.target.value };
+                                    setSiteConfig({ ...siteConfig, services: updatedServices });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Badge (Text Highlight)</label>
+                                <input
+                                  type="text"
+                                  value={svc.badge}
+                                  onChange={(e) => {
+                                    const updatedServices = [...siteConfig.services];
+                                    updatedServices[index] = { ...svc, badge: e.target.value };
+                                    setSiteConfig({ ...siteConfig, services: updatedServices });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Deskripsi Singkat</label>
+                              <textarea
+                                rows={2}
+                                value={svc.desc}
+                                onChange={(e) => {
+                                  const updatedServices = [...siteConfig.services];
+                                  updatedServices[index] = { ...svc, desc: e.target.value };
+                                  setSiteConfig({ ...siteConfig, services: updatedServices });
+                                }}
+                                className="w-full text-xs text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-blue-500 resize-none leading-relaxed"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Packages Manager */}
+                    <div className="space-y-4 pt-4 border-t border-slate-100">
+                      <div className="flex items-center justify-between border-b pb-1">
+                        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Perubahan Paket & Layanan Transparan</h3>
+                        <button
+                          type="button"
+                          onClick={handleAddPackage}
+                          className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 text-[10px] font-bold rounded-lg border border-blue-200 flex items-center space-x-1 cursor-pointer transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Paket Baru</span>
+                        </button>
+                      </div>
+                      <div className="space-y-4">
+                        {siteConfig.packages && siteConfig.packages.map((pkg: any, index: number) => (
+                          <div key={pkg.id} className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50 relative">
+                            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                              <span className="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">ID: {pkg.id}</span>
+                              <div className="flex items-center space-x-3">
+                                <span className="text-[9px] text-slate-400 font-medium">Paket ke-{index + 1}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeletePackage(pkg.id)}
+                                  className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center space-x-1 transition-colors cursor-pointer"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                  <span>Hapus Paket</span>
+                                </button>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Nama Paket</label>
+                                <input
+                                  type="text"
+                                  value={pkg.name}
+                                  onChange={(e) => {
+                                    const updatedPkgs = [...siteConfig.packages];
+                                    updatedPkgs[index] = { ...pkg, name: e.target.value };
+                                    setSiteConfig({ ...siteConfig, packages: updatedPkgs });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Tier / Level</label>
+                                <input
+                                  type="text"
+                                  value={pkg.tier}
+                                  onChange={(e) => {
+                                    const updatedPkgs = [...siteConfig.packages];
+                                    updatedPkgs[index] = { ...pkg, tier: e.target.value };
+                                    setSiteConfig({ ...siteConfig, packages: updatedPkgs });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Cakupan (Scope)</label>
+                                <input
+                                  type="text"
+                                  value={pkg.scope}
+                                  onChange={(e) => {
+                                    const updatedPkgs = [...siteConfig.packages];
+                                    updatedPkgs[index] = { ...pkg, scope: e.target.value };
+                                    setSiteConfig({ ...siteConfig, packages: updatedPkgs });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Penjelasan / Deskripsi Ringkas</label>
+                              <textarea
+                                rows={2}
+                                value={pkg.description}
+                                onChange={(e) => {
+                                  const updatedPkgs = [...siteConfig.packages];
+                                  updatedPkgs[index] = { ...pkg, description: e.target.value };
+                                  setSiteConfig({ ...siteConfig, packages: updatedPkgs });
+                                }}
+                                className="w-full text-xs text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-blue-500 resize-none leading-relaxed"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* API & Connection Integrations */}
+                    <div className="space-y-4 pt-4 border-t border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-700 border-b pb-1 uppercase tracking-wider">Integrasi API & Koneksi Sistem</h3>
+                      <div className="space-y-4">
+                        {/* AI API Settings */}
+                        <div className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50">
+                          <h4 className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                            <Sparkles className="w-4 h-4 text-blue-500" />
+                            <span>Konfigurasi API AI (Gemini)</span>
+                          </h4>
+                          <div>
+                            <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Gemini API Key</label>
+                            <input
+                              type="password"
+                              value={siteConfig.integrations?.geminiApiKey || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                integrations: { ...siteConfig.integrations, geminiApiKey: e.target.value }
+                              })}
+                              placeholder="Masukkan Gemini API Key (e.g. AIzaSy...)"
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                            />
+                            <p className="text-[9px] text-slate-400 mt-1">Kosongkan jika ingin menggunakan API Key default dari server env (`GEMINI_API_KEY`).</p>
+                          </div>
+                        </div>
+
+                        {/* Email Connection settings */}
+                        <div className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50">
+                          <h4 className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                            <Mail className="w-4 h-4 text-blue-500" />
+                            <span>Koneksi Email (SMTP Server)</span>
+                          </h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="sm:col-span-2">
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">SMTP Host</label>
+                              <input
+                                type="text"
+                                value={siteConfig.integrations?.smtpHost || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, smtpHost: e.target.value }
+                                })}
+                                placeholder="smtp.gmail.com"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">SMTP Port</label>
+                              <input
+                                type="text"
+                                value={siteConfig.integrations?.smtpPort || '587'}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, smtpPort: e.target.value }
+                                })}
+                                placeholder="587"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Username / Email SMTP</label>
+                              <input
+                                type="text"
+                                value={siteConfig.integrations?.smtpUser || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, smtpUser: e.target.value }
+                                })}
+                                placeholder="customercare@risetin.co.id"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Password SMTP</label>
+                              <input
+                                type="password"
+                                value={siteConfig.integrations?.smtpPassword || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, smtpPassword: e.target.value }
+                                })}
+                                placeholder="••••••••••••"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Email Pengirim (SMTP From)</label>
+                              <input
+                                type="text"
+                                value={siteConfig.integrations?.smtpFrom || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, smtpFrom: e.target.value }
+                                })}
+                                placeholder="customercare@risetin.co.id"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* WhatsApp Connection settings */}
+                        <div className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50">
+                          <h4 className="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                            <Send className="w-4 h-4 text-blue-500" />
+                            <span>Koneksi WhatsApp Gateway</span>
+                          </h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">WhatsApp Gateway URL</label>
+                              <input
+                                type="text"
+                                value={siteConfig.integrations?.whatsappGatewayUrl || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, whatsappGatewayUrl: e.target.value }
+                                })}
+                                placeholder="https://api.whatsapp.com/v1"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">WhatsApp API Token</label>
+                              <input
+                                type="password"
+                                value={siteConfig.integrations?.whatsappToken || ''}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  integrations: { ...siteConfig.integrations, whatsappToken: e.target.value }
+                                })}
+                                placeholder="••••••••••••"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                          <p className="text-[9px] text-slate-400 mt-1">Gunakan gateway WhatsApp untuk integrasi pengiriman notifikasi/proposal siber via pesan instan WhatsApp secara otomatis di masa mendatang.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Submit button */}
+                    <button
+                      type="submit"
+                      disabled={isSavingSettings}
+                      className="py-3 px-8 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center space-x-1.5 cursor-pointer mt-4"
+                    >
+                      {isSavingSettings ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Menyimpan Perubahan...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-4 h-4" />
+                          <span>Simpan Seluruh Pengaturan Web</span>
+                        </>
+                      )}
+                    </button>
+                  </form>
+                )}
+
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* AI Proposal Builder Modal Workspace */}
+      {isBuilderOpen && selectedProposal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-6xl h-[90vh] flex flex-col overflow-y-auto lg:overflow-hidden border border-slate-100 relative animate-in fade-in-50 zoom-in-95 duration-200">
+            
+            {/* Modal Header */}
+            <div className="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800">
+              <div className="flex items-center space-x-2.5">
+                <Sparkles className="w-5 h-5 text-blue-400" />
+                <div>
+                  <h3 className="font-display font-extrabold text-sm leading-tight text-white">AI Proposal Builder Workspace</h3>
+                  <p className="text-[10px] text-slate-400">Merespon RFP dari {selectedProposal.company} secara cerdas</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsBuilderOpen(false)}
+                className="text-slate-400 hover:text-white font-bold text-xs p-1.5 rounded-lg hover:bg-slate-800 transition-colors focus:outline-none cursor-pointer"
+              >
+                Tutup Panel
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+              
+              {/* Left Column: Metadata & Actions */}
+              <div className="w-full lg:w-96 border-r border-slate-200 p-6 overflow-y-auto bg-slate-50 space-y-6 flex-shrink-0">
+                
+                {/* Client RFP Details Card */}
+                <div className="space-y-4 bg-white border border-slate-200 p-4 rounded-xl shadow-xs">
+                  <h4 className="font-display font-bold text-xs text-slate-800 border-b pb-2 uppercase tracking-wide">Detail Kebutuhan Client</h4>
+                  
+                  <div className="space-y-3 text-xs">
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Perusahaan / Industri</span>
+                      <strong className="text-slate-800">{selectedProposal.company}</strong>
+                      <span className="text-slate-500 block text-[10px] mt-0.5">{selectedProposal.industry} ({selectedProposal.employees} Karyawan)</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Kontak PIC</span>
+                      <strong className="text-slate-800">{selectedProposal.name}</strong>
+                      <span className="text-slate-500 block font-mono text-[10px]">{selectedProposal.email} | {selectedProposal.phone}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Layanan Diajukan</span>
+                      <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded text-[10px] border border-blue-100">{selectedProposal.serviceType}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Estimasi Budget & Timeline</span>
+                      <span className="text-slate-700 block font-semibold">{selectedProposal.budget} | {selectedProposal.timeline}</span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-400 block uppercase">Detail Pengajuan</span>
+                      <p className="text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 text-[10px] max-h-24 overflow-y-auto leading-relaxed">
+                        "{selectedProposal.details}"
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Configuration Section */}
+                <div className="space-y-4 bg-white border border-slate-200 p-4 rounded-xl shadow-xs">
+                  <h4 className="font-display font-bold text-xs text-slate-800 border-b pb-2 uppercase tracking-wide flex items-center space-x-1">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Konfigurasi Gemini AI</span>
+                  </h4>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Pilih Model AI</label>
+                      <select className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 focus:outline-none">
+                        <option>Gemini 2.5 Flash (Medium - Rekomendasi)</option>
+                        <option>Gemini 2.5 Pro (High - Detail & Kompleks)</option>
+                        <option>RTI Local Template Engine (Offline Fallback)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Instruksi Tambahan (Opsional)</label>
+                      <textarea
+                        rows={3}
+                        value={additionalInstructions}
+                        onChange={(e) => setAdditionalInstructions(e.target.value)}
+                        placeholder="Contoh: Berikan diskon 15%, tekankan kepatuhan regulasi OJK RI, tambahkan opsi retesting gratis..."
+                        className="w-full text-xs text-slate-800 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500 transition-all resize-none bg-slate-50 focus:bg-white"
+                      />
+                    </div>
+
+                    <button
+                      onClick={handleGenerateProposal}
+                      disabled={isGenerating}
+                      className="w-full flex items-center justify-center space-x-2 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow-sm transition-colors cursor-pointer"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span className="truncate max-w-[150px]">{generationProgress}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Buat Proposal Baru (AI)</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Proposal Status Badge */}
+                <div className="bg-slate-100 border border-slate-200 rounded-xl p-3.5 text-center">
+                  <span className="text-[10px] font-bold text-slate-400 block uppercase mb-1">Status Proposal Saat Ini</span>
+                  <span className={`text-[10px] font-bold border px-3 py-1 rounded-full bg-white ${getStatusColor(selectedProposal.status)}`}>
+                    {selectedProposal.status}
+                  </span>
+                </div>
+
+              </div>
+
+              {/* Right Column: Editor Workspace & Action tabs */}
+              <div className="flex-1 flex flex-col overflow-y-auto lg:overflow-hidden bg-white">
+                
+                {isGenerating ? (
+                  /* Loading Generation Panel */
+                  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-4">
+                    <div className="w-16 h-16 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center animate-pulse shadow-sm">
+                      <Sparkles className="w-8 h-8 animate-spin" style={{ animationDuration: '3s' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-extrabold text-sm text-slate-900">Gemini AI Sedang Menulis Proposal...</h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">{generationProgress}</p>
+                    </div>
+                    <div className="w-48 h-1.5 bg-slate-100 rounded-full overflow-hidden relative">
+                      <div className="absolute top-0 bottom-0 left-0 bg-blue-600 rounded-full animate-pulse w-full" />
+                    </div>
+                  </div>
+                ) : !proposalContent ? (
+                  /* Initial Empty Workspace */
+                  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center space-y-4 bg-slate-50/50">
+                    <div className="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center shadow-xs">
+                      <FileCode className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-extrabold text-sm text-slate-800">Draf Proposal Kosong</h4>
+                      <p className="text-xs text-slate-500 mt-1 max-w-xs">Tekan tombol <strong>"Buat Proposal Baru (AI)"</strong> di panel kiri untuk memicu kecerdasan Gemini menyusun penawaran keamanan siber profesional.</p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Editor and Delivery Tabs */
+                  <div className="flex-1 flex flex-col overflow-hidden">
+                    
+                    {/* Proposal Document Title & Download Toolbar */}
+                    <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 flex-shrink-0">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={proposalTitle}
+                          onChange={(e) => setProposalTitle(e.target.value)}
+                          placeholder="Proposal Title..."
+                          className="w-full bg-transparent font-display font-extrabold text-sm text-slate-800 border-b border-transparent hover:border-slate-300 focus:border-blue-500 focus:outline-none pb-0.5"
+                        />
+                        <span className="text-[9px] text-slate-400 font-semibold block mt-0.5">Edit judul di atas untuk mengubah nama dokumen/subject</span>
+                      </div>
+                      
+                      {/* Document Actions */}
+                      <div className="flex items-center space-x-2 shrink-0">
+                        <button
+                          onClick={handleSaveDraft}
+                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold text-[10px] rounded-lg transition-colors cursor-pointer bg-white"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Simpan Draf</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => downloadWord(proposalTitle, proposalContent)}
+                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-[10px] rounded-lg shadow-sm transition-colors cursor-pointer"
+                        >
+                          <Download className="w-3.5 h-3.5 text-blue-200" />
+                          <span>Word (.doc)</span>
+                        </button>
+
+                        <button
+                          onClick={() => downloadPdf(proposalTitle, proposalContent)}
+                          className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition-colors cursor-pointer"
+                        >
+                          <FileText className="w-3.5 h-3.5 text-red-200" />
+                          <span>PDF</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Main workspace container: editor + email */}
+                    <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
+                      
+                      {/* Editor Section */}
+                      <div className="flex-1 flex flex-col p-6 overflow-hidden border-r border-slate-200">
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase flex items-center space-x-1">
+                            <Edit3 className="w-3.5 h-3.5" />
+                            <span>Konten Proposal (Format Markdown)</span>
+                          </label>
+                          <span className="text-[10px] text-slate-400 font-medium">Bisa diedit secara bebas</span>
+                        </div>
+                        
+                        <textarea
+                          value={proposalContent}
+                          onChange={(e) => {
+                            setProposalContent(e.target.value);
+                            setEmailBody(convertMarkdownToHtml(e.target.value));
+                          }}
+                          className="flex-1 w-full border border-slate-200 rounded-xl p-4 font-mono text-[11px] text-slate-700 focus:outline-none focus:border-blue-500 bg-slate-50 focus:bg-white resize-none leading-relaxed"
+                          placeholder="Proposal content in Markdown..."
+                        />
+                      </div>
+
+                      {/* Email Integration Panel */}
+                      <div className="w-full md:w-80 p-6 bg-slate-50/50 overflow-y-auto flex-shrink-0 flex flex-col space-y-4">
+                        <h4 className="font-display font-bold text-xs text-slate-800 border-b pb-2 uppercase tracking-wide flex items-center space-x-1">
+                          <Mail className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Kirim Proposal ke Client</span>
+                        </h4>
+
+                        {emailSendStatus && (
+                          <div className={`p-3 rounded-lg border text-xs leading-relaxed space-y-1.5 ${
+                            emailSendStatus.success 
+                              ? 'bg-emerald-50 border-emerald-100 text-emerald-800' 
+                              : 'bg-red-50 border-red-100 text-red-800'
+                          }`}>
+                            <div className="font-bold flex items-center space-x-1">
+                              {emailSendStatus.success ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> : <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />}
+                              <span>{emailSendStatus.success ? 'Email Berhasil Terkirim!' : 'Email Gagal Terkirim'}</span>
+                            </div>
+                            
+                            <p className="text-[10px]">{emailSendStatus.error || (emailSendStatus.simulated ? 'Disimulasikan berhasil (SMTP offline).' : 'Terkirim langsung via SMTP.')}</p>
+                            
+                            {emailSendStatus.success && emailSendStatus.simulated && emailSendStatus.logPath && (
+                              <a 
+                                href={emailSendStatus.logPath} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center space-x-0.5 font-bold text-blue-600 hover:text-blue-700 underline text-[10px]"
+                              >
+                                <span>Buka Simulasi Email</span>
+                                <ExternalLink className="w-2.5 h-2.5" />
+                              </a>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="space-y-3">
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kepada (Email Client)</label>
+                            <input
+                              type="email"
+                              required
+                              value={selectedProposal.email}
+                              disabled
+                              className="w-full text-xs font-semibold text-slate-500 border border-slate-200 rounded-lg px-3 py-2 bg-slate-100 cursor-not-allowed"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subjek Email</label>
+                            <input
+                              type="text"
+                              required
+                              value={emailSubject}
+                              onChange={(e) => setEmailSubject(e.target.value)}
+                              placeholder="Masukkan subjek email..."
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-blue-500"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Catatan Pengantar Email (Opsional)</label>
+                            <p className="text-[9px] text-slate-400 mb-1 leading-snug">Konten proposal otomatis terlampir di dalam badan email menggunakan desain RTI resmi.</p>
+                            <textarea
+                              rows={4}
+                              value={emailBody.replace(/<[^>]*>/g, '').substring(0, 150) + '...'}
+                              disabled
+                              className="w-full text-[10px] font-semibold text-slate-400 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-100 cursor-not-allowed resize-none"
+                            />
+                          </div>
+
+                          <button
+                            onClick={handleSendEmail}
+                            disabled={isSendingEmail}
+                            className="w-full flex items-center justify-center space-x-2 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-400 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
+                          >
+                            {isSendingEmail ? (
+                              <>
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                <span>Mengirim...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Send className="w-3.5 h-3.5" />
+                                <span>Kirim Proposal (Email)</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                )}
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      <Chatbot />
+      <WhatsAppButton />
+
+      <Footer />
+    </div>
+  );
+}
