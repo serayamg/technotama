@@ -132,12 +132,14 @@ export default function OnlineOrder() {
   const [siteConfig, setSiteConfig] = useState<any>(null);
   const [selectedServices, setSelectedServices] = useState<any[]>([servicePricings[0]]);
   const [activeCluster, setActiveCluster] = useState('ALL');
+  const [pdpConsent, setPdpConsent] = useState(false);
   const [formData, setFormData] = useState({
     companyName: '',
     name: '',
     email: '',
     phone: '',
     docName: '',
+    projectDetails: '',
     paymentMethod: 'Bank Transfer (BCA Virtual Account)'
   });
 
@@ -173,6 +175,10 @@ export default function OnlineOrder() {
 
   const handleSubmitOrder = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (!formData.projectDetails || !formData.projectDetails.trim()) {
+      alert('Mohon isi deskripsi Rencana & Kebutuhan Proyek Anda terlebih dahulu.');
+      return;
+    }
     setLoading(true);
 
     try {
@@ -185,7 +191,8 @@ export default function OnlineOrder() {
           documentName: formData.docName || null,
           email: formData.email,
           name: formData.name,
-          phone: formData.phone
+          phone: formData.phone,
+          projectDetails: formData.projectDetails || null
         })
       });
 
@@ -229,14 +236,50 @@ export default function OnlineOrder() {
             </div>
 
             {/* Desktop Stepper progress */}
-            <div className="hidden md:flex border-b border-slate-200 bg-slate-50/50 px-6 py-4 items-center justify-between gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              <span className={step === 1 ? 'text-blue-600' : 'text-slate-500'}>1. Pilih Layanan</span>
-              <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 2 ? 'text-blue-600' : 'text-slate-500'}>2. Isi Profil</span>
-              <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 3 ? 'text-blue-600' : 'text-slate-500'}>3. Dokumen Scoping</span>
-              <ChevronRight className="w-4.5 h-4.5" />
-              <span className={step === 4 ? 'text-blue-600' : 'text-slate-500'}>4. Tracking & Akun</span>
+            <div className="hidden md:flex border-b border-slate-100 bg-slate-50/30 py-5 items-center justify-center gap-6 lg:gap-10">
+              {[
+                { number: 1, label: 'Pilih Layanan' },
+                { number: 2, label: 'Isi Profil' },
+                { number: 3, label: 'Dokumen Scoping' },
+                { number: 4, label: 'Tracking & Akun' }
+              ].map((s, idx) => {
+                const isActive = step === s.number;
+                const isCompleted = step > s.number;
+                return (
+                  <div key={s.number} className="flex items-center">
+                    <div className="flex items-center space-x-2.5">
+                      {/* Step Number Circle */}
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 border-2 ${
+                        isActive 
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20 scale-105'
+                          : isCompleted
+                            ? 'bg-emerald-500 border-emerald-500 text-white'
+                            : 'bg-white border-slate-200 text-slate-400'
+                      }`}>
+                        {isCompleted ? '✓' : s.number}
+                      </div>
+                      
+                      {/* Step Label */}
+                      <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
+                        isActive 
+                          ? 'text-blue-600 font-extrabold' 
+                          : isCompleted 
+                            ? 'text-slate-700' 
+                            : 'text-slate-400'
+                      }`}>
+                        {s.label}
+                      </span>
+                    </div>
+                    
+                    {/* Connecting line */}
+                    {idx < 3 && (
+                      <div className={`w-8 lg:w-12 h-0.5 ml-6 lg:ml-10 rounded transition-colors duration-500 ${
+                        isCompleted ? 'bg-emerald-400' : 'bg-slate-200'
+                      }`} />
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Steps Body */}
@@ -383,6 +426,19 @@ export default function OnlineOrder() {
                     </div>
                   </div>
 
+                  <div className="flex items-start space-x-2.5 p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl">
+                    <input
+                      type="checkbox"
+                      id="pdp-consent"
+                      checked={pdpConsent}
+                      onChange={(e) => setPdpConsent(e.target.checked)}
+                      className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
+                    />
+                    <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
+                      Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi koordinator proyek (PIC) di atas untuk kepentingan pemesanan layanan ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                    </label>
+                  </div>
+
                   <div className="pt-6 flex justify-between border-t border-slate-100">
                     <button
                       onClick={() => setStep(1)}
@@ -394,6 +450,10 @@ export default function OnlineOrder() {
                       onClick={() => {
                         if (!formData.companyName || !formData.name || !formData.email || !formData.phone) {
                           alert('Mohon lengkapi seluruh field wajib (*)');
+                          return;
+                        }
+                        if (!pdpConsent) {
+                          alert('Mohon setujui pemrosesan data pribadi Anda (*)');
                           return;
                         }
                         setStep(3);
@@ -409,24 +469,43 @@ export default function OnlineOrder() {
               {/* Step 3: Document upload */}
               {step === 3 && (
                 <div className="space-y-6">
-                  <h2 className="font-display font-extrabold text-base text-slate-900">Upload Dokumen Scoping Proyek</h2>
+                  <h2 className="font-display font-extrabold text-base text-slate-900">Deskripsi Kebutuhan & Dokumen Scoping</h2>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Unggah lembar scoping awal, topologi jaringan, atau list target web/mobile (IP/URL) untuk mempercepat perhitungan proposal resmi. Anda bisa mengabaikan langkah ini jika ingin berkonsultasi scoping lewat online meeting terlebih dahulu.
+                    Berikan rincian deskripsi mengenai rencana proyek Anda atau unggah file scoping pendukung (seperti topologi jaringan atau daftar target IP/URL) untuk mempermudah konsultan RTI menyusun proposal teknis.
                   </p>
 
-                  <div className="border-2 border-dashed border-slate-200 hover:border-blue-400 bg-slate-50/50 hover:bg-slate-50 transition-colors p-8 rounded-xl text-center relative cursor-pointer">
-                    <input
-                      type="file"
-                      onChange={handleFileChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      accept=".pdf,.doc,.docx,.xls,.xlsx,.zip"
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase">
+                      Rencana & Kebutuhan Proyek *
+                    </label>
+                    <textarea
+                      rows={4}
+                      required
+                      value={formData.projectDetails}
+                      onChange={(e) => setFormData({ ...formData, projectDetails: e.target.value })}
+                      placeholder="Jelaskan secara singkat rencana pekerjaan (misal: pengujian berkala website e-commerce) dan hasil atau kebutuhan spesifik yang ingin dicapai melalui penugasan RTI..."
+                      className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none leading-relaxed"
                     />
-                    <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                    <div className="text-xs font-bold text-slate-700">
-                      {formData.docName ? `Terpilih: ${formData.docName}` : 'Pilih file scoping Anda (Optional)'}
-                    </div>
-                    <div className="text-[10px] text-slate-500 mt-1">
-                      Format: PDF, Word, Excel, ZIP (Max 10MB)
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase">
+                      Upload Dokumen Scoping / TOR (Opsional)
+                    </label>
+                    <div className="border-2 border-dashed border-slate-200 hover:border-blue-400 bg-slate-50/50 hover:bg-slate-50 transition-colors p-8 rounded-xl text-center relative cursor-pointer">
+                      <input
+                        type="file"
+                        onChange={handleFileChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.zip"
+                      />
+                      <FileText className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                      <div className="text-xs font-bold text-slate-700">
+                        {formData.docName ? `Terpilih: ${formData.docName}` : 'Pilih file scoping Anda (Optional)'}
+                      </div>
+                      <div className="text-[10px] text-slate-500 mt-1">
+                        Format: PDF, Word, Excel, ZIP (Max 10MB)
+                      </div>
                     </div>
                   </div>
 
@@ -458,7 +537,7 @@ export default function OnlineOrder() {
                   
                   <div className="space-y-3.5 text-xs text-slate-500 leading-relaxed">
                     <p>
-                      Terima kasih banyak atas kepercayaan Anda bermitra dengan <strong>PT Risetin Teknologi Indonesia (RTI) Neo</strong>.
+                      Terima kasih banyak atas kepercayaan Anda bermitra dengan <strong>RTI</strong>.
                     </p>
                     <p>
                       Pesanan Anda telah aman terdaftar di database kami. Sebagai langkah awal kolaborasi strategis ini, kami telah membuatkan akun akses resmi Anda untuk masuk ke <strong>Portal Klien RTI</strong>.

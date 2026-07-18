@@ -15,6 +15,15 @@ export default function Footer() {
       .catch(err => console.log('Settings fallback used in Footer.'));
   }, []);
 
+  const getCleanWhatsAppNumber = () => {
+    const rawNumber = siteConfig?.general?.whatsappNumber || '0856-6872-2734';
+    const clean = rawNumber.replace(/\D/g, '');
+    if (clean.startsWith('0')) {
+      return '62' + clean.slice(1);
+    }
+    return clean.startsWith('62') ? clean : '62' + clean;
+  };
+
   const getMenuName = (id: string, defaultName: string) => {
     if (!siteConfig?.menus) return defaultName;
     const found = siteConfig.menus.find((m: any) => m.id === id);
@@ -156,6 +165,19 @@ export default function Footer() {
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
                 <a href={`mailto:${siteConfig?.general?.email || 'admin@risetin.co.id'}`} className="hover:text-white transition-colors">
                   {siteConfig?.general?.email || 'admin@risetin.co.id'}
+                </a>
+              </li>
+              <li className="flex items-center space-x-2">
+                <svg className="w-4 h-4 text-emerald-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                </svg>
+                <a 
+                  href={`https://wa.me/${getCleanWhatsAppNumber()}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-white text-slate-400 transition-colors"
+                >
+                  WhatsApp: {siteConfig?.general?.whatsappNumber || '0856-6872-2734'}
                 </a>
               </li>
             </ul>

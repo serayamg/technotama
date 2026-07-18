@@ -16,13 +16,15 @@ export default function RequestProposal() {
     industry: 'Banking',
     employees: '100 - 500',
     location: '',
-    serviceType: 'VA & Penetration Testing',
+    serviceType: '',
     details: '',
     budget: 'Rp 50 Juta - Rp 150 Juta',
     timeline: '2 Bulan',
     fileName: '',
     captchaInput: ''
   });
+
+  const [services, setServices] = useState<string[]>([]);
 
   // Math Captcha state
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: 0 });
@@ -42,6 +44,68 @@ export default function RequestProposal() {
 
   useEffect(() => {
     generateCaptcha();
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.services && data.services.length > 0) {
+          const names = data.services.map((s: any) => s.title);
+          setServices(names);
+          setFormData(prev => ({
+            ...prev,
+            serviceType: names[0]
+          }));
+        } else {
+          const fallback = [
+            'Cybersecurity Blueprint',
+            'Policy-SOP Development',
+            'ISO/IEC Implementation',
+            'BCM-BCP-DRP Services (Cyber Drill)',
+            'Digital Maturity Assessment & Security Risk Rating',
+            'Awareness & Training',
+            'IT Audit',
+            'Vulnerability Assessment (VA)',
+            'Penetration Testing (Pen-Test)',
+            'Secure SDLC Implementation',
+            'Red Teaming',
+            'Security Operation Center (SOC)',
+            'Cyber Threat Intelligence (CTI) Solution',
+            'Network & Endpoint Hardening',
+            'Cyber Security Incident Management',
+            'Digital Forensic'
+          ];
+          setServices(fallback);
+          setFormData(prev => ({
+            ...prev,
+            serviceType: fallback[0]
+          }));
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        const fallback = [
+          'Cybersecurity Blueprint',
+          'Policy-SOP Development',
+          'ISO/IEC Implementation',
+          'BCM-BCP-DRP Services (Cyber Drill)',
+          'Digital Maturity Assessment & Security Risk Rating',
+          'Awareness & Training',
+          'IT Audit',
+          'Vulnerability Assessment (VA)',
+          'Penetration Testing (Pen-Test)',
+          'Secure SDLC Implementation',
+          'Red Teaming',
+          'Security Operation Center (SOC)',
+          'Cyber Threat Intelligence (CTI) Solution',
+          'Network & Endpoint Hardening',
+          'Cyber Security Incident Management',
+          'Digital Forensic'
+        ];
+        setServices(fallback);
+        setFormData(prev => ({
+          ...prev,
+          serviceType: fallback[0]
+        }));
+      });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -144,7 +208,7 @@ export default function RequestProposal() {
                         industry: 'Banking',
                         employees: '100 - 500',
                         location: '',
-                        serviceType: 'VA & Penetration Testing',
+                        serviceType: services[0] || '',
                         details: '',
                         budget: 'Rp 50 Juta - Rp 150 Juta',
                         timeline: '2 Bulan',
@@ -323,13 +387,9 @@ export default function RequestProposal() {
                       onChange={handleChange}
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all"
                     >
-                      <option>VA & Penetration Testing</option>
-                      <option>Standard Implementation (ISO 27001/etc)</option>
-                      <option>Technology Strategy (ITMP)</option>
-                      <option>IT Governance, Risk & Compliance</option>
-                      <option>Cybersecurity Strategy Blueprint</option>
-                      <option>Cybersecurity Compliance Review</option>
-                      <option>CyberTroops Training Academy</option>
+                      {services.map((svc) => (
+                        <option key={svc} value={svc}>{svc}</option>
+                      ))}
                     </select>
                   </div>
 
@@ -365,6 +425,18 @@ export default function RequestProposal() {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="flex items-start space-x-2.5 p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl">
+                  <input
+                    type="checkbox"
+                    id="pdp-consent"
+                    required
+                    className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
+                  />
+                  <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
+                    Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pengajuan proposal RFP ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                  </label>
                 </div>
 
                 {/* Math Captcha & Submit */}

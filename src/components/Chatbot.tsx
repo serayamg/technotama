@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -83,25 +83,33 @@ export default function Chatbot() {
 
     switch (userAction) {
       case 'services':
-        botText = 'RTI menawarkan 3 kluster layanan utama:\n1. Cybersecurity Governance RTI (Rencana Induk, IT GRC, ISO, BCM, Cyber Drill, Audit TI)\n2. Offensive Cybersecurity RTI (VA, Penetration Testing, Secure SDLC, Red Teaming)\n3. Defensive Cybersecurity (SOC 24/7, Threat Intelligence, Hardening, Incident Response, Forensik)';
+        botText = 'RTI menawarkan 3 kluster layanan utama:\n1. Cybersecurity Governance RTI (Rencana Induk, Policy-SOP, ISO, BCM, Cyber Drill, Audit TI)\n2. Offensive Cybersecurity RTI (VA, Penetration Testing, Secure SDLC, Red Teaming)\n3. Defensive Cybersecurity (SOC, Threat Intelligence, Hardening, Incident Response, Forensik)';
         options = [
           { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '⚔️ Detail Ofensif (VAPT)', action: 'detail_vapt' },
-          { label: '🛡️ Detail Tata Kelola & ISO', action: 'detail_iso' },
+          { label: '📋 Detail Governance', action: 'detail_gov' },
+          { label: '⚔️ Detail Offensive', action: 'detail_off' },
+          { label: '🛡️ Detail Defensive', action: 'detail_def' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
-      case 'detail_vapt':
-        botText = 'Layanan Offensive Cybersecurity RTI mencakup Vulnerability Assessment (VA), Penetration Testing (Web, Mobile, API, Network), Secure SDLC, dan Red Teaming simulator rahasia untuk kepatuhan regulasi.';
+      case 'detail_off':
+        botText = 'Layanan Offensive Cybersecurity RTI mencakup Vulnerability Assessment (VA), Penetration Testing (Web, Mobile, API, Network), Secure SDLC Implementation, dan Red Teaming (Simulasi Serangan Nyata).';
         options = [
-          { label: '💰 Estimasi Ofensif', action: 'start_lead' },
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
-      case 'detail_iso':
-        botText = 'Layanan Cybersecurity Governance RTI mencakup Rencana Induk/Blueprint Siber, IT GRC (COBIT), implementasi ISO 27001/20000/22301, BCM/BCP-DRP, Cyber Drill Simulation, Digital Maturity, Kesadaran Siber, dan IT Audit.';
+      case 'detail_gov':
+        botText = 'Layanan Cybersecurity Governance RTI mencakup Cybersecurity Blueprint, Policy-SOP Development (Tata Kelola TI), ISO/IEC Implementation, BCM-BCP-DRP Services (Cyber Drill), Digital Maturity Assessment, Awareness & Training, dan IT Audit.';
         options = [
-          { label: '💰 Estimasi Governance', action: 'start_lead' },
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
+      case 'detail_def':
+        botText = 'Layanan Defensive Cybersecurity RTI mencakup Security Operation Center (SOC) 24/7, Cyber Threat Intelligence (CTI) Solution, Network & Endpoint Hardening, Cyber Security Incident Management, dan Digital Forensic.';
+        options = [
+          { label: '💰 Estimasi Proyek', action: 'start_lead' },
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
@@ -173,12 +181,14 @@ export default function Chatbot() {
     } else if (leadStep === 5) {
       currentData.phone = text;
       nextStep = 6;
-      botText = 'Berapa perkiraan budget dan target timeline proyek ini?';
+      botText = 'Berapa perkiraan budget proyek ini?';
       options = [
-        { label: '< Rp 50 Juta (1 Bulan)', action: 'budget_small' },
-        { label: 'Rp 50Jt - Rp 150Jt (2 Bulan)', action: 'budget_med' },
-        { label: 'Rp 150Jt+ (3-6 Bulan)', action: 'budget_large' }
+        { label: '< Rp 50 Juta', action: 'budget_small' },
+        { label: 'Rp 50Jt - Rp 150Jt', action: 'budget_med' },
+        { label: 'Rp 150Jt+', action: 'budget_large' }
       ];
+    } else if (leadStep === 3 || leadStep === 6 || leadStep === 7) {
+      botText = 'Mohon pilih salah satu opsi tombol di atas untuk melanjutkan.';
     }
 
     setLeadData(currentData);
@@ -223,6 +233,12 @@ export default function Chatbot() {
       return;
     }
 
+    if (action === 'main_menu') {
+      setLeadStep(0);
+      triggerBotResponse('main_menu', label);
+      return;
+    }
+
     if (leadStep === 3 && action.startsWith('lead_')) {
       const servicesMap: Record<string, string> = {
         lead_off: 'Offensive Cybersecurity (VA/Pentest)',
@@ -247,20 +263,46 @@ export default function Chatbot() {
     }
 
     if (leadStep === 6 && action.startsWith('budget_')) {
-      const budgetMap: Record<string, { budget: string; timeline: string }> = {
-        budget_small: { budget: '< Rp 50 Juta', timeline: '1 Bulan' },
-        budget_med: { budget: 'Rp 50Jt - Rp 150Jt', timeline: '2 Bulan' },
-        budget_large: { budget: 'Rp 150Jt+', timeline: '3-6 Bulan' }
+      const budgetMap: Record<string, string> = {
+        budget_small: '< Rp 50 Juta',
+        budget_med: 'Rp 50Jt - Rp 150Jt',
+        budget_large: 'Rp 150Jt+'
+      };
+      setLeadData(prev => ({ ...prev, budget: budgetMap[action] }));
+      setLeadStep(7);
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Berapa target timeline proyek ini?',
+          options: [
+            { label: '1 Bulan', action: 'timeline_1m' },
+            { label: '2 Bulan', action: 'timeline_2m' },
+            { label: '3-6 Bulan', action: 'timeline_3_6m' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (leadStep === 7 && action.startsWith('timeline_')) {
+      const timelineMap: Record<string, string> = {
+        timeline_1m: '1 Bulan',
+        timeline_2m: '2 Bulan',
+        timeline_3_6m: '3-6 Bulan'
       };
 
       const finalData = {
         ...leadData,
-        budget: budgetMap[action].budget,
-        timeline: budgetMap[action].timeline
+        timeline: timelineMap[action]
       };
 
       setLeadData(finalData);
-      setLeadStep(7);
+      setLeadStep(8);
 
       setIsTyping(true);
       // Save lead to database API
@@ -325,15 +367,17 @@ export default function Chatbot() {
     ]);
     setInputText('');
 
-    if (leadStep > 0 && leadStep < 7) {
+    if (leadStep > 0 && leadStep < 8) {
       handleLeadFlow(text);
     } else {
       // Rule-based keyword matching
       const lowText = text.toLowerCase();
-      if (lowText.includes('vapt') || lowText.includes('pentest') || lowText.includes('penetrasi')) {
-        triggerBotResponse('detail_vapt', text);
-      } else if (lowText.includes('iso') || lowText.includes('27001') || lowText.includes('kepatuhan')) {
-        triggerBotResponse('detail_iso', text);
+      if (lowText.includes('vapt') || lowText.includes('pentest') || lowText.includes('penetrasi') || lowText.includes('offensive') || lowText.includes('ofensif')) {
+        triggerBotResponse('detail_off', text);
+      } else if (lowText.includes('iso') || lowText.includes('27001') || lowText.includes('kepatuhan') || lowText.includes('governance') || lowText.includes('grc') || lowText.includes('kebijakan')) {
+        triggerBotResponse('detail_gov', text);
+      } else if (lowText.includes('soc') || lowText.includes('defensive') || lowText.includes('defensif') || lowText.includes('hardening')) {
+        triggerBotResponse('detail_def', text);
       } else if (lowText.includes('biaya') || lowText.includes('harga') || lowText.includes('estimasi') || lowText.includes('budget')) {
         handleOptionClick('💰 Estimasi Biaya Proyek', 'start_lead');
       } else {
@@ -351,7 +395,7 @@ export default function Chatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-xl hover:scale-105 transition-all duration-200 focus:outline-none"
+        className="fixed bottom-6 right-6 z-[60] flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-xl hover:scale-105 transition-all duration-200 focus:outline-none"
         aria-label="Chatbot RTI"
       >
         <MessageSquare className="w-6 h-6" />
@@ -364,7 +408,7 @@ export default function Chatbot() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-24 right-6 z-40 w-96 max-w-[calc(100vw-2rem)] h-[500px] flex flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden"
+            className="fixed bottom-24 right-6 z-[60] w-96 max-w-[calc(100vw-2rem)] h-[500px] flex flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="bg-slate-900 text-white px-4 py-4 flex items-center justify-between">
@@ -442,28 +486,38 @@ export default function Chatbot() {
             </div>
 
             {/* Input Footer */}
-            <div className="border-t border-slate-200 p-3 bg-white flex items-center space-x-2">
-              <input
-                type="text"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={
-                  leadStep === 1 ? 'Ketik nama lengkap Anda...' :
-                  leadStep === 2 ? 'Ketik nama perusahaan Anda...' :
-                  leadStep === 4 ? 'Ketik alamat email Anda...' :
-                  leadStep === 5 ? 'Ketik nomor HP WhatsApp...' :
-                  'Ketik pesan Anda...'
-                }
-                className="flex-1 text-xs font-semibold text-slate-800 border border-slate-200 focus:border-blue-500 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 focus:outline-none transition-all duration-200"
-              />
-              <button
-                onClick={handleSend}
-                className="p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow transition-all duration-200 flex items-center justify-center focus:outline-none"
-                aria-label="Kirim"
-              >
-                <Send className="w-4.5 h-4.5" />
-              </button>
+            <div className="border-t border-slate-200 bg-white">
+              {leadStep > 0 && (
+                <div className="px-3 pt-2 pb-1.5 bg-slate-50/50 border-b border-slate-100 flex items-start space-x-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                  <p className="text-[9px] leading-relaxed text-slate-400 font-medium">
+                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan penghitungan estimasi biaya sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
+                  </p>
+                </div>
+              )}
+              <div className="p-3 flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={
+                    leadStep === 1 ? 'Ketik nama lengkap Anda...' :
+                    leadStep === 2 ? 'Ketik nama perusahaan Anda...' :
+                    leadStep === 4 ? 'Ketik alamat email Anda...' :
+                    leadStep === 5 ? 'Ketik nomor HP WhatsApp...' :
+                    'Ketik pesan Anda...'
+                  }
+                  className="flex-1 text-xs font-semibold text-slate-800 border border-slate-200 focus:border-blue-500 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 focus:outline-none transition-all duration-200"
+                />
+                <button
+                  onClick={handleSend}
+                  className="p-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow transition-all duration-200 flex items-center justify-center focus:outline-none"
+                  aria-label="Kirim"
+                >
+                  <Send className="w-4.5 h-4.5" />
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

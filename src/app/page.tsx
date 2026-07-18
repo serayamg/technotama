@@ -401,7 +401,7 @@ export default function Home() {
                   href="/online-order"
                   className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
                 >
-                  <span>Pesan Layanan Online</span>
+                  <span>Order Solusi Online</span>
                 </Link>
               </div>
 
@@ -503,13 +503,6 @@ export default function Home() {
                 Solusi End-to-End Tata Kelola TI & <span className="whitespace-nowrap">Keamanan Siber</span>
               </h2>
             </div>
-            <Link 
-              href="/online-order" 
-              className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center mt-4 md:mt-0 space-x-1.5 focus:outline-none"
-            >
-              <span>Lihat Daftar Harga Layanan</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
           </div>
 
           {/* Tabs for clusters */}

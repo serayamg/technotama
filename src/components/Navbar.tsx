@@ -210,7 +210,7 @@ export default function Navbar() {
               <>
                 <Link href="/" className="text-sm font-semibold text-slate-600">Beranda</Link>
                 <Link href="/case-studies" className="text-sm font-semibold text-slate-600">Studi Kasus</Link>
-                <Link href="/online-order" className="text-sm font-semibold text-slate-600">Pesan Layanan</Link>
+                <Link href="/online-order" className="text-sm font-semibold text-slate-600">Order Solusi</Link>
                 <Link href="/portal" className="text-sm font-semibold text-slate-600">Portal Klien</Link>
               </>
             )}
@@ -224,22 +224,10 @@ export default function Navbar() {
             >
               Jadwalkan Konsultasi
             </Link>
-            <Link
-              href="/request-proposal"
-              className="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2.5 rounded-lg shadow-sm hover:shadow transition-all duration-200"
-            >
-              Minta Proposal (RFP)
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-2">
-            <Link
-              href="/request-proposal"
-              className="text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg"
-            >
-              RFP
-            </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
@@ -351,7 +339,7 @@ export default function Navbar() {
                 <>
                   <Link href="/" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-base font-semibold text-slate-700">Beranda</Link>
                   <Link href="/case-studies" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-base font-semibold text-slate-700">Studi Kasus</Link>
-                  <Link href="/online-order" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-base font-semibold text-slate-700">Pesan Layanan Online</Link>
+                  <Link href="/online-order" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-base font-semibold text-slate-700">Order Solusi</Link>
                   <Link href="/portal" onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-base font-semibold text-slate-700">Portal Klien</Link>
                 </>
               )}
@@ -363,13 +351,6 @@ export default function Navbar() {
                   className="text-center font-bold text-slate-700 border border-slate-300 py-3 rounded-lg hover:bg-slate-50 transition-colors"
                 >
                   Jadwalkan Konsultasi
-                </Link>
-                <Link
-                  href="/request-proposal"
-                  onClick={() => setIsOpen(false)}
-                  className="text-center font-bold text-white bg-blue-600 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Minta Proposal (RFP)
                 </Link>
               </div>
             </div>

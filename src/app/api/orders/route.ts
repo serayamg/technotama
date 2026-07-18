@@ -5,7 +5,7 @@ import { sendProposalEmail } from '@/lib/mailer';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { clientId, serviceType, companyName, documentName, email, name, phone } = body;
+    const { clientId, serviceType, companyName, documentName, email, name, phone, projectDetails } = body;
 
     if (!serviceType || !companyName) {
       return NextResponse.json(
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         serviceType: sanitize(serviceType),
         companyName: sanitize(companyName),
         status: documentName ? 'DOC_UPLOADED' : 'ORDERED',
+        projectDetails: projectDetails ? sanitize(projectDetails) : null,
         // Mock generation of files
         quotationPath: `/orders/QT-${Math.floor(1000 + Math.random() * 9000)}.pdf`,
         invoicePath: `/orders/INV-${Math.floor(1000 + Math.random() * 9000)}.pdf`

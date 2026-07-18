@@ -515,7 +515,7 @@ export default function ServiceDetail() {
                     href={`/online-order?service=${encodeURIComponent(service.title)}`}
                     className="w-full text-center block py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-colors"
                   >
-                    Pesan Layanan Online
+                    Order Solusi Online
                   </Link>
                   <Link
                     href="/request-proposal"

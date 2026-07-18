@@ -18,8 +18,8 @@ export default function CustomerPortal() {
   const [activeTab, setActiveTab] = useState<'progress' | 'documents' | 'billing' | 'tickets'>('progress');
 
   // Login form state
-  const [email, setEmail] = useState('client@bankdki.co.id');
-  const [password, setPassword] = useState('clientpassword123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [captchaInput, setCaptchaInput] = useState('');
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: 0 });
   const [loginError, setLoginError] = useState('');
@@ -167,17 +167,6 @@ export default function CustomerPortal() {
               <div className="bg-white border border-slate-200/80 p-8 rounded-2xl shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
                 
-                {/* Credentials Helper for Reviewers */}
-                <div className="bg-slate-900 text-slate-300 p-4 rounded-xl text-xs mb-6 space-y-2">
-                  <div className="flex items-center space-x-1.5 text-white font-bold">
-                    <Key className="w-4 h-4 text-blue-500" />
-                    <span>Akses Portal Klien (Demo)</span>
-                  </div>
-                  <div className="font-mono space-y-0.5">
-                    <div>Email: client@bankdki.co.id</div>
-                    <div>Password: clientpassword123</div>
-                  </div>
-                </div>
 
                 <form onSubmit={handleLogin} className="space-y-4">
                   {loginError && (
@@ -196,6 +185,7 @@ export default function CustomerPortal() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="name@company.com"
+                        autoComplete="off"
                         className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                       />
                       <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
@@ -211,6 +201,7 @@ export default function CustomerPortal() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                        autoComplete="off"
                         className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                       />
                       <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />

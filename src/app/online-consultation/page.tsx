@@ -88,14 +88,50 @@ export default function OnlineConsultation() {
             </div>
 
             {/* Desktop Stepper Header */}
-            <div className="hidden md:flex border-b border-slate-200 bg-slate-50/50 px-6 py-4 items-center justify-between text-xs font-bold text-slate-400">
-              <span className={step === 1 ? 'text-blue-600' : 'text-slate-500'}>1. Pilih Topik</span>
-              <ChevronRight className="w-4 h-4" />
-              <span className={step === 2 ? 'text-blue-600' : 'text-slate-500'}>2. Jadwal & Waktu</span>
-              <ChevronRight className="w-4 h-4" />
-              <span className={step === 3 ? 'text-blue-600' : 'text-slate-500'}>3. Detail Kontak</span>
-              <ChevronRight className="w-4 h-4" />
-              <span className={step === 4 ? 'text-blue-600' : 'text-slate-500'}>4. Konfirmasi</span>
+            <div className="hidden md:flex border-b border-slate-100 bg-slate-50/30 py-5 items-center justify-center gap-6 lg:gap-10">
+              {[
+                { number: 1, label: 'Pilih Topik' },
+                { number: 2, label: 'Jadwal & Waktu' },
+                { number: 3, label: 'Detail Kontak' },
+                { number: 4, label: 'Konfirmasi' }
+              ].map((s, idx) => {
+                const isActive = step === s.number;
+                const isCompleted = step > s.number;
+                return (
+                  <div key={s.number} className="flex items-center">
+                    <div className="flex items-center space-x-2.5">
+                      {/* Step Number Circle */}
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 border-2 ${
+                        isActive 
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20 scale-105'
+                          : isCompleted
+                            ? 'bg-emerald-500 border-emerald-500 text-white'
+                            : 'bg-white border-slate-200 text-slate-400'
+                      }`}>
+                        {isCompleted ? '✓' : s.number}
+                      </div>
+                      
+                      {/* Step Label */}
+                      <span className={`text-[10px] font-bold uppercase tracking-wider transition-colors duration-300 ${
+                        isActive 
+                          ? 'text-blue-600 font-extrabold' 
+                          : isCompleted 
+                            ? 'text-slate-700' 
+                            : 'text-slate-400'
+                      }`}>
+                        {s.label}
+                      </span>
+                    </div>
+                    
+                    {/* Connecting line */}
+                    {idx < 3 && (
+                      <div className={`w-8 lg:w-12 h-0.5 ml-6 lg:ml-10 rounded transition-colors duration-500 ${
+                        isCompleted ? 'bg-emerald-400' : 'bg-slate-200'
+                      }`} />
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Steps Body */}
@@ -267,6 +303,18 @@ export default function OnlineConsultation() {
                       placeholder="Ceritakan singkat kendala teknis atau kebutuhan sertifikasi yang ingin dicapai..."
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-all resize-none"
                     />
+                  </div>
+
+                  <div className="flex items-start space-x-2.5 p-3.5 bg-slate-50 border border-slate-200/60 rounded-xl">
+                    <input
+                      type="checkbox"
+                      id="pdp-consent"
+                      required
+                      className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
+                    />
+                    <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
+                      Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan konsultasi ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                    </label>
                   </div>
 
                   <div className="pt-6 flex justify-between border-t border-slate-100">

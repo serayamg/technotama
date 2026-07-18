@@ -58,14 +58,15 @@ model Proposal {
 }
 
 model Order {
-  id            String   @id @default(uuid())
-  clientId      String?
-  serviceType   String
-  companyName   String
-  status        String   @default("ORDERED") // "ORDERED", "DOC_UPLOADED", "QUOTATION_GENERATED", "APPROVED", "INVOICED", "PAID", "COMPLETED"
-  quotationPath String?
-  invoicePath   String?
-  createdAt     DateTime @default(now())
+  id             String   @id @default(uuid())
+  clientId       String?
+  serviceType    String
+  companyName    String
+  status         String   @default("ORDERED") // "ORDERED", "DOC_UPLOADED", "QUOTATION_GENERATED", "APPROVED", "INVOICED", "PAID", "COMPLETED"
+  quotationPath  String?
+  invoicePath    String?
+  projectDetails String?
+  createdAt      DateTime @default(now())
 }
 
 model ProjectProgress {
