@@ -302,6 +302,64 @@ const caseStudies = [
   }
 ];
 
+const testimonials = [
+  {
+    rating: 5,
+    text: "RTI membantu kami merancang tata kelola SMKI dan meloloskan sertifikasi ISO 27001 versi terbaru tepat waktu. Pemahaman mereka akan infrastruktur perbankan dan kepatuhan siber sangat mendalam.",
+    author: "Kepala Divisi Keamanan Informasi",
+    company: "Sektor Jasa Keuangan Nasional"
+  },
+  {
+    rating: 5,
+    text: "Hasil pengujian VAPT dari RTI sangat detail dan memberikan langkah perbaikan yang konkrit. Rekomendasinya objektif karena mereka tidak mencoba menjual lisensi software tertentu.",
+    author: "Head of Technology Operations",
+    company: "Penyedia Layanan Payment Gateway (Fintech)"
+  },
+  {
+    rating: 5,
+    text: "Program awareness siber dari RTI meningkatkan kepedulian keamanan staf kami secara signifikan. Phishing simulation yang dilakukan sangat mirip dengan serangan nyata.",
+    author: "VP of Human Resources",
+    company: "Lembaga Pemerintahan Pusat"
+  },
+  {
+    rating: 5,
+    text: "Kami mempercayakan penetrasi sistem inti perbankan kami ke RTI. Kerja profesional, kepatuhan kerahasiaan tinggi, dan pelaporan yang sangat eksekutif.",
+    author: "Chief Information Officer",
+    company: "BUMN Sektor Keuangan"
+  }
+];
+
+const insights = [
+  {
+    category: "REGULATION",
+    categoryColor: "text-blue-600 bg-blue-50",
+    title: "Panduan Kepatuhan UU Pelindungan Data Pribadi (UU PDP) Indonesia",
+    desc: "Masa transisi berakhir dan denda administratif hingga 2% pendapatan siap menanti kelalaian pengelolaan data pribadi. Pelajari mitigasinya.",
+    date: "1 Juli 2026"
+  },
+  {
+    category: "THREAT INTEL",
+    categoryColor: "text-red-600 bg-red-50",
+    title: "Analisis Ancaman Ransomware di Sektor Perbankan Nasional",
+    desc: "Laporan Security Operations Center (SOC) RTI mengenai taktik pemerasan ganda (double extortion) yang menargetkan server cadangan/DRC.",
+    date: "5 Juli 2026"
+  },
+  {
+    category: "TRENDS",
+    categoryColor: "text-amber-600 bg-amber-50",
+    title: "Mengapa Sertifikasi ISO/IEC 27001:2022 Penting untuk SPBE",
+    desc: "Bagaimana implementasi SMKI membantu instansi kementerian dan pemerintah daerah menaikkan tingkat kematangan indeks SPBE nasional.",
+    date: "10 Juli 2026"
+  },
+  {
+    category: "OFFENSIVE",
+    categoryColor: "text-purple-600 bg-purple-50",
+    title: "Mengapa DevSecOps Harus Mulai Diterapkan Sejak Awal Project",
+    desc: "Pentingnya integrasi Automated SAST/DAST dalam pipa CI/CD untuk menghindari pengerjaan ulang (re-work) pasca pre-production audit.",
+    date: "15 Juli 2026"
+  }
+];
+
 export default function Home() {
   const [activeClientGroup, setActiveClientGroup] = useState<keyof typeof clients>('Government');
   const [selectedFramework, setSelectedFramework] = useState<typeof frameworks[0] | null>(null);
@@ -317,6 +375,21 @@ export default function Home() {
   const [siteConfig, setSiteConfig] = useState<any>(null);
   const [activeMethodologyStep, setActiveMethodologyStep] = useState(0);
   const [selectedServiceTab, setSelectedServiceTab] = useState('all');
+
+  const testimonialRef = React.useRef<HTMLDivElement>(null);
+  const insightRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollLeft = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: -350, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = (ref: React.RefObject<HTMLDivElement | null>) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: 350, behavior: 'smooth' });
+    }
+  };
 
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [scannerDomain, setScannerDomain] = useState('');
@@ -1018,43 +1091,55 @@ export default function Home() {
       {/* Testimonials Carousel Section */}
       <section className="py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Testimoni Klien</div>
-            <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang RTI</span>
-            </h2>
+          <div className="flex flex-col md:flex-row items-end justify-between mb-12">
+            <div className="max-w-2xl">
+              <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Testimoni Klien</div>
+              <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
+                Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang RTI</span>
+              </h2>
+            </div>
+            {/* Carousel navigation buttons */}
+            <div className="flex space-x-2 mt-4 md:mt-0">
+              <button
+                onClick={() => scrollLeft(testimonialRef)}
+                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
+                aria-label="Previous Testimonial"
+              >
+                <ArrowRight className="w-4 h-4 rotate-180" />
+              </button>
+              <button
+                onClick={() => scrollRight(testimonialRef)}
+                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
+                aria-label="Next Testimonial"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white border border-slate-200/80 p-8 rounded-2xl relative shadow-sm">
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
+          <div 
+            ref={testimonialRef}
+            className="flex space-x-6 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-4"
+          >
+            {testimonials.map((t, idx) => (
+              <div 
+                key={idx} 
+                className="min-w-[280px] sm:min-w-[380px] md:min-w-[450px] max-w-[500px] flex-shrink-0 bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
+              >
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(t.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs italic leading-relaxed text-slate-600 mb-6 min-h-[72px]">
+                  &quot;{t.text}&quot;
+                </p>
+                <div className="border-t border-slate-100 pt-4">
+                  <div className="font-display font-bold text-xs text-slate-900">{t.author}</div>
+                  <div className="text-[10px] font-semibold text-slate-500">{t.company}</div>
+                </div>
               </div>
-              <p className="text-xs italic leading-relaxed text-slate-600 mb-6">
-                &quot;RTI membantu kami merancang tata kelola SMKI dan meloloskan sertifikasi ISO 27001 versi terbaru tepat waktu. Pemahaman mereka akan infrastruktur perbankan dan kepatuhan siber sangat mendalam.&quot;
-              </p>
-              <div className="border-t border-slate-100 pt-4">
-                <div className="font-display font-bold text-xs text-slate-900">Kepala Divisi Keamanan Informasi</div>
-                <div className="text-[10px] font-semibold text-slate-500">Sektor Jasa Keuangan Nasional</div>
-              </div>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-8 rounded-2xl relative shadow-sm">
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-xs italic leading-relaxed text-slate-600 mb-6">
-                &quot;Hasil pengujian VAPT dari RTI sangat detail dan memberikan langkah perbaikan yang konkrit. Rekomendasinya objektif karena mereka tidak mencoba menjual lisensi software tertentu.&quot;
-              </p>
-              <div className="border-t border-slate-100 pt-4">
-                <div className="font-display font-bold text-xs text-slate-900">Head of Technology Operations</div>
-                <div className="text-[10px] font-semibold text-slate-500">Penyedia Layanan Payment Gateway (Fintech)</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1069,53 +1154,48 @@ export default function Home() {
                 Riset Siber, Kepatuhan Regulasi & <span className="whitespace-nowrap">Update Ancaman</span>
               </h2>
             </div>
+            {/* Carousel navigation buttons */}
+            <div className="flex space-x-2 mt-4 md:mt-0">
+              <button
+                onClick={() => scrollLeft(insightRef)}
+                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
+                aria-label="Previous Insight"
+              >
+                <ArrowRight className="w-4 h-4 rotate-180" />
+              </button>
+              <button
+                onClick={() => scrollRight(insightRef)}
+                className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
+                aria-label="Next Insight"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <article className="border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow">
-              <div className="p-6 space-y-3.5">
-                <span className="text-[9px] font-extrabold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded">
-                  REGULATION
-                </span>
-                <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors">
-                  Panduan Kepatuhan UU Pelindungan Data Pribadi (UU PDP) Indonesia
-                </h3>
-                <p className="text-xs leading-relaxed text-slate-500">
-                  Masa transisi berakhir dan denda administratif hingga 2% pendapatan siap menanti kelalaian pengelolaan data pribadi. Pelajari mitigasinya.
-                </p>
-                <div className="text-[10px] font-bold text-slate-400">1 Juli 2026</div>
-              </div>
-            </article>
-
-            <article className="border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow">
-              <div className="p-6 space-y-3.5">
-                <span className="text-[9px] font-extrabold uppercase tracking-wider text-red-600 bg-red-50 px-2.5 py-1 rounded">
-                  THREAT INTEL
-                </span>
-                <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors">
-                  Analisis Ancaman Ransomware di Sektor Perbankan Nasional
-                </h3>
-                <p className="text-xs leading-relaxed text-slate-500">
-                  Laporan Security Operations Center (SOC) RTI mengenai taktik pemerasan ganda (double extortion) yang menargetkan server cadangan/DRC.
-                </p>
-                <div className="text-[10px] font-bold text-slate-400">5 Juli 2026</div>
-              </div>
-            </article>
-
-            <article className="border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow">
-              <div className="p-6 space-y-3.5">
-                <span className="text-[9px] font-extrabold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded">
-                  TRENDS
-                </span>
-                <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors">
-                  Mengapa Sertifikasi ISO/IEC 27001:2022 Penting untuk SPBE
-                </h3>
-                <p className="text-xs leading-relaxed text-slate-500">
-                  Bagaimana implementasi SMKI membantu instansi kementerian dan pemerintah daerah menaikkan tingkat kematangan indeks SPBE nasional.
-                </p>
-                <div className="text-[10px] font-bold text-slate-400">10 Juli 2026</div>
-              </div>
-            </article>
+          <div 
+            ref={insightRef}
+            className="flex space-x-6 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-4"
+          >
+            {insights.map((article, idx) => (
+              <article 
+                key={idx}
+                className="min-w-[280px] sm:min-w-[340px] md:min-w-[380px] flex-shrink-0 border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
+              >
+                <div className="p-6 space-y-3.5">
+                  <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor}`}>
+                    {article.category}
+                  </span>
+                  <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors line-clamp-2 min-h-[40px]">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs leading-relaxed text-slate-500 line-clamp-3 min-h-[54px]">
+                    {article.desc}
+                  </p>
+                  <div className="text-[10px] font-bold text-slate-400 pt-2 border-t border-slate-100">{article.date}</div>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
