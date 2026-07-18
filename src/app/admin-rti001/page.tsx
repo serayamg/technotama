@@ -266,6 +266,31 @@ export default function AdminDashboard() {
     setSiteConfig({ ...siteConfig, packages: newPackages });
   };
 
+  const handleAddService = () => {
+    if (!siteConfig) return;
+    const newSvcId = `svc_${Date.now()}`;
+    const newServices = [
+      ...(siteConfig.services || []),
+      {
+        id: newSvcId,
+        title: 'Layanan Baru',
+        desc: 'Deskripsi lengkap layanan baru.',
+        badge: 'New',
+        cluster: 'governance',
+        imageUrl: '/illustrations/governance.png'
+      }
+    ];
+    setSiteConfig({ ...siteConfig, services: newServices });
+  };
+
+  const handleDeleteService = (idToDelete: string) => {
+    if (!siteConfig) return;
+    const confirmDelete = window.confirm('Apakah Anda yakin ingin menghapus layanan/fitur ini?');
+    if (!confirmDelete) return;
+    const newServices = siteConfig.services.filter((s: any) => s.id !== idToDelete);
+    setSiteConfig({ ...siteConfig, services: newServices });
+  };
+
   // AI Proposal Builder Helper Functions
   const convertMarkdownToHtml = (markdown: string): string => {
     if (!markdown) return '';
@@ -1184,6 +1209,18 @@ export default function AdminDashboard() {
                               className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                             />
                           </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">YouTube URL</label>
+                            <input
+                              type="text"
+                              value={siteConfig.general.youtube || ''}
+                              onChange={(e) => setSiteConfig({
+                                ...siteConfig,
+                                general: { ...siteConfig.general, youtube: e.target.value }
+                              })}
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
                         </div>
                         <div>
                           <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Alamat Kantor Resmi</label>
@@ -1303,16 +1340,36 @@ export default function AdminDashboard() {
 
                     {/* Services Manager */}
                     <div className="space-y-4 pt-4 border-t border-slate-100">
-                      <h3 className="text-xs font-bold text-slate-700 border-b pb-1 uppercase tracking-wider">Perubahan Fitur & Layanan Utama</h3>
+                      <div className="flex items-center justify-between border-b pb-1">
+                        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Perubahan Fitur & Layanan Utama</h3>
+                        <button
+                          type="button"
+                          onClick={handleAddService}
+                          className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 text-[10px] font-bold rounded-lg border border-blue-200 flex items-center space-x-1 cursor-pointer transition-colors"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Layanan Baru</span>
+                        </button>
+                      </div>
                       <div className="space-y-4">
                         {siteConfig.services && siteConfig.services.map((svc: any, index: number) => (
                           <div key={svc.id} className="border border-slate-200 p-4 rounded-xl space-y-3 bg-slate-50/50 relative">
                             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                               <span className="text-[10px] font-bold uppercase text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">ID: {svc.id}</span>
-                              <span className="text-[9px] text-slate-400 font-medium">Layanan ke-{index + 1}</span>
+                              <div className="flex items-center space-x-3">
+                                <span className="text-[9px] text-slate-400 font-medium">Layanan ke-{index + 1}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteService(svc.id)}
+                                  className="text-red-500 hover:text-red-700 text-[10px] font-bold flex items-center space-x-1 transition-colors cursor-pointer"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                  <span>Hapus Layanan</span>
+                                </button>
+                              </div>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                              <div>
+                            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                              <div className="sm:col-span-3">
                                 <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Judul Layanan</label>
                                 <input
                                   type="text"
@@ -1325,7 +1382,7 @@ export default function AdminDashboard() {
                                   className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                                 />
                               </div>
-                              <div>
+                              <div className="sm:col-span-3">
                                 <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Badge (Text Highlight)</label>
                                 <input
                                   type="text"
@@ -1338,7 +1395,23 @@ export default function AdminDashboard() {
                                   className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                                 />
                               </div>
-                              <div>
+                              <div className="sm:col-span-3">
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Kategori (Cluster)</label>
+                                <select
+                                  value={svc.cluster}
+                                  onChange={(e) => {
+                                    const updatedServices = [...siteConfig.services];
+                                    updatedServices[index] = { ...svc, cluster: e.target.value };
+                                    setSiteConfig({ ...siteConfig, services: updatedServices });
+                                  }}
+                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                >
+                                  <option value="governance">Governance</option>
+                                  <option value="offensive">Offensive</option>
+                                  <option value="defensive">Defensive</option>
+                                </select>
+                              </div>
+                              <div className="sm:col-span-3">
                                 <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">URL Ilustrasi / Infografis</label>
                                 <input
                                   type="text"
