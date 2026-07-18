@@ -477,7 +477,6 @@ export default function Home() {
                   className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-5 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/10 hover:shadow transition-all duration-200 whitespace-nowrap"
                 >
                   <span>Request Proposal</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
                 <Link
                   href="/online-consultation"
