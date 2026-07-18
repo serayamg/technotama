@@ -30,6 +30,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>(null);
 
   useEffect(() => {
@@ -253,65 +254,76 @@ export default function Navbar() {
                         {menu.name}
                       </Link>
                       
-                      {/* Mobile Services List */}
-                      <div className="space-y-3 pt-2 border-t border-slate-100">
-                        {/* Governance Group */}
-                        <div>
-                          <span className="block px-3 text-[10px] font-extrabold text-blue-600 uppercase tracking-widest">
-                            Governance & Strategy
-                          </span>
-                          <div className="space-y-0.5 mt-1.5">
-                            {activeServices.filter((s: any) => s.cluster === 'governance').map((service: any) => (
-                              <Link
-                                key={service.id}
-                                href={`/services/${service.id}`}
-                                onClick={() => setIsOpen(false)}
-                                className="block px-6 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
+                      {/* Mobile Services Accordion Trigger */}
+                      <button
+                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                        className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-base font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-50 focus:outline-none"
+                      >
+                        <span>Layanan</span>
+                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* Collapsible Mobile Services List */}
+                      {mobileServicesOpen && (
+                        <div className="pl-4 pr-2 py-2 space-y-4 bg-slate-50/50 rounded-xl border border-slate-100/60">
+                          {/* Governance Group */}
+                          <div>
+                            <span className="block px-3 text-[10px] font-extrabold text-blue-600 uppercase tracking-widest">
+                              Governance & Strategy
+                            </span>
+                            <div className="space-y-0.5 mt-1.5">
+                              {activeServices.filter((s: any) => s.cluster === 'governance').map((service: any) => (
+                                <Link
+                                  key={service.id}
+                                  href={`/services/${service.id}`}
+                                  onClick={() => setIsOpen(false)}
+                                  className="block px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                                >
+                                  {service.name}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Offensive Group */}
-                        <div>
-                          <span className="block px-3 text-[10px] font-extrabold text-amber-600 uppercase tracking-widest">
-                            Offensive Cybersecurity
-                          </span>
-                          <div className="space-y-0.5 mt-1.5">
-                            {activeServices.filter((s: any) => s.cluster === 'offensive').map((service: any) => (
-                              <Link
-                                key={service.id}
-                                href={`/services/${service.id}`}
-                                onClick={() => setIsOpen(false)}
-                                className="block px-6 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
+                          {/* Offensive Group */}
+                          <div>
+                            <span className="block px-3 text-[10px] font-extrabold text-amber-600 uppercase tracking-widest">
+                              Offensive Cybersecurity
+                            </span>
+                            <div className="space-y-0.5 mt-1.5">
+                              {activeServices.filter((s: any) => s.cluster === 'offensive').map((service: any) => (
+                                <Link
+                                  key={service.id}
+                                  href={`/services/${service.id}`}
+                                  onClick={() => setIsOpen(false)}
+                                  className="block px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                                >
+                                  {service.name}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Defensive Group */}
-                        <div>
-                          <span className="block px-3 text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest">
-                            Defensive Cybersecurity
-                          </span>
-                          <div className="space-y-0.5 mt-1.5">
-                            {activeServices.filter((s: any) => s.cluster === 'defensive').map((service: any) => (
-                              <Link
-                                key={service.id}
-                                href={`/services/${service.id}`}
-                                onClick={() => setIsOpen(false)}
-                                className="block px-6 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
+                          {/* Defensive Group */}
+                          <div>
+                            <span className="block px-3 text-[10px] font-extrabold text-emerald-600 uppercase tracking-widest">
+                              Defensive Cybersecurity
+                            </span>
+                            <div className="space-y-0.5 mt-1.5">
+                              {activeServices.filter((s: any) => s.cluster === 'defensive').map((service: any) => (
+                                <Link
+                                  key={service.id}
+                                  href={`/services/${service.id}`}
+                                  onClick={() => setIsOpen(false)}
+                                  className="block px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-slate-50"
+                                >
+                                  {service.name}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </React.Fragment>
                   );
                 }

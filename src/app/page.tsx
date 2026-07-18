@@ -506,7 +506,7 @@ export default function Home() {
           </div>
 
           {/* Tabs for clusters */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+          <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:justify-center md:flex-wrap gap-2 mb-12 scrollbar-none">
             {[
               { id: 'all', name: 'Semua Layanan' },
               { id: 'governance', name: 'Governance & Strategy' },
@@ -516,7 +516,7 @@ export default function Home() {
               <button
                 key={tab.id}
                 onClick={() => setSelectedServiceTab(tab.id)}
-                className={`px-5 py-2 rounded-full text-xs font-extrabold transition-all duration-200 focus:outline-none cursor-pointer border ${
+                className={`px-5 py-2 rounded-full text-xs font-extrabold transition-all duration-200 focus:outline-none cursor-pointer border shrink-0 ${
                   selectedServiceTab === tab.id
                     ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-100'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'

@@ -541,12 +541,12 @@ export default function ServiceDetail() {
             {/* Right Column: Content tabs & details */}
             <div className="lg:col-span-8 bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden">
               {/* Tabs nav */}
-              <div className="flex border-b border-slate-200 bg-slate-50/50">
+              <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50/50 scrollbar-none">
                 {(['overview', 'methodology', 'deliverables', 'faq'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`flex-1 py-4 text-center text-xs font-bold border-b-2 uppercase tracking-wider focus:outline-none transition-all ${
+                    className={`shrink-0 min-w-[110px] sm:min-w-0 sm:flex-1 py-4 text-center text-xs font-bold border-b-2 uppercase tracking-wider focus:outline-none transition-all ${
                       activeTab === tab
                         ? 'border-blue-600 text-blue-600 bg-white'
                         : 'border-transparent text-slate-500 hover:text-slate-800'

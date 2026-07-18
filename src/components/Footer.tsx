@@ -157,10 +157,12 @@ export default function Footer() {
                   {siteConfig?.general?.address || 'Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190'}
                 </span>
               </li>
-              <li className="flex items-center space-x-2">
-                <Phone className="w-4 h-4 text-blue-500 shrink-0" />
-                <span>{siteConfig?.general?.phone || '0856-6872-2734'}</span>
-              </li>
+              {siteConfig?.general?.showPhone && (
+                <li className="flex items-center space-x-2">
+                  <Phone className="w-4 h-4 text-blue-500 shrink-0" />
+                  <span>{siteConfig?.general?.phone || '0856-6872-2734'}</span>
+                </li>
+              )}
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
                 <a href={`mailto:${siteConfig?.general?.email || 'customercare@risetin.co.id'}`} className="hover:text-white transition-colors">

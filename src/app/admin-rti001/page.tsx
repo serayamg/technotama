@@ -1144,6 +1144,21 @@ export default function AdminDashboard() {
                               })}
                               className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                             />
+                            <div className="flex items-center space-x-2 mt-1.5">
+                              <input
+                                type="checkbox"
+                                id="showPhone"
+                                checked={!!siteConfig.general.showPhone}
+                                onChange={(e) => setSiteConfig({
+                                  ...siteConfig,
+                                  general: { ...siteConfig.general, showPhone: e.target.checked }
+                                })}
+                                className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer"
+                              />
+                              <label htmlFor="showPhone" className="text-[10px] font-semibold text-slate-500 cursor-pointer select-none">
+                                Tampilkan Nomor Telepon di Footer Halaman
+                              </label>
+                            </div>
                           </div>
                           <div>
                             <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nomor WhatsApp</label>
