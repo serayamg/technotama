@@ -483,7 +483,7 @@ export default function Home() {
                   href="/online-consultation"
                   className="w-full sm:w-auto flex items-center justify-center space-x-1.5 px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors whitespace-nowrap"
                 >
-                  <span>Jadwalkan Konsultasi</span>
+                  <span>Schedule a Call</span>
                 </Link>
                 <button
                   onClick={() => setIsScannerOpen(true)}
@@ -1218,7 +1218,7 @@ export default function Home() {
                         href="/online-consultation?ref=scanner"
                         className="flex items-center justify-center px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition-colors"
                       >
-                        Jadwalkan Konsultasi
+                        Schedule a Call
                       </Link>
                     </div>
                   </div>
