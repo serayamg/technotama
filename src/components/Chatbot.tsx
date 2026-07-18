@@ -541,7 +541,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Bagus. Silakan masukkan alamat email profesional Anda.'
+          text: 'Baik, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.'
         }
       ]);
       return;
