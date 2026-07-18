@@ -106,9 +106,6 @@ export default function AcademyPage() {
                 <GraduationCap className="w-3.5 h-3.5" />
                 <span>RTI Cybersecurity Academy</span>
               </span>
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
-                Versi 1.0
-              </span>
               <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                 Lulusan Siap Kerja (Job Ready)
               </span>
