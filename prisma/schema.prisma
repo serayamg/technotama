@@ -96,13 +96,59 @@ model Blog {
 }
 
 model AcademyRegistration {
-  id              String   @id @default(uuid())
-  name            String
-  email           String
-  phone           String
-  background      String   // "Mahasiswa", "Jobseeker", "Professional IT", "Professional Non-IT"
-  bootcampLevel   String   // "Basic", "Intermediate", "Advanced"
-  certRequired    String   // "Ya", "Tidak"
-  prepRequired    String   // "Ya", "Tidak"
-  createdAt       DateTime @default(now())
+  id               String   @id @default(uuid())
+  // A. Informasi Program
+  classOption      String
+  participantType  String
+  
+  // B. Data Pribadi
+  name             String
+  nikPaspor        String
+  birthPlaceDate   String
+  gender           String
+  address          String
+  domicile         String
+  email            String
+  phone            String
+  linkedin         String
+  github           String?
+  
+  // C. Latar Belakang Pendidikan
+  educationLevel   String
+  school           String
+  major            String
+  gpa              String?
+  employmentStatus String
+  
+  // D. Pengalaman Kerja
+  workCompany      String?
+  workJobTitle     String?
+  workDuration     String?
+  workDescription  String?
+  
+  // E & F. Pengalaman IT & Cybersecurity
+  itExperience     String
+  cyberExperience  String
+  
+  // G. Sertifikasi yang Dimiliki
+  certifications   String
+  
+  // H. Tujuan & I. Pilihan Paket
+  bootcampGoals    String
+  packageOption    String
+  
+  // J. Dokumen yang Wajib Diupload
+  uploadedDocuments String
+  
+  // K. Metode Pembayaran
+  paymentMethod    String
+  
+  // Q. Tanda Tangan & Corporate
+  signatureName    String
+  signatureDate    String
+  corpName         String?
+  corpPic          String?
+  corpJobTitle     String?
+  
+  createdAt        DateTime @default(now())
 }

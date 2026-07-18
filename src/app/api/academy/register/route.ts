@@ -4,12 +4,73 @@ import { prisma } from '@/lib/db';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, background, bootcampLevel, certRequired, prepRequired } = body;
+    const {
+      classOption,
+      participantType,
+      name,
+      nikPaspor,
+      birthPlaceDate,
+      gender,
+      address,
+      domicile,
+      email,
+      phone,
+      linkedin,
+      github,
+      educationLevel,
+      school,
+      major,
+      gpa,
+      employmentStatus,
+      workCompany,
+      workJobTitle,
+      workDuration,
+      workDescription,
+      itExperience,
+      cyberExperience,
+      certifications,
+      bootcampGoals,
+      packageOption,
+      uploadedDocuments,
+      paymentMethod,
+      signatureName,
+      signatureDate,
+      corpName,
+      corpPic,
+      corpJobTitle
+    } = body;
 
     // Input Validation
-    if (!name || !email || !phone || !background || !bootcampLevel || !certRequired || !prepRequired) {
+    if (
+      !classOption ||
+      !participantType ||
+      !name ||
+      !nikPaspor ||
+      !birthPlaceDate ||
+      !gender ||
+      !address ||
+      !domicile ||
+      !email ||
+      !phone ||
+      !linkedin ||
+      !educationLevel ||
+      !school ||
+      !major ||
+      !employmentStatus ||
+      !packageOption ||
+      !paymentMethod ||
+      !signatureName ||
+      !signatureDate
+    ) {
       return NextResponse.json(
-        { error: 'Semua field wajib diisi.' },
+        { error: 'Semua field wajib bagian A, B, C, I, K, dan Q wajib diisi.' },
+        { status: 400 }
+      );
+    }
+
+    if (participantType === 'Corporate' && (!corpName || !corpPic || !corpJobTitle)) {
+      return NextResponse.json(
+        { error: 'Untuk jenis peserta Corporate, informasi perusahaan (bagian Q) wajib diisi lengkap.' },
         { status: 400 }
       );
     }
@@ -22,8 +83,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const sanitize = (val: string) => {
-      if (!val) return '';
+    const sanitize = (val: any) => {
+      if (val === undefined || val === null) return '';
+      if (typeof val !== 'string') return JSON.stringify(val);
       return val
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -36,17 +98,43 @@ export async function POST(request: Request) {
     // Save into database
     const registration = await prisma.academyRegistration.create({
       data: {
+        classOption: sanitize(classOption),
+        participantType: sanitize(participantType),
         name: sanitize(name),
+        nikPaspor: sanitize(nikPaspor),
+        birthPlaceDate: sanitize(birthPlaceDate),
+        gender: sanitize(gender),
+        address: sanitize(address),
+        domicile: sanitize(domicile),
         email: sanitize(email),
         phone: sanitize(phone),
-        background: sanitize(background),
-        bootcampLevel: sanitize(bootcampLevel),
-        certRequired: sanitize(certRequired),
-        prepRequired: sanitize(prepRequired)
+        linkedin: sanitize(linkedin),
+        github: sanitize(github),
+        educationLevel: sanitize(educationLevel),
+        school: sanitize(school),
+        major: sanitize(major),
+        gpa: sanitize(gpa),
+        employmentStatus: sanitize(employmentStatus),
+        workCompany: sanitize(workCompany),
+        workJobTitle: sanitize(workJobTitle),
+        workDuration: sanitize(workDuration),
+        workDescription: sanitize(workDescription),
+        itExperience: sanitize(itExperience),
+        cyberExperience: sanitize(cyberExperience),
+        certifications: sanitize(certifications),
+        bootcampGoals: sanitize(bootcampGoals),
+        packageOption: sanitize(packageOption),
+        uploadedDocuments: sanitize(uploadedDocuments),
+        paymentMethod: sanitize(paymentMethod),
+        signatureName: sanitize(signatureName),
+        signatureDate: sanitize(signatureDate),
+        corpName: sanitize(corpName),
+        corpPic: sanitize(corpPic),
+        corpJobTitle: sanitize(corpJobTitle)
       }
     });
 
-    console.log(`[AUDIT LOG] Academy registration created: id=${registration.id} email=${registration.email}`);
+    console.log(`[AUDIT LOG] Comprehensive academy registration created: id=${registration.id} email=${registration.email}`);
 
     return NextResponse.json(
       { success: true, registrationId: registration.id },
