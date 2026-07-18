@@ -236,7 +236,7 @@ export default function OnlineOrder() {
             </div>
 
             {/* Desktop Stepper progress */}
-            <div className="hidden md:flex border-b border-slate-100 bg-slate-50/30 py-5 items-center justify-center gap-6 lg:gap-10">
+            <div className="hidden md:flex border-b border-slate-100 bg-slate-50/30 py-5 items-center justify-center px-4">
               {[
                 { number: 1, label: 'Pilih Layanan' },
                 { number: 2, label: 'Isi Profil' },
@@ -246,8 +246,8 @@ export default function OnlineOrder() {
                 const isActive = step === s.number;
                 const isCompleted = step > s.number;
                 return (
-                  <div key={s.number} className="flex items-center">
-                    <div className="flex items-center space-x-2.5">
+                  <React.Fragment key={s.number}>
+                    <div className="flex items-center space-x-2.5 shrink-0">
                       {/* Step Number Circle */}
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-300 border-2 ${
                         isActive 
@@ -273,11 +273,11 @@ export default function OnlineOrder() {
                     
                     {/* Connecting line */}
                     {idx < 3 && (
-                      <div className={`w-8 lg:w-12 h-0.5 ml-6 lg:ml-10 rounded transition-colors duration-500 ${
-                        isCompleted ? 'bg-emerald-400' : 'bg-slate-200'
+                      <div className={`w-8 lg:w-16 h-0.5 mx-3 lg:mx-6 rounded transition-colors duration-500 shrink-0 ${
+                        step > s.number ? 'bg-emerald-400' : 'bg-slate-200'
                       }`} />
                     )}
-                  </div>
+                  </React.Fragment>
                 );
               })}
             </div>

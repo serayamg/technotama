@@ -163,8 +163,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href={`mailto:${siteConfig?.general?.email || 'admin@risetin.co.id'}`} className="hover:text-white transition-colors">
-                  {siteConfig?.general?.email || 'admin@risetin.co.id'}
+                <a href={`mailto:${siteConfig?.general?.email || 'customercare@risetin.co.id'}`} className="hover:text-white transition-colors">
+                  {siteConfig?.general?.email || 'customercare@risetin.co.id'}
                 </a>
               </li>
               <li className="flex items-center space-x-2">
@@ -193,9 +193,6 @@ export default function Footer() {
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">NIST CSF</span>
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">PCI DSS</span>
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">CIS Controls</span>
-          </div>
-          <div className="text-xs text-slate-500">
-            Kepatuhan Regulasi: <strong className="text-slate-400">OJK, Bank Indonesia, UU PDP No. 27/2022</strong>
           </div>
         </div>
 
