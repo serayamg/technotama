@@ -94,3 +94,15 @@ model Blog {
   summary     String
   publishedAt DateTime @default(now())
 }
+
+model AcademyRegistration {
+  id              String   @id @default(uuid())
+  name            String
+  email           String
+  phone           String
+  background      String   // "Mahasiswa", "Jobseeker", "Professional IT", "Professional Non-IT"
+  bootcampLevel   String   // "Basic", "Intermediate", "Advanced"
+  certRequired    String   // "Ya", "Tidak"
+  prepRequired    String   // "Ya", "Tidak"
+  createdAt       DateTime @default(now())
+}

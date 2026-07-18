@@ -108,15 +108,13 @@ export default function AcademyPage() {
               Program bootcamp intensif dengan kurikulum industri, praktikum berbasis lab siber nyata, dan bimbingan mentor berpengalaman untuk mencetak ahli siber masa depan.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/academy/register"
                 className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all text-center flex items-center justify-center space-x-2"
               >
                 <span>Daftar Sekarang</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
               <a
                 href="#kurikulum"
                 className="w-full sm:w-auto px-6 py-3 bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-xl border border-slate-700 transition-all text-center"
@@ -200,7 +198,7 @@ export default function AcademyPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="space-y-3 text-center md:text-left">
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl w-12 h-12 flex items-center justify-center mx-auto md:mx-0 shadow-sm border border-blue-100">
                   <GraduationCap className="w-6 h-6" />
@@ -225,9 +223,19 @@ export default function AcademyPage() {
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl w-12 h-12 flex items-center justify-center mx-auto md:mx-0 shadow-sm border border-blue-100">
                   <Users className="w-6 h-6" />
                 </div>
-                <h3 className="font-display font-extrabold text-sm text-slate-800 font-semibold">Program Penyaluran Kerja</h3>
+                <h3 className="font-display font-extrabold text-sm text-slate-800">Program Penyaluran Kerja</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   Lulusan tingkat intermediate dan advance berkesempatan disalurkan langsung sebagai staf keamanan siber ke partner & klien strategis RTI.
+                </p>
+              </div>
+
+              <div className="space-y-3 text-center md:text-left">
+                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl w-12 h-12 flex items-center justify-center mx-auto md:mx-0 shadow-sm border border-blue-100">
+                  <Award className="w-6 h-6" />
+                </div>
+                <h3 className="font-display font-extrabold text-sm text-slate-800">Sertifikasi Internasional</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Pendampingan persiapan ujian sertifikasi keamanan siber global terkemuka seperti CompTIA Security+, CEH, dan sertifikasi industri lainnya.
                 </p>
               </div>
             </div>
@@ -241,18 +249,16 @@ export default function AcademyPage() {
             <div className="relative space-y-4">
               <h2 className="font-display font-extrabold text-2xl lg:text-3xl">Siap Memulai Langkah Anda di Dunia Siber?</h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-                Hubungi tim pendaftaran kami untuk berkonsultasi mengenai tingkat yang sesuai untuk Anda, biaya pendaftaran, serta jadwal angkatan (batch) terdekat.
+                Hubungi tim RTI Academy untuk berkonsultasi mengenai tingkat yang sesuai untuk Anda, biaya pendaftaran, serta jadwal angkatan (batch) terdekat.
               </p>
               <div className="pt-4 flex justify-center">
-                <a
-                  href={waLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/academy/register"
                   className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all flex items-center space-x-2"
                 >
-                  <MessageSquare className="w-4.5 h-4.5" />
-                  <span>Hubungi Advisor Pendaftaran</span>
-                </a>
+                  <GraduationCap className="w-4.5 h-4.5" />
+                  <span>Daftar Sekarang</span>
+                </Link>
               </div>
             </div>
           </div>
