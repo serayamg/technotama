@@ -1216,25 +1216,25 @@ export default function AcademyRegisterPage() {
                 )}
 
                 {/* Navigation Buttons inside footer card */}
-                <div className="border-t border-slate-100 pt-6 flex justify-between">
+                <div className="border-t border-slate-100 pt-6 flex flex-col-reverse sm:flex-row sm:justify-between gap-3">
                   {step > 1 ? (
                     <button
                       type="button"
                       onClick={prevStep}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center space-x-1.5"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center space-x-1.5"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" />
                       <span>Sebelumnya</span>
                     </button>
                   ) : (
-                    <div />
+                    <div className="hidden sm:block" />
                   )}
 
                   {step < 5 ? (
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md hover:shadow-blue-500/10 transition-all cursor-pointer flex items-center space-x-1.5"
+                      className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md hover:shadow-blue-500/10 transition-all cursor-pointer flex items-center justify-center space-x-1.5"
                     >
                       <span>Selanjutnya</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -1244,7 +1244,7 @@ export default function AcademyRegisterPage() {
                       type="button"
                       disabled={submitting}
                       onClick={handleSubmit}
-                      className="px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all cursor-pointer flex items-center space-x-2"
+                      className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center space-x-2"
                     >
                       <span>{submitting ? 'Mengirim Pendaftaran...' : 'Kirim Pendaftaran Resmi'}</span>
                     </button>

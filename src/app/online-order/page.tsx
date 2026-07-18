@@ -438,12 +438,10 @@ export default function OnlineOrder() {
                     <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
                       Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi koordinator proyek (PIC) di atas untuk kepentingan pemesanan layanan ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                     </label>
-                  </div>
-
-                  <div className="pt-6 flex justify-between border-t border-slate-100">
+                  </div>                   <div className="pt-6 flex flex-col-reverse sm:flex-row sm:justify-between gap-3 border-t border-slate-100">
                     <button
                       onClick={() => setStep(1)}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center"
                     >
                       Kembali
                     </button>
@@ -459,7 +457,7 @@ export default function OnlineOrder() {
                         }
                         setStep(3);
                       }}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center"
                     >
                       Lanjutkan
                     </button>
@@ -510,17 +508,17 @@ export default function OnlineOrder() {
                     </div>
                   </div>
 
-                  <div className="pt-6 flex justify-between border-t border-slate-100">
+                  <div className="pt-6 flex flex-col-reverse sm:flex-row sm:justify-between gap-3 border-t border-slate-100">
                     <button
                       onClick={() => setStep(2)}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center"
                     >
                       Kembali
                     </button>
                     <button
                       onClick={() => handleSubmitOrder()}
                       disabled={loading}
-                      className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center space-x-1.5"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center space-x-1.5"
                     >
                       {loading ? 'Memproses...' : 'Kirim Pemesanan & Selesai'}
                     </button>
