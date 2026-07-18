@@ -1098,8 +1098,8 @@ export default function Home() {
                 Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang RTI</span>
               </h2>
             </div>
-            {/* Carousel navigation buttons */}
-            <div className="flex space-x-2 mt-4 md:mt-0">
+            {/* Carousel navigation buttons - Hidden on desktop since all items are visible in grid */}
+            <div className="flex space-x-2 mt-4 md:mt-0 lg:hidden">
               <button
                 onClick={() => scrollLeft(testimonialRef)}
                 className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
@@ -1119,12 +1119,12 @@ export default function Home() {
 
           <div 
             ref={testimonialRef}
-            className="flex space-x-6 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible scrollbar-none snap-x snap-mandatory scroll-smooth pb-4 lg:pb-0"
           >
             {testimonials.map((t, idx) => (
               <div 
                 key={idx} 
-                className="w-full sm:w-[380px] md:w-[450px] flex-shrink-0 bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
+                className="w-full sm:w-[380px] lg:w-auto flex-shrink-0 lg:flex-shrink bg-white border border-slate-200/85 p-6 sm:p-8 rounded-2xl relative shadow-sm snap-start"
               >
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(t.rating)].map((_, i) => (
@@ -1154,8 +1154,8 @@ export default function Home() {
                 Riset Siber, Kepatuhan Regulasi & <span className="whitespace-nowrap">Update Ancaman</span>
               </h2>
             </div>
-            {/* Carousel navigation buttons */}
-            <div className="flex space-x-2 mt-4 md:mt-0">
+            {/* Carousel navigation buttons - Hidden on desktop since all items are visible in grid */}
+            <div className="flex space-x-2 mt-4 md:mt-0 lg:hidden">
               <button
                 onClick={() => scrollLeft(insightRef)}
                 className="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-800 transition-colors shadow-sm cursor-pointer"
@@ -1175,12 +1175,12 @@ export default function Home() {
 
           <div 
             ref={insightRef}
-            className="flex space-x-6 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-4"
+            className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible scrollbar-none snap-x snap-mandatory scroll-smooth pb-4 lg:pb-0"
           >
             {insights.map((article, idx) => (
               <article 
                 key={idx}
-                className="w-full sm:w-[340px] md:w-[380px] flex-shrink-0 border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
+                className="w-full sm:w-[340px] lg:w-auto flex-shrink-0 lg:flex-shrink border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
               >
                 <div className="p-6 space-y-3.5">
                   <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor}`}>
