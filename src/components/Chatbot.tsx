@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -298,6 +298,13 @@ export default function Chatbot() {
           { label: '💰 Estimasi Biaya Proyek', action: 'start_lead' },
           { label: '🎓 RTI Academy', action: 'academy_flow' },
           { label: '📞 Hubungi Konsultan', action: 'consultant' }
+        ];
+        break;
+      case 'thank_you':
+        botText = 'Senang bisa membantu Anda hari ini! Khusus untuk langkah awal Anda hari ini, kami menyertakan analisis risiko awal gratis di sesi pertama kita. Jangan lewatkan kesempatan ini—amankan slot Anda sekarang dengan klik [Schedule a Call] dan mari buat bisnis Anda selangkah lebih aman.';
+        options = [
+          { label: '📅 Schedule a Call', action: 'go_consultation' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
       default:
@@ -692,6 +699,8 @@ export default function Chatbot() {
         handleOptionClick('💰 Estimasi Biaya Proyek', 'start_lead');
       } else if (lowText.includes('academy') || lowText.includes('bootcamp') || lowText.includes('pelatihan') || lowText.includes('belajar') || lowText.includes('admisi') || lowText.includes('training')) {
         triggerBotResponse('academy_flow', text);
+      } else if (lowText.includes('terima kasih') || lowText.includes('terimakasih') || lowText.includes('cukup') || lowText.includes('akhiri')) {
+        triggerBotResponse('thank_you', text);
       } else {
         triggerBotResponse('main_menu', text);
       }
@@ -801,7 +810,7 @@ export default function Chatbot() {
             <div className="border-t border-slate-200 bg-white">
               {leadStep > 0 && (
                 <div className="px-3 pt-2 pb-1.5 bg-slate-50/50 border-b border-slate-100 flex items-start space-x-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                  <Shield className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                   <p className="text-[9px] leading-relaxed text-slate-400 font-medium">
                     Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan kami memahami kebutuhan Anda dengan lebih baik sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
                   </p>
