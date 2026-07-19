@@ -69,6 +69,7 @@ export default function Chatbot() {
           { label: '🔍 Tanya Layanan', action: 'services' },
           { label: '📊 Jelaskan Framework', action: 'frameworks' },
           { label: '💰 Estimasi Biaya Proyek', action: 'start_lead' },
+          { label: '🎓 RTI Academy', action: 'academy_flow' },
           { label: '📞 Hubungi Konsultan', action: 'consultant' }
         ]
       }
@@ -281,12 +282,21 @@ export default function Chatbot() {
           { label: '↩ Menu Utama', action: 'main_menu' }
         ];
         break;
+      case 'academy_flow':
+        botText = '🎓 RTI Cybersecurity Academy menyediakan Program Cybersecurity Professional Bootcamp (Industry Ready Cybersecurity Workforce Program) untuk melatih SDM siber handal siap kerja.\n\nApakah Anda ingin mendaftar ke program Bootcamp ini atau berkonsultasi terlebih dahulu dengan tim Admisi RTI Academy?';
+        options = [
+          { label: '📝 Daftar Bootcamp Sekarang', action: 'go_academy_register' },
+          { label: '💬 Konsultasi Admisi Academy', action: 'go_academy_consult' },
+          { label: '↩ Menu Utama', action: 'main_menu' }
+        ];
+        break;
       case 'main_menu':
         botText = 'Bagaimana saya bisa membantu organisasi Anda hari ini?';
         options = [
           { label: '🔍 Tanya Layanan', action: 'services' },
           { label: '📊 Jelaskan Framework', action: 'frameworks' },
           { label: '💰 Estimasi Biaya Proyek', action: 'start_lead' },
+          { label: '🎓 RTI Academy', action: 'academy_flow' },
           { label: '📞 Hubungi Konsultan', action: 'consultant' }
         ];
         break;
@@ -454,6 +464,18 @@ export default function Chatbot() {
 
     if (action === 'go_order') {
       window.location.href = '/online-order';
+      return;
+    }
+
+    if (action === 'go_academy_register') {
+      window.location.href = '/academy/register';
+      return;
+    }
+
+    if (action === 'go_academy_consult') {
+      const waText = 'Halo Tim Admisi RTI Academy, saya tertarik untuk berkonsultasi mengenai program Cybersecurity Professional Bootcamp.';
+      const url = `https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(waText)}`;
+      window.open(url, '_blank');
       return;
     }
 
@@ -668,6 +690,8 @@ export default function Chatbot() {
         triggerBotResponse('detail_def', text);
       } else if (lowText.includes('biaya') || lowText.includes('harga') || lowText.includes('estimasi') || lowText.includes('budget')) {
         handleOptionClick('💰 Estimasi Biaya Proyek', 'start_lead');
+      } else if (lowText.includes('academy') || lowText.includes('bootcamp') || lowText.includes('pelatihan') || lowText.includes('belajar') || lowText.includes('admisi') || lowText.includes('training')) {
+        triggerBotResponse('academy_flow', text);
       } else {
         triggerBotResponse('main_menu', text);
       }
