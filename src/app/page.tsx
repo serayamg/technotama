@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Chatbot from '@/components/Chatbot';
@@ -361,6 +362,8 @@ const insights = [
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const [blogsList, setBlogsList] = useState<any[]>([]);
   const [activeClientGroup, setActiveClientGroup] = useState<keyof typeof clients>('Government');
   const [selectedFramework, setSelectedFramework] = useState<typeof frameworks[0] | null>(null);
   const [activeCaseStudyIdx, setActiveCaseStudyIdx] = useState(0);
@@ -446,6 +449,15 @@ export default function Home() {
       .then(res => res.json())
       .then(data => setSiteConfig(data))
       .catch(err => console.log('Settings fallback used on Home.'));
+
+    fetch('/api/blogs')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setBlogsList(data);
+        }
+      })
+      .catch(err => console.log('Failed to fetch blog list in Home.'));
   }, []);
 
   const getServiceIcon = (id: string) => {
@@ -1179,27 +1191,45 @@ export default function Home() {
             ref={insightRef}
             className="flex lg:grid lg:grid-cols-4 gap-6 overflow-x-auto lg:overflow-x-visible scrollbar-none snap-x snap-mandatory scroll-smooth pb-4 lg:pb-0"
           >
-            {insights.map((article, idx) => (
-              <article 
-                key={idx}
-                className="w-full sm:w-[340px] lg:w-auto flex-shrink-0 lg:flex-shrink flex flex-col justify-between h-full border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow transition-shadow snap-start bg-white"
-              >
-                <div className="p-6 flex flex-col justify-between h-full space-y-3.5 flex-grow">
-                  <div>
-                    <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${article.categoryColor} mb-2`}>
-                      {article.category}
-                    </span>
-                    <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors line-clamp-2 min-h-[40px] mb-1">
-                      {article.title}
-                    </h3>
-                    <p className="text-xs leading-relaxed text-slate-500 line-clamp-3 min-h-[54px]">
-                      {article.desc}
-                    </p>
+            {(blogsList.length > 0 ? blogsList : insights).map((article, idx) => {
+              const isDbBlog = !!article.id;
+              const title = article.title;
+              const summary = isDbBlog ? article.summary : article.desc;
+              const category = article.category;
+              const dateStr = isDbBlog 
+                ? new Date(article.publishedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
+                : article.date;
+              const id = article.id || idx;
+
+              // Helper for category color
+              let catColor = "text-blue-600 bg-blue-50";
+              if (category === 'THREAT' || category === 'THREAT INTEL') catColor = "text-red-600 bg-red-50";
+              else if (category === 'TREND' || category === 'TRENDS') catColor = "text-amber-600 bg-amber-50";
+              else if (category === 'NEWS' || category === 'OFFENSIVE') catColor = "text-purple-600 bg-purple-50";
+
+              return (
+                <article 
+                  key={id}
+                  onClick={() => isDbBlog && router.push(`/blog/${id}`)}
+                  className={`w-full sm:w-[340px] lg:w-auto flex-shrink-0 lg:flex-shrink flex flex-col justify-between h-full border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition-all snap-start bg-white ${isDbBlog ? 'cursor-pointer' : ''}`}
+                >
+                  <div className="p-6 flex flex-col justify-between h-full space-y-3.5 flex-grow">
+                    <div>
+                      <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded inline-block ${catColor} mb-2`}>
+                        {category === 'REGULATION' ? 'REGULATION' : category === 'THREAT' ? 'THREAT INTEL' : category === 'TREND' ? 'TRENDS' : 'NEWS'}
+                      </span>
+                      <h3 className="font-display font-extrabold text-sm text-slate-900 hover:text-blue-600 transition-colors line-clamp-2 min-h-[40px] mb-1">
+                        {title}
+                      </h3>
+                      <p className="text-xs leading-relaxed text-slate-500 line-clamp-3 min-h-[54px]">
+                        {summary}
+                      </p>
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-400 pt-2 border-t border-slate-100 mt-auto">{dateStr}</div>
                   </div>
-                  <div className="text-[10px] font-bold text-slate-400 pt-2 border-t border-slate-100 mt-auto">{article.date}</div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

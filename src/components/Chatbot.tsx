@@ -212,6 +212,17 @@ export default function Chatbot() {
 
     switch (userAction) {
       case 'explore_solutions':
+        setPreQualIntent('solutions');
+        botText = 'Sebelum kita mulai, siapakah Anda?';
+        options = [
+          { label: '🏢 Saya Mewakili Perusahaan', action: 'who_corporate' },
+          { label: '👨💻 Saya Individu / Profesional', action: 'who_individual' },
+          { label: '🎓 Saya Mahasiswa', action: 'who_student' },
+          { label: '👨🎓 Saya Fresh Graduate', action: 'who_fresh_grad' }
+        ];
+        break;
+
+      case 'menu_solutions_corporate_direct':
         botText = 'Solusi apa yang sedang Anda cari?';
         options = [
           { label: '🛡 Cybersecurity Strategy', action: 'menu_strategy' },
@@ -265,6 +276,17 @@ export default function Chatbot() {
         break;
 
       case 'menu_academy':
+        setPreQualIntent('academy');
+        botText = 'Sebelum kita mulai, siapakah Anda?';
+        options = [
+          { label: '🏢 Saya Mewakili Perusahaan', action: 'who_corporate' },
+          { label: '👨💻 Saya Individu / Profesional', action: 'who_individual' },
+          { label: '🎓 Saya Mahasiswa', action: 'who_student' },
+          { label: '👨🎓 Saya Fresh Graduate', action: 'who_fresh_grad' }
+        ];
+        break;
+
+      case 'menu_academy_corporate_direct':
         botText = 'Tingkatkan kompetensi SDM melalui program pelatihan cybersecurity RTI.';
         options = [
           { label: 'Cyber Awareness', action: 'prod_academy_awareness' },
@@ -559,6 +581,7 @@ export default function Chatbot() {
       setBookingDate(null);
       setBookingTime(null);
       setCurrentContextService(null);
+      setPreQualIntent(null);
       
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 400));
@@ -568,12 +591,806 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
+          text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
           options: [
-            { label: '🔍 Explore Solutions', action: 'explore_solutions' },
-            { label: '📅 Book a Consultation', action: 'book_consultation_start' },
-            { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
-            { label: '🎓 RTI Academy', action: 'menu_academy' }
+            { label: '🛡 Explore Solutions', action: 'explore_solutions' },
+            { label: '🎓 RTI Academy', action: 'menu_academy' },
+            { label: '📅 Book Consultation', action: 'book_consultation_start' },
+            { label: '💬 WhatsApp', action: 'chat_whatsapp' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'explore_solutions') {
+      setPreQualIntent('solutions');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Sebelum kita mulai, siapakah Anda?',
+          options: [
+            { label: '🏢 Saya Mewakili Perusahaan', action: 'who_corporate' },
+            { label: '👨💻 Saya Individu / Profesional', action: 'who_individual' },
+            { label: '🎓 Saya Mahasiswa', action: 'who_student' },
+            { label: '👨🎓 Saya Fresh Graduate', action: 'who_fresh_grad' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'menu_academy') {
+      setPreQualIntent('academy');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Sebelum kita mulai, siapakah Anda?',
+          options: [
+            { label: '🏢 Saya Mewakili Perusahaan', action: 'who_corporate' },
+            { label: '👨💻 Saya Individu / Profesional', action: 'who_individual' },
+            { label: '🎓 Saya Mahasiswa', action: 'who_student' },
+            { label: '👨🎓 Saya Fresh Graduate', action: 'who_fresh_grad' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'who_corporate') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      
+      if (preQualIntent === 'academy') {
+        triggerBotResponse('menu_academy_corporate_direct', label);
+      } else {
+        triggerBotResponse('menu_solutions_corporate_direct', label);
+      }
+      return;
+    }
+
+    if (action === 'who_individual' || action === 'who_student' || action === 'who_fresh_grad') {
+      setFlowType('academy_goal');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Senang bertemu dengan Anda.\n\nApa tujuan Anda mengikuti RTI Academy?',
+          options: [
+            { label: '🚀 Ingin Berkarir di Cybersecurity', action: 'acad_goal:career' },
+            { label: '📈 Upgrade Skill', action: 'acad_goal:upgrade' },
+            { label: '🏆 Persiapan Sertifikasi', action: 'acad_goal:cert' },
+            { label: '🔄 Alih Karir (Career Switch)', action: 'acad_goal:switch' },
+            { label: '🤔 Masih Bingung', action: 'acad_goal:confused' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_goal:career') {
+      setAcadGoal('career');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Pilihan yang tepat.\n\nRTI Academy memiliki Bootcamp yang dirancang untuk mempersiapkan peserta menjadi tenaga cybersecurity yang siap bekerja.',
+          options: [
+            { label: 'Lihat Bootcamp', action: 'acad_view_bootcamps' },
+            { label: 'Lihat Roadmap Belajar', action: 'acad_view_roadmap' },
+            { label: 'Konsultasi Karir', action: 'acad_career_consultation' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_goal:upgrade') {
+      setAcadGoal('upgrade');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Bidang cybersecurity apa yang ingin Anda tingkatkan?',
+          options: [
+            { label: 'SOC Analyst', action: 'acad_upgrade_field:SOC Analyst' },
+            { label: 'Penetration Testing', action: 'acad_upgrade_field:Penetration Testing' },
+            { label: 'Digital Forensic', action: 'acad_upgrade_field:Digital Forensic' },
+            { label: 'Cloud Security', action: 'acad_upgrade_field:Cloud Security' },
+            { label: 'Threat Intelligence', action: 'acad_upgrade_field:Threat Intelligence' },
+            { label: 'Governance Risk Compliance', action: 'acad_upgrade_field:Governance Risk Compliance' },
+            { label: 'Network Security', action: 'acad_upgrade_field:Network Security' },
+            { label: 'DevSecOps', action: 'acad_upgrade_field:DevSecOps' },
+            { label: 'Belum Tahu', action: 'acad_upgrade_field:Belum Tahu' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_upgrade_field:')) {
+      const field = action.replace('acad_upgrade_field:', '');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsTyping(false);
+
+      if (field === 'Belum Tahu') {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Saya akan membantu menentukan jalur belajar yang paling sesuai.',
+            options: [
+              { label: 'Mulai Career Assessment', action: 'acad_goal:confused' }
+            ]
+          }
+        ]);
+        return;
+      }
+
+      let recText = '';
+      if (field === 'SOC Analyst') {
+        recText = '✅ Intermediate SOC Analyst\n✅ Threat Hunting\n✅ FortiSIEM Training';
+      } else if (field === 'Penetration Testing') {
+        recText = '✅ Basic Ethical Hacking\n✅ Advanced Penetration Testing\n✅ Active Directory Attack';
+      } else if (field === 'Digital Forensic') {
+        recText = '✅ Digital Forensic\n✅ Advanced Malware Analysis';
+      } else if (field === 'Cloud Security') {
+        recText = '✅ Cloud Security Fundamentals\n✅ AWS/GCP Cloud Pentesting';
+      } else if (field === 'Threat Intelligence') {
+        recText = '✅ Threat Intelligence Specialist\n✅ Cyber Threat Hunting';
+      } else if (field === 'Governance Risk Compliance') {
+        recText = '✅ ISO/IEC 27001 Lead Implementer\n✅ IT GRC Development';
+      } else if (field === 'Network Security') {
+        recText = '✅ Practical Network Security\n✅ Firewall Configuration';
+      } else if (field === 'DevSecOps') {
+        recText = '✅ Secure SDLC & DevSecOps\n✅ Container Security';
+      }
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: `Berdasarkan pilihan Anda, kami merekomendasikan:\n\n${recText}\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?`,
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_goal:cert') {
+      setAcadGoal('cert');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Sertifikasi apa yang ingin Anda capai?',
+          options: [
+            { label: 'CompTIA Security+', action: 'acad_cert_select:CompTIA Security+' },
+            { label: 'CompTIA CySA+', action: 'acad_cert_select:CompTIA CySA+' },
+            { label: 'CEH', action: 'acad_cert_select:CEH' },
+            { label: 'CHFI', action: 'acad_cert_select:CHFI' },
+            { label: 'ISO 27001 Lead Implementer', action: 'acad_cert_select:ISO 27001 Lead Implementer' },
+            { label: 'ISO 27001 Lead Auditor', action: 'acad_cert_select:ISO 27001 Lead Auditor' },
+            { label: 'CISSP', action: 'acad_cert_select:CISSP' },
+            { label: 'Belum Menentukan', action: 'acad_cert_select:Belum Menentukan' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_cert_select:')) {
+      const cert = action.replace('acad_cert_select:', '');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+
+      if (cert === 'Belum Menentukan') {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Tidak masalah.\n\nSaya akan membantu memilih sertifikasi yang sesuai dengan pengalaman Anda.',
+            options: [
+              { label: 'Mulai Career Assessment', action: 'acad_goal:confused' }
+            ]
+          }
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: `Pilihan sertifikasi yang sangat baik. Kami menyediakan kelas persiapan sertifikasi ${cert} dengan kurikulum resmi, instruktur berpengalaman, serta latihan soal komprehensif.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?`,
+            options: [
+              { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+              { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+            ]
+          }
+        ]);
+      }
+      return;
+    }
+
+    if (action === 'acad_goal:switch') {
+      setAcadGoal('switch');
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Apakah Anda memiliki pengalaman di bidang IT?',
+          options: [
+            { label: 'Ya', action: 'acad_switch_exp:yes' },
+            { label: 'Tidak', action: 'acad_switch_exp:no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_switch_exp:yes') {
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Bagus sekali. Pengalaman IT Anda akan mempermudah akselerasi belajar Anda. Mari lakukan assessment singkat.',
+          options: [
+            { label: 'Mulai Assessment', action: 'acad_goal:confused' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_switch_exp:no') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Tidak perlu khawatir.\n\nBootcamp RTI dimulai dari level Basic sehingga peserta tanpa pengalaman cybersecurity tetap dapat mengikuti.',
+          options: [
+            { label: 'Lihat Detail Bootcamp', action: 'acad_view_bootcamps' },
+            { label: 'Mulai Career Assessment', action: 'acad_goal:confused' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_goal:confused') {
+      setAcadGoal('confused');
+      setFlowType('academy_assessment');
+      setAcadAssessmentStep(1);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Saya akan membantu menentukan jalur belajar yang paling sesuai.\n\nBerapa usia Anda?',
+          options: [
+            { label: '18-22', action: 'acad_assess_q1:18-22' },
+            { label: '23-30', action: 'acad_assess_q1:23-30' },
+            { label: '31-40', action: 'acad_assess_q1:31-40' },
+            { label: '40+', action: 'acad_assess_q1:40+' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_assess_q1:')) {
+      const val = action.replace('acad_assess_q1:', '');
+      setAcadAssessmentData(prev => ({ ...prev, age: val }));
+      setAcadAssessmentStep(2);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Pendidikan terakhir?',
+          options: [
+            { label: 'SMA', action: 'acad_assess_q2:SMA' },
+            { label: 'D3', action: 'acad_assess_q2:D3' },
+            { label: 'S1', action: 'acad_assess_q2:S1' },
+            { label: 'S2', action: 'acad_assess_q2:S2' },
+            { label: 'Lainnya', action: 'acad_assess_q2:Lainnya' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_assess_q2:')) {
+      const val = action.replace('acad_assess_q2:', '');
+      setAcadAssessmentData(prev => ({ ...prev, education: val }));
+      setAcadAssessmentStep(3);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Apakah memiliki pengalaman kerja di bidang IT?',
+          options: [
+            { label: 'Belum Ada', action: 'acad_assess_q3:Belum Ada' },
+            { label: 'Helpdesk', action: 'acad_assess_q3:Helpdesk' },
+            { label: 'Network', action: 'acad_assess_q3:Network' },
+            { label: 'System Administrator', action: 'acad_assess_q3:System Administrator' },
+            { label: 'Developer', action: 'acad_assess_q3:Developer' },
+            { label: 'IT Support', action: 'acad_assess_q3:IT Support' },
+            { label: 'Lainnya', action: 'acad_assess_q3:Lainnya' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_assess_q3:')) {
+      const val = action.replace('acad_assess_q3:', '');
+      setAcadAssessmentData(prev => ({ ...prev, experience: val }));
+      setAcadAssessmentStep(4);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Target Anda?',
+          options: [
+            { label: 'Mendapatkan pekerjaan', action: 'acad_assess_q4:Mendapatkan pekerjaan' },
+            { label: 'Naik jabatan', action: 'acad_assess_q4:Naik jabatan' },
+            { label: 'Pindah divisi', action: 'acad_assess_q4:Pindah divisi' },
+            { label: 'Freelancer', action: 'acad_assess_q4:Freelancer' },
+            { label: 'Membangun bisnis', action: 'acad_assess_q4:Membangun bisnis' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_assess_q4:')) {
+      const val = action.replace('acad_assess_q4:', '');
+      const finalAssessment = { ...acadAssessmentData, target: val };
+      setAcadAssessmentData(finalAssessment);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setIsTyping(false);
+      
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Berdasarkan jawaban Anda, jalur belajar yang kami rekomendasikan adalah:\n\nRTI Bootcamp Roadmap\n\n🟢 Basic Bootcamp\n↓\n🔵 Intermediate Bootcamp\n↓\n🟣 Advanced Bootcamp\n↓\n🏆 International Certification\n↓\n💼 Job Ready Program'
+        }
+      ]);
+
+      await new Promise(resolve => setTimeout(resolve, 600));
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Estimasi waktu belajar: 6–9 bulan.\n\nTingkat keberhasilan sangat bergantung pada komitmen belajar dan praktik. RTI Academy menyediakan pembelajaran berbasis proyek, simulasi, dan pendampingan agar peserta memiliki pengalaman yang relevan dengan kebutuhan industri.',
+          options: [
+            { label: 'Basic', action: 'acad_detail:basic' },
+            { label: 'Intermediate', action: 'acad_detail:intermediate' },
+            { label: 'Advanced', action: 'acad_detail:advanced' },
+            { label: 'International Certification', action: 'acad_detail:cert' },
+            { label: 'Informasi Biaya', action: 'acad_detail:cost' },
+            { label: 'Pendaftaran', action: 'acad_enroll_start' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_view_bootcamps') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Berikut adalah program Bootcamp di RTI Academy:',
+          options: [
+            { label: '🟢 Basic Bootcamp', action: 'acad_detail:basic' },
+            { label: '🔵 Intermediate Bootcamp', action: 'acad_detail:intermediate' },
+            { label: '🟣 Advanced Bootcamp', action: 'acad_detail:advanced' },
+            { label: '🏠 Menu Utama', action: 'go_home' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_view_roadmap') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Rekomendasi Jalur Belajar (Roadmap):\n\n🟢 Basic (8 minggu) -> Fundamental & Linux\n↓\n🔵 Intermediate (12 minggu) -> SOC, SIEM & Pentesting\n↓\n🟣 Advanced (16 minggu) -> Red Team & Incident Response\n↓\n🏆 Persiapan Sertifikasi Internasional\n↓\n💼 Pendampingan Kerja (Job Ready)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_career_consultation') {
+      setContactPurpose('academic_booking');
+      setFlowType('booking_date');
+      setBookingTopic('RTI Academy Career Consultation');
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Pilih tanggal untuk konsultasi karir Anda.',
+          isCalendar: true
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_detail:basic') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Anda akan mempelajari:\n\n✅ Fundamental Cybersecurity\n✅ Networking\n✅ Linux\n✅ Windows Security\n✅ Ethical Hacking Introduction\n✅ Web Security\n✅ Security Awareness\n\nDurasi: 8 Minggu',
+          options: [
+            { label: 'Lihat Kurikulum', action: 'acad_curriculum:basic' },
+            { label: 'Daftar Sekarang', action: 'acad_enroll_start:Basic Bootcamp' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_detail:intermediate') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Materi:\n\nSOC\nSIEM\nThreat Hunting\nVA\nPen-Test\nIncident Response\nCloud Security\n\nDurasi: 12 Minggu',
+          options: [
+            { label: 'Lihat Kurikulum', action: 'acad_curriculum:intermediate' },
+            { label: 'Daftar', action: 'acad_enroll_start:Intermediate Bootcamp' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_detail:advanced') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Materi:\n\nRed Team\nPurple Team\nDigital Forensic\nMalware Analysis\nThreat Intelligence\nAdvanced Pentest\nActive Directory Attack\nCloud Pentest\nDevSecOps\n\nDurasi: 16 Minggu',
+          options: [
+            { label: 'Lihat Kurikulum', action: 'acad_curriculum:advanced' },
+            { label: 'Daftar', action: 'acad_enroll_start:Advanced Bootcamp' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_detail:cert') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Setelah menyelesaikan Bootcamp Intermediate, peserta dapat mengikuti kelas persiapan sertifikasi internasional sesuai jalur karier yang dipilih.\n\nPilihan sertifikasi meliputi:\n\n🏅 CompTIA Security+\n🏅 CompTIA CySA+\n🏅 CEH\n🏅 CHFI\n🏅 ISO/IEC 27001 Lead Implementer\n🏅 ISO/IEC 27001 Lead Auditor\n🏅 CISSP (bagi peserta yang telah memenuhi persyaratan pengalaman)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_detail:cost') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Informasi biaya akan disesuaikan dengan kelas yang dipilih.',
+          options: [
+            { label: 'Lihat Paket', action: 'acad_cost_package' },
+            { label: 'Promo', action: 'acad_cost_promo' },
+            { label: 'Cicilan', action: 'acad_cost_installment' },
+            { label: 'Corporate Class', action: 'acad_cost_corporate' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_curriculum:basic') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Kurikulum Basic Bootcamp:\nMinggu 1-2: Fundamental OS & Networking\nMinggu 3-4: Linux Administration & Security\nMinggu 5-6: Web Fundamentals & OWASP Top 10\nMinggu 7-8: Intro to Ethical Hacking & Security Awareness.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_curriculum:intermediate') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Kurikulum Intermediate Bootcamp:\nMinggu 1-3: Security Operations Center (SOC) & SIEM\nMinggu 4-6: Vulnerability Assessment & Penetration Testing\nMinggu 7-9: Incident Response & Threat Hunting\nMinggu 10-12: Cloud Security Fundamentals.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_curriculum:advanced') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Kurikulum Advanced Bootcamp:\nMinggu 1-4: Red Teaming & Active Directory Attacks\nMinggu 5-8: Digital Forensics & Incident Response (DFIR)\nMinggu 9-12: Threat Intelligence & Malware Analysis\nMinggu 13-16: DevSecOps & Cloud Pentesting.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_cost_package') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Paket Belajar RTI Academy:\n- Basic Bootcamp: Rp 3.500.000\n- Intermediate Bootcamp: Rp 6.000.000\n- Advanced Bootcamp: Rp 8.500.000\n- Bundle Complete: Rp 15.000.000\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_cost_promo') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Diskon Early Bird 10% untuk pendaftaran 2 minggu sebelum kelas dimulai, serta diskon kelompok sebesar 15% (minimal 3 orang).\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_cost_installment') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Tersedia cicilan tanpa bunga (0%) hingga 3x pembayaran atau opsi pembiayaan cicilan bulanan melalui mitra kami.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_cost_corporate') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Paket pelatihan khusus untuk peningkatan kompetensi tim IT & Security korporasi dengan materi dan jadwal yang fleksibel.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action.startsWith('acad_enroll_start')) {
+      const selectedClass = action.includes(':') ? action.split(':')[1] : '';
+      setAcadEnrollData(prev => ({ ...prev, kelas: selectedClass }));
+      setFlowType('academy_enroll');
+      setAcadEnrollStep(1);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Siap bergabung bersama RTI Academy?\n\nMari isi form pendaftaran singkat.\n\nSiapa nama lengkap Anda?'
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_consultation_start') {
+      setContactPurpose('academic_booking');
+      setFlowType('booking_date');
+      setBookingTopic('Academic Consultation');
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Pilih tanggal untuk konsultasi akademik Anda.',
+          isCalendar: true
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'acad_download_brochure') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Anda dapat men-download Brosur Lengkap Bootcamp RTI Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://rti.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          options: [
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
           ]
         }
       ]);
@@ -623,6 +1440,28 @@ export default function Chatbot() {
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsTyping(false);
       
+      const isAcademyUser = preQualIntent === 'academy' || flowType.startsWith('academy') || contactPurpose === 'academic_booking' || acadGoal !== null;
+
+      if (isAcademyUser) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Terima kasih telah mengunjungi RTI Academy.\n\nCybersecurity merupakan salah satu bidang dengan pertumbuhan karier yang sangat pesat. Melalui kurikulum berbasis praktik, studi kasus industri, dan pendampingan dari para praktisi, RTI Academy membantu Anda membangun kompetensi yang relevan dengan kebutuhan dunia kerja.\n\nJika Anda ingin mendiskusikan jalur belajar yang paling sesuai atau membutuhkan informasi lebih lanjut mengenai kelas, jadwal, maupun sertifikasi, kami siap membantu.',
+            options: [
+              { label: '🚀 Daftar Bootcamp Sekarang', action: 'acad_enroll_start' },
+              { label: '📅 Book Free Academic Consultation', action: 'acad_consultation_start' },
+              { label: '🎓 Lihat Roadmap Karier Cybersecurity', action: 'acad_view_roadmap' },
+              { label: '💬 Chat RTI Academy', action: 'open_whatsapp_now' }
+            ]
+          }
+        ]);
+        setFlowType('completed');
+        startIdleTimer();
+        return;
+      }
+
       const closingOptions = [
         {
           text: "Terima kasih telah berkonsultasi dengan RTI AI Cybersecurity Consultant.\n\nSetiap organisasi memiliki tantangan keamanan siber yang berbeda. Tim konsultan RTI siap membantu Anda merancang solusi yang tepat, efektif, dan sesuai dengan kebutuhan bisnis maupun regulasi industri.",
@@ -1251,6 +2090,109 @@ export default function Chatbot() {
     }, 600);
   };
 
+  const handleAcademyEnrollment = async (text: string) => {
+    const step = acadEnrollStep;
+    let nextData = { ...acadEnrollData };
+    
+    if (step === 1) nextData.name = text;
+    else if (step === 2) nextData.email = text;
+    else if (step === 3) nextData.whatsapp = text;
+    else if (step === 4) nextData.domisili = text;
+    else if (step === 5) nextData.pendidikan = text;
+    else if (step === 6) nextData.pekerjaan = text;
+    else if (step === 7) nextData.kelas = text;
+    else if (step === 8) nextData.targetMulai = text;
+
+    setAcadEnrollData(nextData);
+
+    let nextStep = step + 1;
+    // If they pre-selected a class, skip class selection step
+    if (nextStep === 7 && nextData.kelas) {
+      nextStep = 8;
+    }
+
+    setAcadEnrollStep(nextStep);
+
+    setIsTyping(true);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    setIsTyping(false);
+
+    if (nextStep === 2) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Apa alamat email Anda?' }
+      ]);
+    } else if (nextStep === 3) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Berapa nomor WhatsApp aktif Anda?' }
+      ]);
+    } else if (nextStep === 4) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Di kota mana domisili Anda saat ini?' }
+      ]);
+    } else if (nextStep === 5) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Apa tingkat pendidikan terakhir Anda? (contoh: SMA, S1)' }
+      ]);
+    } else if (nextStep === 6) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Apa pekerjaan Anda saat ini?' }
+      ]);
+    } else if (nextStep === 7) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Kelas/Bootcamp apa yang paling Anda minati?' }
+      ]);
+    } else if (nextStep === 8) {
+      setMessages(prev => [
+        ...prev,
+        { id: Math.random().toString(), sender: 'bot', text: 'Kapan target Anda untuk mulai belajar?' }
+      ]);
+    } else {
+      // Submit Academy lead
+      try {
+        const leadPayload = {
+          name: nextData.name,
+          email: nextData.email,
+          phone: nextData.whatsapp,
+          company: `Domisili: ${nextData.domisili}`,
+          role: nextData.pekerjaan,
+          needs: `Kelas: ${nextData.kelas || text}. Pendidikan: ${nextData.pendidikan}. Target mulai: ${text}`,
+          budget: 'Academy Student',
+          timeline: text,
+          source: 'CHATBOT_ACADEMY'
+        };
+
+        await fetch('/api/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(leadPayload)
+        });
+      } catch (err) {
+        console.error('Failed to submit academy enrollment to backend.', err);
+      }
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Terima kasih.\n\nTim RTI Academy akan menghubungi Anda untuk membantu proses pendaftaran, menjelaskan jadwal kelas, metode pembelajaran, pilihan pembayaran, serta menjawab pertanyaan yang mungkin masih Anda miliki.',
+          options: [
+            { label: '📅 Jadwalkan Konsultasi Akademik', action: 'acad_consultation_start' },
+            { label: '📘 Download Brosur Bootcamp', action: 'acad_download_brochure' },
+            { label: '💬 Chat Admin RTI Academy', action: 'open_whatsapp_now' }
+          ]
+        }
+      ]);
+      setFlowType('completed');
+    }
+  };
+
   const handleSend = () => {
     stopIdleTimer();
     if (!inputText.trim()) return;
@@ -1266,6 +2208,8 @@ export default function Chatbot() {
       handleContactCollection(text);
     } else if (flowType === 'exit_capture') {
       handleExitCaptureSubmit(text);
+    } else if (flowType === 'academy_enroll') {
+      handleAcademyEnrollment(text);
     } else {
       handleFreeTextInput(text);
     }
@@ -1314,12 +2258,12 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
+            text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
             options: [
-              { label: '🔍 Explore Solutions', action: 'explore_solutions' },
-              { label: '📅 Book a Consultation', action: 'book_consultation_start' },
-              { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
-              { label: '🎓 RTI Academy', action: 'menu_academy' }
+              { label: '🛡 Explore Solutions', action: 'explore_solutions' },
+              { label: '🎓 RTI Academy', action: 'menu_academy' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start' },
+              { label: '💬 WhatsApp', action: 'chat_whatsapp' }
             ]
           }
         ]);

@@ -61,6 +61,9 @@ export default function AdminDashboard() {
   const [blogSummary, setBlogSummary] = useState('');
   const [blogContent, setBlogContent] = useState('');
   const [blogSuccess, setBlogSuccess] = useState(false);
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [isAddingBlog, setIsAddingBlog] = useState(false);
+  const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
 
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 9) + 1;
@@ -129,6 +132,13 @@ export default function AdminDashboard() {
         const dataSettings = await resSettings.json();
         setSiteConfig(dataSettings);
       }
+
+      // 6. Fetch all blogs
+      const resBlogs = await fetch('/api/blogs');
+      if (resBlogs.ok) {
+        const dataBlogs = await resBlogs.json();
+        setBlogs(dataBlogs);
+      }
     } catch (err) {
       console.error('Failed to fetch admin data:', err);
     }
@@ -189,13 +199,81 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePublishBlog = (e: React.FormEvent) => {
+  const handlePublishBlog = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBlogSuccess(true);
-    setBlogTitle('');
-    setBlogSummary('');
-    setBlogContent('');
-    setTimeout(() => setBlogSuccess(false), 3000);
+    try {
+      const url = editingBlogId ? `/api/blogs/${editingBlogId}` : '/api/blogs';
+      const method = editingBlogId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: blogTitle,
+          category: blogCategory,
+          summary: blogSummary,
+          content: blogContent
+        })
+      });
+
+      if (res.ok) {
+        setBlogSuccess(true);
+        setBlogTitle('');
+        setBlogSummary('');
+        setBlogContent('');
+        setEditingBlogId(null);
+        setIsAddingBlog(false);
+        setTimeout(() => setBlogSuccess(false), 3000);
+        
+        // Refresh blogs list
+        const resBlogs = await fetch('/api/blogs');
+        if (resBlogs.ok) {
+          const dataBlogs = await resBlogs.json();
+          setBlogs(dataBlogs);
+        }
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Gagal menyimpan artikel.');
+      }
+    } catch (err) {
+      console.error('Failed to publish/update blog:', err);
+      alert('Terjadi kesalahan jaringan.');
+    }
+  };
+
+  const handleEditBlogClick = (b: any) => {
+    setEditingBlogId(b.id);
+    setBlogTitle(b.title);
+    setBlogCategory(b.category);
+    setBlogSummary(b.summary);
+    setBlogContent(b.content);
+    setIsAddingBlog(true);
+  };
+
+  const handleDeleteBlog = async (id: string) => {
+    const confirmDelete = window.confirm('Apakah Anda yakin ingin menghapus artikel ini secara permanen?');
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/blogs/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (res.ok) {
+        // Refresh blogs list
+        const resBlogs = await fetch('/api/blogs');
+        if (resBlogs.ok) {
+          const dataBlogs = await resBlogs.json();
+          setBlogs(dataBlogs);
+        }
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Gagal menghapus artikel.');
+      }
+    } catch (err) {
+      console.error('Failed to delete blog:', err);
+      alert('Terjadi kesalahan jaringan.');
+    }
   };
 
   const handleSubmitSettings = async (e: React.FormEvent) => {
@@ -1037,73 +1115,195 @@ export default function AdminDashboard() {
 
                   {/* Publish Blog */}
                   {activeTab === 'blogs' && (
-                    <form onSubmit={handlePublishBlog} className="space-y-6 max-w-xl">
-                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Buat Artikel Baru (Insight / Threat Warning)</h2>
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between border-b pb-3">
+                        <h2 className="font-display font-extrabold text-base text-slate-900">CMS Pengelola Blog & Insight</h2>
+                        {!isAddingBlog && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingBlogId(null);
+                              setBlogTitle('');
+                              setBlogSummary('');
+                              setBlogContent('');
+                              setBlogCategory('NEWS');
+                              setIsAddingBlog(true);
+                            }}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow flex items-center space-x-1.5 cursor-pointer transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                            <span>Tambah Artikel Baru</span>
+                          </button>
+                        )}
+                      </div>
+
                       {blogSuccess && (
-                        <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-100 flex items-start space-x-2 text-xs text-emerald-700">
+                        <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-100 flex items-start space-x-2 text-xs text-emerald-700">
                           <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-                          <span>Artikel sukses dipublikasikan ke halaman utama.</span>
+                          <span>Artikel berhasil disimpan dan dipublikasikan ke halaman utama.</span>
                         </div>
                       )}
 
-                      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                        <div className="md:col-span-8">
-                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Judul Artikel *</label>
-                          <input
-                            type="text"
-                            required
-                            value={blogTitle}
-                            onChange={(e) => setBlogTitle(e.target.value)}
-                            placeholder="Contoh: Ancaman Malware Terbaru"
-                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
-                          />
+                      {!isAddingBlog ? (
+                        /* Blog Posts List Table */
+                        <div className="border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm bg-white">
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                              <thead className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                <tr>
+                                  <th className="py-3 px-4">Judul Artikel</th>
+                                  <th className="py-3 px-4">Kategori</th>
+                                  <th className="py-3 px-4">Tanggal Rilis</th>
+                                  <th className="py-3 px-4 text-right">Aksi</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {blogs.map((b) => (
+                                  <tr key={b.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-4 px-4">
+                                      <div className="font-bold text-slate-800 text-xs line-clamp-1">{b.title}</div>
+                                      <div className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">{b.summary}</div>
+                                    </td>
+                                    <td className="py-4 px-4">
+                                      <span className={`text-[9px] font-bold border px-2 py-0.5 rounded-full ${
+                                        b.category === 'REGULATION' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                        b.category === 'THREAT' ? 'bg-red-50 text-red-600 border-red-100' :
+                                        b.category === 'TREND' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                        'bg-purple-50 text-purple-600 border-purple-100'
+                                      }`}>
+                                        {b.category}
+                                      </span>
+                                    </td>
+                                    <td className="py-4 px-4 text-slate-500 font-semibold">
+                                      {new Date(b.publishedAt).toLocaleDateString('id-ID', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        year: 'numeric'
+                                      })}
+                                    </td>
+                                    <td className="py-4 px-4 text-right space-x-2">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleEditBlogClick(b)}
+                                        className="inline-flex items-center space-x-1 text-[11px] font-bold text-blue-600 hover:text-blue-800 cursor-pointer"
+                                      >
+                                        <Edit3 className="w-3.5 h-3.5" />
+                                        <span>Edit</span>
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteBlog(b.id)}
+                                        className="inline-flex items-center space-x-1 text-[11px] font-bold text-red-600 hover:text-red-800 cursor-pointer"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                        <span>Hapus</span>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                                {blogs.length === 0 && (
+                                  <tr>
+                                    <td colSpan={4} className="py-8 text-center text-slate-400 italic">
+                                      Belum ada artikel dipublikasikan. Klik tombol &quot;Tambah Artikel Baru&quot; di atas untuk memulai.
+                                    </td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
-                        <div className="md:col-span-4">
-                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kategori Artikel</label>
-                          <select
-                            value={blogCategory}
-                            onChange={(e) => setBlogCategory(e.target.value)}
-                            className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all"
-                          >
-                            <option value="NEWS">NEWS / UPDATE</option>
-                            <option value="THREAT">THREAT INTELLIGENCE</option>
-                            <option value="REGULATION">REGULATION UPDATE</option>
-                            <option value="TREND">TECHNOLOGY TREND</option>
-                          </select>
-                        </div>
-                      </div>
+                      ) : (
+                        /* Add/Edit Blog Form */
+                        <form onSubmit={handlePublishBlog} className="space-y-5 bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm">
+                          <h3 className="font-display font-extrabold text-sm text-slate-900 border-b pb-3 flex items-center justify-between">
+                            <span>{editingBlogId ? '📝 Edit Artikel' : '✨ Buat Artikel Baru'}</span>
+                            <span className="text-[10px] font-bold text-slate-400">Status: Draft &bull; Publish</span>
+                          </h3>
 
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ringkasan Singkat (SEO Meta Description) *</label>
-                        <input
-                          type="text"
-                          required
-                          value={blogSummary}
-                          onChange={(e) => setBlogSummary(e.target.value)}
-                          placeholder="Ringkasan 1-2 kalimat untuk snippet pencarian..."
-                          className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
-                        />
-                      </div>
+                          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                            <div className="md:col-span-8">
+                              <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Judul Artikel *</label>
+                              <input
+                                type="text"
+                                required
+                                value={blogTitle}
+                                onChange={(e) => setBlogTitle(e.target.value)}
+                                placeholder="Contoh: Analisis Ancaman Malware Lockbit Terhadap Layanan Publik"
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                              />
+                            </div>
+                            <div className="md:col-span-4">
+                              <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kategori Artikel</label>
+                              <select
+                                value={blogCategory}
+                                onChange={(e) => setBlogCategory(e.target.value)}
+                                className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 focus:outline-none focus:border-blue-500 transition-all"
+                              >
+                                <option value="NEWS">NEWS / UPDATE</option>
+                                <option value="THREAT">THREAT INTELLIGENCE</option>
+                                <option value="REGULATION">REGULATION UPDATE</option>
+                                <option value="TREND">TECHNOLOGY TREND</option>
+                              </select>
+                            </div>
+                          </div>
 
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Isi Artikel Lengkap *</label>
-                        <textarea
-                          required
-                          rows={6}
-                          value={blogContent}
-                          onChange={(e) => setBlogContent(e.target.value)}
-                          placeholder="Ketik konten artikel secara lengkap..."
-                          className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none"
-                        />
-                      </div>
+                          <div>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ringkasan Singkat (Snippet Deskripsi) *</label>
+                            <input
+                              type="text"
+                              required
+                              value={blogSummary}
+                              onChange={(e) => setBlogSummary(e.target.value)}
+                              placeholder="Tulis ringkasan singkat 1-2 kalimat untuk preview postingan..."
+                              className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
+                            />
+                          </div>
 
-                      <button
-                        type="submit"
-                        className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
-                      >
-                        Publish Artikel
-                      </button>
-                    </form>
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <label className="block text-[10px] font-bold text-slate-500 uppercase">Konten Artikel Lengkap (Format HTML) *</label>
+                              <span className="text-[9px] text-slate-400 font-bold uppercase">Mendukung Tag Format HTML</span>
+                            </div>
+                            <textarea
+                              required
+                              rows={12}
+                              value={blogContent}
+                              onChange={(e) => setBlogContent(e.target.value)}
+                              placeholder="Ketik isi lengkap artikel di sini... (Contoh: <h2>Judul Bagian</h2> <p>Isi paragraf...</p>)"
+                              className="w-full text-xs font-mono text-slate-800 border border-slate-200 rounded-xl px-3 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-y"
+                            />
+                            <div className="mt-1.5 p-3 rounded-lg bg-blue-50/50 border border-blue-100/50 text-[10px] text-blue-700 leading-normal font-semibold">
+                              💡 <strong>Tips Blogger Profesional:</strong> Gunakan tag HTML untuk formatting konten yang indah:
+                              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 font-mono text-[9px] text-blue-600">
+                                <span>&lt;h2&gt;Judul Bagian&lt;/h2&gt;</span>
+                                <span>&lt;p&gt;Paragraf&lt;/p&gt;</span>
+                                <span>&lt;strong&gt;Tebal&lt;/strong&gt;</span>
+                                <span>&lt;ul&gt;&lt;li&gt;List Item&lt;/li&gt;&lt;/ul&gt;</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                            <button
+                              type="submit"
+                              className="py-2.5 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
+                            >
+                              {editingBlogId ? 'Simpan Perubahan' : 'Publish Artikel'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsAddingBlog(false);
+                                setEditingBlogId(null);
+                              }}
+                              className="py-2.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                            >
+                              Batal
+                            </button>
+                          </div>
+                        </form>
+                      )}
+                    </div>
                   )}
 
                   {/* Settings CMS View */}
