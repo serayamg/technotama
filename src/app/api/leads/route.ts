@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
 
 // POST /api/leads - Create a new lead from Chatbot or Forms
 export async function POST(request: Request) {
@@ -71,6 +72,14 @@ export async function POST(request: Request) {
 // GET /api/leads - Fetch all leads for Admin CMS Dashboard
 export async function GET() {
   try {
+    const user = await getAuthUser();
+    if (!user || !isAdmin(user.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized access.' },
+        { status: 403 }
+      );
+    }
+
     const leads = await prisma.lead.findMany({
       orderBy: { createdAt: 'desc' }
     });

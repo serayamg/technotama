@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
 
 const getFilePath = () => path.join(process.cwd(), 'src/lib/site-content.json');
 
@@ -21,6 +22,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const user = await getAuthUser();
+    if (!user || !isAdmin(user.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized access.' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const filePath = getFilePath();
     

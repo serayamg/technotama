@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { sendProposalEmail } from '@/lib/mailer';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
 
 export async function POST(request: Request) {
   try {
@@ -103,19 +104,37 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Unauthorized access.' },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
-    const clientId = searchParams.get('clientId');
+    const clientIdParam = searchParams.get('clientId');
 
     let orders;
-    if (clientId) {
+    
+    // Enforce that clients can only access their own orders
+    if (!isAdmin(user.role)) {
       orders = await prisma.order.findMany({
-        where: { clientId },
+        where: { clientId: user.userId },
         orderBy: { createdAt: 'desc' }
       });
     } else {
-      orders = await prisma.order.findMany({
-        orderBy: { createdAt: 'desc' }
-      });
+      // Admins can query everything or filter by clientIdParam
+      if (clientIdParam) {
+        orders = await prisma.order.findMany({
+          where: { clientId: clientIdParam },
+          orderBy: { createdAt: 'desc' }
+        });
+      } else {
+        orders = await prisma.order.findMany({
+          orderBy: { createdAt: 'desc' }
+        });
+      }
     }
 
     // Include progress milestones for each order
