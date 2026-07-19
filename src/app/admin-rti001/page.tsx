@@ -10,7 +10,7 @@ import {
   Lock, Mail, AlertCircle, RefreshCw, LayoutDashboard, 
   Users, Briefcase, FileText, CheckCircle2, TrendingUp, 
   Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo, Key,
-  Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X
+  Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X, Trash2
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
@@ -1186,7 +1186,7 @@ export default function AdminDashboard() {
                             </div>
                           </div>
                           <div>
-                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nomor WhatsApp</label>
+                            <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nomor WhatsApp Utama</label>
                             <input
                               type="text"
                               value={siteConfig.general.whatsappNumber || ''}
@@ -1196,6 +1196,91 @@ export default function AdminDashboard() {
                               })}
                               className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                             />
+                          </div>
+
+                          <div className="md:col-span-2 border border-slate-200/80 p-5 rounded-2xl bg-slate-50/50 space-y-4">
+                            <div className="flex items-center justify-between">
+                              <div className="space-y-0.5">
+                                <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider">Daftar Hubungan WhatsApp Terkoneksi</label>
+                                <p className="text-[9px] text-slate-400 font-medium">Nomor WhatsApp departemen/kontak tambahan yang terhubung dengan website RTI.</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const list = siteConfig.general.whatsappNumbers || [];
+                                  setSiteConfig({
+                                    ...siteConfig,
+                                    general: {
+                                      ...siteConfig.general,
+                                      whatsappNumbers: [...list, { label: 'Departemen Baru', number: '0878-8333-6017' }]
+                                    }
+                                  });
+                                }}
+                                className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-3 py-2 rounded-xl flex items-center space-x-1 cursor-pointer select-none transition-colors"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                                <span>Tambah Nomor</span>
+                              </button>
+                            </div>
+
+                            <div className="space-y-3">
+                              {(siteConfig.general.whatsappNumbers || []).map((item: any, idx: number) => (
+                                <div key={idx} className="flex items-center space-x-3 bg-white p-3.5 border border-slate-200/60 rounded-xl shadow-sm">
+                                  <div className="flex-1 grid grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="block text-[8px] font-bold text-slate-450 uppercase mb-1">Nama Hubungan / Label</label>
+                                      <input
+                                        type="text"
+                                        value={item.label || ''}
+                                        onChange={(e) => {
+                                          const list = JSON.parse(JSON.stringify(siteConfig.general.whatsappNumbers || []));
+                                          list[idx].label = e.target.value;
+                                          setSiteConfig({
+                                            ...siteConfig,
+                                            general: { ...siteConfig.general, whatsappNumbers: list }
+                                          });
+                                        }}
+                                        className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-all"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-[8px] font-bold text-slate-450 uppercase mb-1">Nomor WhatsApp</label>
+                                      <input
+                                        type="text"
+                                        value={item.number || ''}
+                                        onChange={(e) => {
+                                          const list = JSON.parse(JSON.stringify(siteConfig.general.whatsappNumbers || []));
+                                          list[idx].number = e.target.value;
+                                          setSiteConfig({
+                                            ...siteConfig,
+                                            general: { ...siteConfig.general, whatsappNumbers: list }
+                                          });
+                                        }}
+                                        className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition-all"
+                                      />
+                                    </div>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const list = (siteConfig.general.whatsappNumbers || []).filter((_: any, i: number) => i !== idx);
+                                      setSiteConfig({
+                                        ...siteConfig,
+                                        general: { ...siteConfig.general, whatsappNumbers: list }
+                                      });
+                                    }}
+                                    className="p-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors cursor-pointer"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              ))}
+                              {(siteConfig.general.whatsappNumbers || []).length === 0 && (
+                                <div className="text-[11px] text-slate-400 italic text-center py-4 bg-white border border-dashed border-slate-200 rounded-xl">
+                                  Belum ada nomor WhatsApp tambahan terdaftar.
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div>
                             <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">LinkedIn URL</label>

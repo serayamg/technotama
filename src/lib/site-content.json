@@ -3,12 +3,16 @@
     "companyName": "PT Riset Teknologi Indonesia",
     "companyShortName": "RTI Cybersecurity",
     "email": "customercare@risetin.co.id",
-    "phone": "0856-6872-2734",
+    "phone": "0878-8333-6017",
     "address": "Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190",
     "linkedin": "https://linkedin.com/company/riset-teknologi-indonesia",
     "youtube": "https://youtube.com",
-    "whatsappNumber": "0856-6872-2734",
-    "showPhone": false
+    "whatsappNumber": "0878-8333-6017",
+    "showPhone": false,
+    "whatsappNumbers": [
+      { "label": "Customer Support & General", "number": "0878-8333-6017" },
+      { "label": "Admisi RTI Academy", "number": "0878-8333-6017" }
+    ]
   },
   "hero": {
     "badge": "Partner Keamanan Siber Terpercaya Sejak 2014",
