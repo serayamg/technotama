@@ -600,9 +600,6 @@ export default function ServiceDetail() {
                         />
                         <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                       </div>
-                      <p className="text-[10px] text-slate-400 italic text-center font-medium">
-                        *Visualisasi sistem ini dapat disesuaikan di Panel Admin
-                      </p>
                     </div>
                   </div>
                 )}
