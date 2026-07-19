@@ -109,7 +109,7 @@ export default function AcademyPage() {
             </div>
 
             <div className="space-y-4">
-              <p className="text-blue-500 font-mono font-bold text-xs uppercase tracking-widest leading-relaxed">
+              <p className="text-amber-400 font-mono font-bold text-xs uppercase tracking-widest leading-relaxed">
                 &quot;Industry Ready Cybersecurity <br className="sm:hidden" />Workforce Program&quot;
               </p>
               <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight max-w-4xl">
