@@ -1333,7 +1333,7 @@ export default function Home() {
                         href="/request-proposal?ref=scanner"
                         className="flex items-center justify-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
                       >
-                        Request Proposal (RFP)
+                        Request Proposal
                       </Link>
                       <Link
                         href="/online-consultation?ref=scanner"

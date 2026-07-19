@@ -124,7 +124,7 @@ export default function Footer() {
                 </>
               )}
               <li>
-                <Link href="/request-proposal" className="hover:text-white transition-colors">Minta Proposal (RFP)</Link>
+                <Link href="/request-proposal" className="hover:text-white transition-colors">Minta Proposal</Link>
               </li>
             </ul>
           </div>

@@ -643,9 +643,9 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: `Terima kasih! Kami telah mencatat detail kebutuhan Anda:\n• Layanan: ${finalData.service} (${finalData.scopingDetails || ''})\n• Estimasi Budget: ${finalData.budget}\n• Target Timeline: ${finalData.timeline}\n\nUntuk memproses penawaran resmi atau konsultasi tatap muka, Anda dapat langsung melakukan estimasi formal dan memesan solusi dengan menjadwalkan konsultasi gratis atau mengirimkan request proposal (RFP) di bawah ini.`,
+          text: `Terima kasih! Kami telah mencatat detail kebutuhan Anda:\n• Layanan: ${finalData.service} (${finalData.scopingDetails || ''})\n• Estimasi Budget: ${finalData.budget}\n• Target Timeline: ${finalData.timeline}\n\nUntuk memproses penawaran resmi atau konsultasi tatap muka, Anda dapat langsung melakukan estimasi formal dan memesan solusi dengan menjadwalkan konsultasi gratis atau mengirimkan request proposal di bawah ini.`,
           options: [
-            { label: '📄 Request Proposal (RFP)', action: 'go_proposal' },
+            { label: '📄 Request Proposal', action: 'go_proposal' },
             { label: '📅 Jadwalkan Konsultasi', action: 'go_consultation' },
             { label: '🛒 Order Solusi Instan', action: 'go_order' },
             { label: '📲 Hubungkan ke WhatsApp', action: `wa_link:${waLink}` },

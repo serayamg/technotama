@@ -773,7 +773,7 @@ export default function AdminDashboard() {
                     }`}
                   >
                     <FileText className="w-4.5 h-4.5" />
-                    <span>Proposals (RFP)</span>
+                    <span>Proposals</span>
                   </button>
                   <button
                     onClick={() => setActiveTab('orders')}
