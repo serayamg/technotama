@@ -1,8 +1,20 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
 
 export async function GET() {
   try {
+    const user = await getAuthUser();
+    
+    if (user && isAdmin(user.role)) {
+      // Admin/Sales/Customer Care: return full CRM/follow-up details
+      const bookings = await prisma.booking.findMany({
+        orderBy: { createdAt: 'desc' }
+      });
+      return NextResponse.json(bookings, { status: 200 });
+    }
+
+    // Public visitor: return only date/time to avoid scraping
     const bookings = await prisma.booking.findMany({
       select: {
         date: true,

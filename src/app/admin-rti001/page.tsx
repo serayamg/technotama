@@ -17,7 +17,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminUser, setAdminUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'proposals' | 'orders' | 'blogs' | 'settings'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'bookings' | 'proposals' | 'orders' | 'blogs' | 'settings'>('analytics');
 
   // CMS Website Editor States
   const [siteConfig, setSiteConfig] = useState<any>(null);
@@ -52,6 +52,7 @@ export default function AdminDashboard() {
   // Stats & Data states
   const [stats, setStats] = useState<any>(null);
   const [leads, setLeads] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [proposals, setProposals] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
 
@@ -138,6 +139,13 @@ export default function AdminDashboard() {
       if (resBlogs.ok) {
         const dataBlogs = await resBlogs.json();
         setBlogs(dataBlogs);
+      }
+
+      // 7. Fetch all bookings
+      const resBookings = await fetch('/api/bookings');
+      if (resBookings.ok) {
+        const dataBookings = await resBookings.json();
+        setBookings(dataBookings);
       }
     } catch (err) {
       console.error('Failed to fetch admin data:', err);
@@ -843,6 +851,17 @@ export default function AdminDashboard() {
                     <span>Lead Management</span>
                   </button>
                   <button
+                    onClick={() => setActiveTab('bookings')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'bookings'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <Calendar className="w-4.5 h-4.5" />
+                    <span>Konsultasi & Bookings</span>
+                  </button>
+                  <button
                     onClick={() => setActiveTab('proposals')}
                     className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'proposals'
@@ -1006,6 +1025,61 @@ export default function AdminDashboard() {
                                 </td>
                               </tr>
                             ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bookings Management */}
+                  {activeTab === 'bookings' && (
+                    <div className="space-y-6">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Jadwal Konsultasi & Bookings Klien</h2>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase text-[9px] tracking-wider bg-slate-50/50">
+                              <th className="py-3 px-4">Klien / Perusahaan</th>
+                              <th className="py-3 px-4">Kontak</th>
+                              <th className="py-3 px-4">Topik Konsultasi</th>
+                              <th className="py-3 px-4">Jadwal & Waktu</th>
+                              <th className="py-3 px-4">Platform</th>
+                              <th className="py-3 px-4">Deskripsi / Detail</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {bookings.map((booking) => (
+                              <tr key={booking.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                <td className="py-4 px-4">
+                                  <div className="font-bold text-slate-800">{booking.name}</div>
+                                  <div className="text-[10px] text-slate-400 mt-0.5">{booking.company}</div>
+                                </td>
+                                <td className="py-4 px-4 font-mono text-[11px] text-slate-600">
+                                  <div>{booking.email}</div>
+                                  <div>{booking.phone}</div>
+                                </td>
+                                <td className="py-4 px-4 font-bold text-blue-600">{booking.topic}</td>
+                                <td className="py-4 px-4 text-slate-700">
+                                  <div className="font-bold">{booking.date}</div>
+                                  <div className="text-[10px] text-slate-500">{booking.time}</div>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-600 px-2 py-0.5 bg-emerald-50 border border-emerald-100 rounded">
+                                    {booking.platform}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-4 max-w-[200px] leading-relaxed text-slate-500 whitespace-pre-line">
+                                  {booking.description || '-'}
+                                </td>
+                              </tr>
+                            ))}
+                            {bookings.length === 0 && (
+                              <tr>
+                                <td colSpan={6} className="py-8 text-center text-slate-400 italic">
+                                  Belum ada jadwal konsultasi atau booking yang masuk.
+                                </td>
+                              </tr>
+                            )}
                           </tbody>
                         </table>
                       </div>
