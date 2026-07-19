@@ -338,41 +338,8 @@ export default function Chatbot() {
     } else if (leadStep === 2) {
       currentData.company = text;
       if (currentData.service) {
-        nextStep = 4;
-        let customText = '';
-        let customOptions: { label: string; action: string }[] = [];
-
-        if (currentData.service === 'Offensive Cybersecurity (VA/Pentest)') {
-          customText = 'Berapa banyak target aplikasi (web/mobile/API) atau IP address yang ingin di-Pentest?';
-          customOptions = [
-            { label: '1-3 Target Aplikasi/IP', action: 'scoping_off_1_3' },
-            { label: '4-10 Target Aplikasi/IP', action: 'scoping_off_4_10' },
-            { label: '10+ Target / Skala Enterprise', action: 'scoping_off_10' }
-          ];
-        } else if (currentData.service === 'Cybersecurity Governance (GRC/ISO)') {
-          customText = 'Apakah Anda memerlukan pemenuhan regulasi tertentu atau sertifikasi?';
-          customOptions = [
-            { label: 'Sertifikasi ISO/IEC 27001', action: 'scoping_gov_iso' },
-            { label: 'Kepatuhan Regulasi BI/OJK/UU PDP', action: 'scoping_gov_reg' },
-            { label: 'Hanya Penyusunan Blueprint / Policy-SOP', action: 'scoping_gov_blue' }
-          ];
-        } else if (currentData.service === 'Defensive Cybersecurity (SOC/CTI)') {
-          customText = 'Apa kebutuhan utama sistem pertahanan siber Anda?';
-          customOptions = [
-            { label: 'Layanan SOC Monitoring 24/7', action: 'scoping_def_soc' },
-            { label: 'Network Hardening & Incident Response', action: 'scoping_def_hard' },
-            { label: 'Cyber Threat Intelligence (CTI)', action: 'scoping_def_cti' }
-          ];
-        } else {
-          customText = 'Apa fokus utama dari bantuan siber yang Anda butuhkan?';
-          customOptions = [
-            { label: 'Persiapan Audit Eksternal / Sertifikasi', action: 'scoping_oth_audit' },
-            { label: 'Pengujian & Perlindungan Rutin Berkala', action: 'scoping_oth_routine' },
-            { label: 'Konsultasi Umum Kebutuhan Siber', action: 'scoping_oth_general' }
-          ];
-        }
-        botText = customText;
-        options = customOptions;
+        nextStep = 5;
+        botText = `Baik, terkait layanan ${currentData.service} yang telah Anda pilih, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.`;
       } else {
         nextStep = 3;
         botText = 'Layanan apa yang Anda butuhkan?';
@@ -493,52 +460,19 @@ export default function Chatbot() {
         lead_def: 'Defensive Cybersecurity (SOC/CTI)',
         lead_other: 'Lainnya'
       };
-      setLeadData(prev => ({ ...prev, service: servicesMap[action] }));
-      setLeadStep(4);
+      const chosenService = servicesMap[action];
+      setLeadData(prev => ({ ...prev, service: chosenService }));
+      setLeadStep(5);
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsTyping(false);
-
-      let customText = '';
-      let customOptions: { label: string; action: string }[] = [];
-
-      if (action === 'lead_off') {
-        customText = 'Berapa banyak target aplikasi (web/mobile/API) atau IP address yang ingin di-Pentest?';
-        customOptions = [
-          { label: '1-3 Target Aplikasi/IP', action: 'scoping_off_1_3' },
-          { label: '4-10 Target Aplikasi/IP', action: 'scoping_off_4_10' },
-          { label: '10+ Target / Skala Enterprise', action: 'scoping_off_10' }
-        ];
-      } else if (action === 'lead_gov') {
-        customText = 'Apakah Anda memerlukan pemenuhan regulasi tertentu atau sertifikasi?';
-        customOptions = [
-          { label: 'Sertifikasi ISO/IEC 27001', action: 'scoping_gov_iso' },
-          { label: 'Kepatuhan Regulasi BI/OJK/UU PDP', action: 'scoping_gov_reg' },
-          { label: 'Hanya Penyusunan Blueprint / Policy-SOP', action: 'scoping_gov_blue' }
-        ];
-      } else if (action === 'lead_def') {
-        customText = 'Apa kebutuhan utama sistem pertahanan siber Anda?';
-        customOptions = [
-          { label: 'Layanan SOC Monitoring 24/7', action: 'scoping_def_soc' },
-          { label: 'Network Hardening & Incident Response', action: 'scoping_def_hard' },
-          { label: 'Cyber Threat Intelligence (CTI)', action: 'scoping_def_cti' }
-        ];
-      } else {
-        customText = 'Apa fokus utama dari bantuan siber yang Anda butuhkan?';
-        customOptions = [
-          { label: 'Persiapan Audit Eksternal / Sertifikasi', action: 'scoping_oth_audit' },
-          { label: 'Pengujian & Perlindungan Rutin Berkala', action: 'scoping_oth_routine' },
-          { label: 'Konsultasi Umum Kebutuhan Siber', action: 'scoping_oth_general' }
-        ];
-      }
 
       setMessages(prev => [
         ...prev,
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: customText,
-          options: customOptions
+          text: `Baik, terkait layanan ${chosenService} yang telah Anda pilih, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.`
         }
       ]);
       return;
