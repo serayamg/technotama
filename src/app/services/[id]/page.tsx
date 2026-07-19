@@ -553,7 +553,7 @@ export default function ServiceDetail() {
                   >
                     {tab === 'overview' ? 'Ringkasan' :
                      tab === 'methodology' ? 'Metodologi' :
-                     tab === 'deliverables' ? 'Hasil Kerja' : 'FAQ'}
+                     tab === 'deliverables' ? 'Output' : 'FAQ'}
                   </button>
                 ))}
               </div>

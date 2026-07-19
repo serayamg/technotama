@@ -59,6 +59,41 @@ export default function Chatbot() {
   // Active service selection context
   const [currentContextService, setCurrentContextService] = useState<string | null>(null);
 
+  // Idle Timer State
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startIdleTimer = () => {
+    if (idleTimerRef.current) {
+      clearTimeout(idleTimerRef.current);
+    }
+    idleTimerRef.current = setTimeout(() => {
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Terima kasih telah mengunjungi RTI - Riset Teknologi Indonesia.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun RTI Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
+        }
+      ]);
+      setFlowType('completed');
+    }, 60000); // 60 seconds
+  };
+
+  const stopIdleTimer = () => {
+    if (idleTimerRef.current) {
+      clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     fetch('/api/settings')
       .then(res => res.json())
@@ -220,62 +255,59 @@ export default function Chatbot() {
 
       // Menu Level 2 Strategy
       case 'prod_blueprint':
-        botText = 'Kami membantu menyusun roadmap keamanan siber yang sesuai dengan regulasi dan kebutuhan bisnis.';
+        botText = 'Kami membantu menyusun roadmap keamanan siber yang sesuai dengan regulasi dan kebutuhan bisnis.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '✅ Learn More', action: 'start_qualification:Cybersecurity Blueprint' },
-          { label: '📅 Book Consultation', action: 'book_consultation_start:Cybersecurity Blueprint' },
-          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Cybersecurity Blueprint' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_maturity':
-        botText = 'Mengukur tingkat kematangan keamanan siber organisasi berdasarkan framework global (NIST CSF, COBIT, CIS Controls).';
+        botText = 'Mengukur tingkat kematangan keamanan siber organisasi berdasarkan framework global (NIST CSF, COBIT, CIS Controls).\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '✅ Learn More', action: 'start_qualification:Digital Maturity Assessment' },
-          { label: '📅 Book Consultation', action: 'book_consultation_start:Digital Maturity Assessment' },
-          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Digital Maturity Assessment' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_risk_rating':
-        botText = 'Evaluasi risiko siber pihak ketiga dan penilaian postur keamanan eksternal organisasi Anda secara kontinu.';
+        botText = 'Evaluasi risiko siber pihak ketiga dan penilaian postur keamanan eksternal organisasi Anda secara kontinu.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '✅ Learn More', action: 'start_qualification:Security Risk Rating' },
-          { label: '📅 Book Consultation', action: 'book_consultation_start:Security Risk Rating' },
-          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Security Risk Rating' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       // Menu Level 2 Governance
       case 'prod_iso_impl':
-        botText = 'RTI mendampingi implementasi ISO/IEC menggunakan pendekatan PDCA hingga proses sertifikasi.';
+        botText = 'RTI mendampingi implementasi ISO/IEC menggunakan pendekatan PDCA hingga proses sertifikasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '📄 Request Proposal', action: 'start_qualification:ISO/IEC 27001 Implementation' },
-          { label: '📅 Consultation', action: 'book_consultation_start:ISO/IEC 27001 Implementation' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_it_grc':
-        botText = 'Penyusunan kerangka kerja tata kelola TI, manajemen risiko, dan kepatuhan (IT GRC) sesuai standar COBIT dan NIST.';
+        botText = 'Penyusunan kerangka kerja tata kelola TI, manajemen risiko, dan kepatuhan (IT GRC) sesuai standar COBIT dan NIST.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '📄 Request Proposal', action: 'start_qualification:IT Governance / IT GRC' },
-          { label: '📅 Consultation', action: 'book_consultation_start:IT Governance / IT GRC' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_bcm_bcp':
-        botText = 'Merancang strategi Business Continuity Plan (BCP) dan Disaster Recovery Plan (DRP) untuk menjaga kelangsungan operasional.';
+        botText = 'Merancang strategi Business Continuity Plan (BCP) dan Disaster Recovery Plan (DRP) untuk menjaga kelangsungan operasional.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '📄 Request Proposal', action: 'start_qualification:BCM / BCP / DRP' },
-          { label: '📅 Consultation', action: 'book_consultation_start:BCM / BCP / DRP' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_it_audit':
-        botText = 'Audit TI independen untuk menilai keamanan sistem informasi, kontrol internal, dan kepatuhan regulasi.';
+        botText = 'Audit TI independen untuk menilai keamanan sistem informasi, kontrol internal, dan kepatuhan regulasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: '📄 Request Proposal', action: 'start_qualification:IT Audit' },
-          { label: '📅 Consultation', action: 'book_consultation_start:IT Audit' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
@@ -301,23 +333,26 @@ export default function Chatbot() {
         break;
 
       case 'prod_redteaming':
-        botText = 'Simulasi Advanced Persistent Threat (APT) untuk menguji kesiapan sistem siber dan tim keamanan Anda.';
+        botText = 'Simulasi Advanced Persistent Threat (APT) untuk menguji kesiapan sistem siber dan tim keamanan Anda.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Book Assessment', action: 'start_qualification:Red Teaming' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_secure_sdlc':
-        botText = 'Integrasikan keamanan ke dalam proses pengembangan software sejak tahap desain (Shift Left / DevSecOps).';
+        botText = 'Integrasikan keamanan ke dalam proses pengembangan software sejak tahap desain (Shift Left / DevSecOps).\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Talk to Expert', action: 'start_qualification:Secure SDLC' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_cyberdrill':
-        botText = 'Uji kesiapan organisasi melalui Tabletop Exercise, Cyber Range, Social Engineering, dan Attack Simulation.';
+        botText = 'Uji kesiapan organisasi melalui Tabletop Exercise, Cyber Range, Social Engineering, dan Attack Simulation.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Schedule Demo', action: 'start_qualification:Cyber Drill' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
@@ -332,45 +367,51 @@ export default function Chatbot() {
         break;
 
       case 'prod_cti':
-        botText = 'Deteksi kebocoran data dan ancaman global sebelum berdampak terhadap bisnis Anda.';
+        botText = 'Deteksi kebocoran data dan ancaman global sebelum berdampak terhadap bisnis Anda.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Live Demo', action: 'start_qualification:CTI Live Demo' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_incident':
-        botText = 'Tim RTI membantu mendeteksi, mengisolasi dan memulihkan insiden keamanan sesuai NIST Incident Response Framework.';
+        botText = 'Tim RTI membantu mendeteksi, mengisolasi dan memulihkan insiden keamanan sesuai NIST Incident Response Framework.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Emergency Response', action: 'chat_whatsapp:Emergency Incident Response' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_forensic':
-        botText = 'Investigasi bukti digital yang memenuhi standar hukum dan regulasi.';
+        botText = 'Investigasi bukti digital yang memenuhi standar hukum dan regulasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Talk to Investigator', action: 'start_qualification:Digital Forensic' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_hardening':
-        botText = 'Penguatan konfigurasi server, cloud, firewall, endpoint dan perangkat jaringan.';
+        botText = 'Penguatan konfigurasi server, cloud, firewall, endpoint dan perangkat jaringan.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Assessment', action: 'start_qualification:Network Hardening' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       // Menu Level 2 Academy
       case 'prod_academy_awareness':
-        botText = 'Edukasi keamanan siber untuk seluruh karyawan disertai simulasi phishing.';
+        botText = 'Edukasi keamanan siber untuk seluruh karyawan disertai simulasi phishing.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Corporate Package', action: 'start_qualification:Academy Cyber Awareness' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_academy_technical':
-        botText = 'Pelatihan praktis bagi engineer, SOC Analyst, Security Engineer, dan Auditor.';
+        botText = 'Pelatihan praktis bagi engineer, SOC Analyst, Security Engineer, dan Auditor.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Training Catalog', action: 'start_qualification:Academy Technical Training' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
@@ -384,26 +425,27 @@ export default function Chatbot() {
         break;
 
       case 'prod_academy_certification':
-        botText = 'Persiapan sertifikasi internasional cybersecurity.';
+        botText = 'Persiapan sertifikasi internasional cybersecurity.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'View Certification Roadmap', action: 'start_qualification:Academy Certification Roadmap' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       case 'prod_academy_corporate':
-        botText = 'Program pelatihan siber kustom yang disesuaikan dengan kebutuhan dan skala organisasi Anda.';
+        botText = 'Program pelatihan siber kustom yang disesuaikan dengan kebutuhan dan skala organisasi Anda.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Custom Training Proposal', action: 'start_qualification:Academy Corporate Training' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
       // Other actions
       case 'view_methodology':
-        botText = 'Metodologi Vulnerability Assessment RTI mencakup:\n1. Reconnaissance & Asset Discovery\n2. Vulnerability Scanning (Nessus, OpenVAS)\n3. Risk Analysis & Prioritization\n4. Reporting & Remediation Guidance';
+        botText = 'Metodologi Vulnerability Assessment RTI mencakup:\n1. Reconnaissance & Asset Discovery\n2. Vulnerability Scanning (Nessus, OpenVAS)\n3. Risk Analysis & Prioritization\n4. Reporting & Remediation Guidance\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
-          { label: 'Get Quotation', action: 'start_qualification:Vulnerability Assessment' },
-          { label: 'Book Consultation', action: 'book_consultation_start:Vulnerability Assessment' },
-          { label: '↩ Kembali', action: 'prod_va' }
+          { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+          { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
         ];
         break;
 
@@ -480,6 +522,7 @@ export default function Chatbot() {
   };
 
   const handleOptionClick = async (label: string, action: string) => {
+    stopIdleTimer();
     // Add user message for UI trace
     setMessages(prev => [
       ...prev,
@@ -503,7 +546,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: '👋 Selamat datang di **RTI - Riset Teknologi Indonesia**.\n\nSaya **RTI AI Cybersecurity Consultant**.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari **2 menit**.',
+          text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
           options: [
             { label: '🔍 Explore Solutions', action: 'explore_solutions' },
             { label: '📅 Book a Consultation', action: 'book_consultation_start' },
@@ -512,6 +555,110 @@ export default function Chatbot() {
           ]
         }
       ]);
+      return;
+    }
+
+    if (action === 'ask_more_yes') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Dengan senang hati.\n\nSilakan pilih topik yang ingin Anda bahas berikutnya.',
+          options: [
+            { label: '🛡 Cybersecurity Strategy', action: 'menu_strategy' },
+            { label: '⚙ Governance & Compliance', action: 'menu_gov' },
+            { label: '🔍 Assessment & Testing', action: 'menu_assessment' },
+            { label: '🛡 Security Operations', action: 'menu_secops' },
+            { label: '🎓 RTI Academy', action: 'menu_academy' },
+            { label: '💬 Tulis Pertanyaan Sendiri', action: 'write_own_question' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'write_own_question') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Silakan ketik pertanyaan Anda terkait cybersecurity secara bebas pada kolom chat di bawah. Saya akan siap membantu memberikan rekomendasi.'
+        }
+      ]);
+      return;
+    }
+
+    if (action === 'ask_more_no') {
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsTyping(false);
+      
+      const closingOptions = [
+        {
+          text: "Terima kasih telah berkonsultasi dengan RTI AI Cybersecurity Consultant.\n\nSetiap organisasi memiliki tantangan keamanan siber yang berbeda. Tim konsultan RTI siap membantu Anda merancang solusi yang tepat, efektif, dan sesuai dengan kebutuhan bisnis maupun regulasi industri.",
+          options: [
+            { label: '📅 Book Free Consultation', action: 'book_consultation_start' },
+            { label: '📄 Request Proposal', action: 'qual_request_proposal' },
+            { label: '💬 Chat with RTI Expert', action: 'open_whatsapp_now' }
+          ]
+        },
+        {
+          text: "Keamanan siber bukan hanya tentang teknologi, tetapi tentang menjaga keberlangsungan bisnis, kepercayaan pelanggan, dan kepatuhan terhadap regulasi.\n\nRTI siap menjadi mitra strategis dalam membangun ketahanan siber organisasi Anda.",
+          options: [
+            { label: '📅 Jadwalkan Konsultasi Gratis', action: 'book_consultation_start' },
+            { label: '📄 Minta Penawaran', action: 'qual_request_proposal' },
+            { label: '☎ Hubungi Konsultan RTI', action: 'open_whatsapp_now' }
+          ]
+        },
+        {
+          text: "Terima kasih atas waktu Anda.\n\nTim RTI telah membantu berbagai organisasi dalam meningkatkan tata kelola keamanan siber, memperkuat pertahanan digital, serta memenuhi berbagai kebutuhan kepatuhan dan audit.\n\nKami siap mendiskusikan solusi yang paling sesuai untuk organisasi Anda.",
+          options: [
+            { label: '🚀 Mulai Diskusi', action: 'open_whatsapp_now' },
+            { label: '📅 Book Consultation', action: 'book_consultation_start' },
+            { label: '💬 WhatsApp Consultant', action: 'open_whatsapp_now' }
+          ]
+        },
+        {
+          text: "Terima kasih telah menggunakan RTI AI Cybersecurity Consultant.\n\nDalam banyak kasus, konsultasi singkat selama 30 menit sudah cukup untuk mengidentifikasi area risiko utama dan memberikan rekomendasi awal yang dapat segera ditindaklanjuti.\n\nTidak ada biaya konsultasi awal, dan seluruh diskusi dijaga kerahasiaannya melalui komitmen profesional RTI.",
+          options: [
+            { label: '📅 Book Free 30-Minute Consultation', action: 'book_consultation_start' },
+            { label: '📄 Request Solution Proposal', action: 'qual_request_proposal' },
+            { label: '💬 Diskusi dengan Cybersecurity Expert', action: 'open_whatsapp_now' }
+          ]
+        },
+        {
+          text: "Sebelum mengakhiri percakapan ini, izinkan kami membantu Anda mengambil langkah berikutnya.\n\nTim RTI siap memberikan assessment awal, rekomendasi solusi, hingga estimasi implementasi yang disesuaikan dengan kondisi organisasi Anda tanpa komitmen awal.\n\nMari bangun pertahanan siber yang lebih kuat bersama RTI.",
+          options: [
+            { label: '🛡 Free Security Consultation', action: 'book_consultation_start' },
+            { label: '📅 Schedule Meeting', action: 'book_consultation_start' },
+            { label: '📄 Request Proposal', action: 'qual_request_proposal' },
+            { label: '💬 WhatsApp Sales Consultant', action: 'open_whatsapp_now' }
+          ]
+        }
+      ];
+      
+      const randomOption = closingOptions[Math.floor(Math.random() * closingOptions.length)];
+      
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: randomOption.text,
+          options: randomOption.options
+        }
+      ]);
+      
+      setFlowType('completed');
+      startIdleTimer();
       return;
     }
 
@@ -709,11 +856,10 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: `Terima kasih.\n\nBerdasarkan jawaban Anda, solusi yang kami rekomendasikan adalah:\n\n${recText}`,
+          text: `Terima kasih.\n\nBerdasarkan jawaban Anda, solusi yang kami rekomendasikan adalah:\n\n${recText}\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?`,
           options: [
-            { label: '📄 Request Proposal', action: 'qual_request_proposal' },
-            { label: '📅 Book Consultation', action: `book_consultation_start:${finalQualData.targetService}` },
-            { label: '💬 WhatsApp Expert', action: 'chat_whatsapp_qual_done' }
+            { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+            { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
           ]
         }
       ]);
@@ -986,11 +1132,10 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Saya merekomendasikan layanan ISO/IEC Implementation, yang dapat dilengkapi dengan IT GRC Development untuk memperkuat tata kelola serta IT Audit sebagai kesiapan sebelum sertifikasi.',
+            text: 'Saya merekomendasikan layanan ISO/IEC Implementation, yang dapat dilengkapi dengan IT GRC Development untuk memperkuat tata kelola serta IT Audit sebagai kesiapan sebelum sertifikasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?',
             options: [
-              { label: '📄 Request Proposal', action: 'start_qualification:ISO/IEC 27001 Implementation' },
-              { label: '📅 Book Consultation', action: 'book_consultation_start:ISO/IEC 27001 Implementation' },
-              { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:ISO/IEC 27001 Implementation' }
+              { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+              { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
             ]
           }
         ]);
@@ -1000,11 +1145,10 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Untuk kondisi tersebut, saya menyarankan kombinasi Vulnerability Assessment, Penetration Testing, dan Managed Security Operation Center (SOC) agar kerentanan dapat ditemukan, diuji, serta dipantau secara berkelanjutan.',
+            text: 'Untuk kondisi tersebut, saya menyarankan kombinasi Vulnerability Assessment, Penetration Testing, dan Managed Security Operation Center (SOC) agar kerentanan dapat ditemukan, diuji, serta dipantau secara berkelanjutan.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?',
             options: [
-              { label: '📄 Request Proposal', action: 'start_qualification:Vulnerability Assessment & Pentest' },
-              { label: '📅 Book Consultation', action: 'book_consultation_start:Vulnerability Assessment & Pentest' },
-              { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Vulnerability Assessment & Pentest' }
+              { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+              { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
             ]
           }
         ]);
@@ -1014,10 +1158,10 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Situasi ini memerlukan respons segera. Tim RTI dapat membantu melalui Cyber Security Incident Management, Digital Forensic, dan Cyber Threat Intelligence (CTI) untuk investigasi, pemulihan, dan pencegahan insiden lanjutan.',
+            text: 'Situasi ini memerlukan respons segera. Tim RTI dapat membantu melalui Cyber Security Incident Management, Digital Forensic, dan Cyber Threat Intelligence (CTI) untuk investigasi, pemulihan, dan pencegahan insiden lanjutan.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?',
             options: [
-              { label: '🚨 Emergency Response', action: 'chat_whatsapp:Emergency Incident Response' },
-              { label: '📞 Talk to Expert', action: 'start_qualification:Incident Response' }
+              { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
+              { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
             ]
           }
         ]);
@@ -1080,6 +1224,7 @@ export default function Chatbot() {
   };
 
   const handleSend = () => {
+    stopIdleTimer();
     if (!inputText.trim()) return;
     const text = inputText.trim();
     
@@ -1112,6 +1257,7 @@ export default function Chatbot() {
   };
 
   const handlePersistentMenuClick = (action: string) => {
+    stopIdleTimer();
     setFlowType('idle');
     setQualStep(1);
     setContactStep(1);
