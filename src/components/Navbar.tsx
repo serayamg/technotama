@@ -86,10 +86,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-[100] transition-all duration-300 ${
+      className={`z-[100] transition-all duration-300 ${
         scrolled || isOpen || isSolidPage
-          ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
-          : 'bg-transparent border-b border-transparent max-md:bg-white/95 max-md:backdrop-blur-md max-md:border-slate-200/80 max-md:shadow-sm'
+          ? 'sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm' 
+          : 'absolute top-0 left-0 right-0 bg-transparent border-b border-transparent max-md:bg-white/95 max-md:backdrop-blur-md max-md:border-slate-200/80 max-md:shadow-sm'
       }`}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

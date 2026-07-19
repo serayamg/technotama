@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink } from 'lucide-react';
+import { 
+  MessageSquare, X, Send, Bot, Shield, Loader2, ArrowRight, ExternalLink, 
+  Home, Calendar, Phone, Check, ChevronLeft, ChevronRight, User, Briefcase, Mail, GraduationCap
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -9,6 +12,7 @@ interface Message {
   sender: 'bot' | 'user';
   text: string;
   options?: { label: string; action: string }[];
+  isCalendar?: boolean;
 }
 
 export default function Chatbot() {
@@ -18,6 +22,42 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const [siteConfig, setSiteConfig] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Custom Flow States
+  const [flowType, setFlowType] = useState<'idle' | 'qualification' | 'booking_date' | 'booking_time' | 'contact_collect' | 'exit_capture' | 'completed'>('idle');
+  
+  // For contact collection step
+  const [contactStep, setContactStep] = useState(1); // 1: Name, 2: Company, 3: Email, 4: Phone, 5: Title
+  const [contactData, setContactData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    title: '',
+  });
+  const [contactPurpose, setContactPurpose] = useState<'booking' | 'proposal'>('proposal');
+
+  // Qualification State
+  const [qualStep, setQualStep] = useState(1); // 1: Industry, 2: Karyawan, 3: Tantangan, 4: Timeline
+  const [qualData, setQualData] = useState({
+    industry: '',
+    employees: '',
+    challenge: '',
+    timeline: '',
+    targetService: '',
+  });
+
+  // Booking State
+  const [bookingDate, setBookingDate] = useState<string | null>(null);
+  const [bookingTime, setBookingTime] = useState<string | null>(null);
+  const [bookingTopic, setBookingTopic] = useState('Cybersecurity Consultation');
+
+  // Exit Capture State
+  const [showExitCapture, setShowExitCapture] = useState(false);
+  const [exitCaptureType, setExitCaptureType] = useState<'email' | 'whatsapp' | null>(null);
+
+  // Active service selection context
+  const [currentContextService, setCurrentContextService] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -35,20 +75,43 @@ export default function Chatbot() {
     return clean.startsWith('62') ? clean : '62' + clean;
   };
 
-  // Lead Collection State Flow
-  const [leadStep, setLeadStep] = useState(0); // 0 = none, 1 = Name, 2 = Company, 3 = Service, 4 = Scoping, 5 = Email, 6 = Phone, 7 = Budget, 8 = Timeline, 9 = Done
-  const [leadData, setLeadData] = useState({
-    name: '',
-    company: '',
-    role: '',
-    service: '',
-    scopingDetails: '',
-    email: '',
-    phone: '',
-    budget: '',
-    timeline: '',
-  });
-  const [currentContextService, setCurrentContextService] = useState<string | null>(null);
+  const getWhatsAppLink = (customText?: string) => {
+    const phone = getCleanWhatsAppNumber();
+    if (customText) {
+      return `https://wa.me/${phone}?text=${encodeURIComponent(customText)}`;
+    }
+
+    const serviceText = currentContextService || qualData.targetService || 'Solusi Cybersecurity';
+    const nameText = contactData.name || '';
+    const companyText = contactData.company || '';
+    
+    let needsText = '';
+    if (qualData.challenge) {
+      needsText = `Tantangan: ${qualData.challenge}. Timeline: ${qualData.timeline}`;
+    }
+
+    const defaultMessage = `Halo RTI,\n\nSaya tertarik dengan layanan: ${serviceText}\n\nPerusahaan: ${companyText}\nNama: ${nameText}\nKebutuhan: ${needsText}`;
+    return `https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`;
+  };
+
+  const getGoogleCalendarLink = (dateStr: string, timeStr: string) => {
+    const cleanedTime = timeStr.replace('.', ':'); // "09:00"
+    const [hours, minutes] = cleanedTime.split(':');
+    
+    // Create Date in local time (WIB / UTC+7)
+    const startLocal = new Date(`${dateStr}T${hours}:${minutes}:00`);
+    const endLocal = new Date(startLocal.getTime() + 60 * 60 * 1000); // 1 hour
+    
+    const formatUTC = (d: Date) => {
+      return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+    
+    const datesStr = `${formatUTC(startLocal)}/${formatUTC(endLocal)}`;
+    const title = encodeURIComponent("Cybersecurity Consultation - RTI");
+    const details = encodeURIComponent(`Konsultasi virtual cybersecurity dengan RTI. Topik: ${bookingTopic}. Dijadwalkan via Google Meet.`);
+    
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${datesStr}&details=${details}&location=Google+Meet`;
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +119,7 @@ export default function Chatbot() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isTyping, flowType]);
 
   // Initial welcome message
   useEffect(() => {
@@ -64,252 +127,306 @@ export default function Chatbot() {
       {
         id: '1',
         sender: 'bot',
-        text: 'Halo! Saya RTI Cyber Assistant. Ada yang bisa saya bantu terkait layanan tata kelola TI, VAPT, atau kepatuhan keamanan siber PT Riset Teknologi Indonesia?',
+        text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
         options: [
-          { label: '🔍 Tanya Layanan', action: 'services' },
-          { label: '📊 Jelaskan Framework', action: 'frameworks' },
-          { label: '💰 Estimasi Biaya Proyek', action: 'start_lead' },
-          { label: '🎓 RTI Academy', action: 'academy_flow' },
-          { label: '📞 Hubungi Konsultan', action: 'consultant' }
+          { label: '🔍 Explore Solutions', action: 'explore_solutions' },
+          { label: '📅 Book a Consultation', action: 'book_consultation_start' },
+          { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
+          { label: '🎓 RTI Academy', action: 'menu_academy' }
         ]
       }
     ]);
   }, []);
 
   const triggerBotResponse = async (userAction: string, userText: string) => {
-    // Track context service
-    if (['off_va', 'off_pentest', 'off_ssdlc', 'off_redteam', 'detail_off'].includes(userAction)) {
-      setCurrentContextService('Offensive Cybersecurity (VA/Pentest)');
-    } else if (['gov_blueprint', 'gov_policy', 'gov_iso', 'gov_bcm', 'gov_maturity', 'gov_awareness', 'gov_audit', 'detail_gov'].includes(userAction)) {
-      setCurrentContextService('Cybersecurity Governance (GRC/ISO)');
-    } else if (['def_soc', 'def_cti', 'def_hardening', 'def_incident', 'def_forensic', 'detail_def'].includes(userAction)) {
-      setCurrentContextService('Defensive Cybersecurity (SOC/CTI)');
-    } else if (['main_menu', 'services', 'frameworks', 'consultant'].includes(userAction)) {
-      setCurrentContextService(null);
-    }
-
     setIsTyping(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 600));
     setIsTyping(false);
 
     let botText = '';
     let options: { label: string; action: string }[] | undefined = undefined;
+    let isCalendar = false;
+
+    // Track context services for WhatsApp/leads
+    if (userAction.startsWith('prod_')) {
+      const serviceName = userAction.replace('prod_', '').replace(/_/g, ' ');
+      setCurrentContextService(serviceName);
+    }
 
     switch (userAction) {
-      case 'services':
-        botText = 'RTI menawarkan 3 kluster layanan utama:\n1. Cybersecurity Governance RTI (Rencana Induk, Policy-SOP, ISO, BCM, Cyber Drill, Audit TI)\n2. Offensive Cybersecurity RTI (VA, Penetration Testing, Secure SDLC, Red Teaming)\n3. Defensive Cybersecurity (SOC, Threat Intelligence, Hardening, Incident Response, Forensik)';
+      case 'explore_solutions':
+        botText = 'Solusi apa yang sedang Anda cari?';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '📋 Detail Governance', action: 'detail_gov' },
-          { label: '⚔️ Detail Offensive', action: 'detail_off' },
-          { label: '🛡️ Detail Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '🛡 Cybersecurity Strategy', action: 'menu_strategy' },
+          { label: '🔎 Assessment & Testing', action: 'menu_assessment' },
+          { label: '🛡 Security Operations', action: 'menu_secops' },
+          { label: '📖 Training & Academy', action: 'menu_academy' },
+          { label: '⚙ Governance & Compliance', action: 'menu_gov' }
         ];
         break;
-      case 'detail_off':
-        botText = 'Layanan Offensive Cybersecurity RTI mencakup berbagai metode pengujian keamanan siber proaktif. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+
+      // Menu Level 1
+      case 'menu_strategy':
+        botText = 'Bangun fondasi keamanan siber yang selaras dengan tujuan bisnis Anda.';
         options = [
-          { label: '🔍 Vulnerability Assessment (VA)', action: 'off_va' },
-          { label: '⚔️ Penetration Testing (Pentest)', action: 'off_pentest' },
-          { label: '💻 Secure SDLC Implementation', action: 'off_ssdlc' },
-          { label: '🛡️ Red Teaming', action: 'off_redteam' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Cybersecurity Blueprint', action: 'prod_blueprint' },
+          { label: 'Digital Maturity Assessment', action: 'prod_maturity' },
+          { label: 'Security Risk Rating', action: 'prod_risk_rating' }
         ];
         break;
-      case 'off_va':
-        botText = '🔍 Vulnerability Assessment (VA) mengidentifikasi dan memetakan celah keamanan siber pada infrastruktur, server, dan jaringan organisasi Anda secara otomatis dan berkala.';
+
+      case 'menu_gov':
+        botText = 'Tingkatkan tata kelola TI dan kepatuhan organisasi Anda.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Offensive', action: 'detail_off' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'IT Governance / IT GRC', action: 'prod_it_grc' },
+          { label: 'ISO/IEC Implementation', action: 'prod_iso_impl' },
+          { label: 'BCM / BCP / DRP', action: 'prod_bcm_bcp' },
+          { label: 'IT Audit', action: 'prod_it_audit' }
         ];
         break;
-      case 'off_pentest':
-        botText = '⚔️ Penetration Testing (Web, Mobile, API, Network) melakukan simulasi peretasan terkontrol oleh ethical hacker kami untuk mengeksploitasi dan melaporkan kerentanan sistem Anda secara mendalam.';
+
+      case 'menu_assessment':
+        botText = 'Temukan kelemahan sebelum penyerang menemukannya.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Offensive', action: 'detail_off' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Vulnerability Assessment', action: 'prod_va' },
+          { label: 'Penetration Testing', action: 'prod_pentest' },
+          { label: 'Red Teaming', action: 'prod_redteaming' },
+          { label: 'Secure SDLC', action: 'prod_secure_sdlc' },
+          { label: 'Cyber Drill', action: 'prod_cyberdrill' }
         ];
         break;
-      case 'off_ssdlc':
-        botText = '💻 Secure SDLC Implementation mengintegrasikan praktik dan pengujian keamanan siber (security checks) pada setiap tahap siklus pengembangan software Anda (DevSecOps).';
+
+      case 'menu_secops':
+        botText = 'Lindungi bisnis Anda 24x7 dengan layanan operasi keamanan RTI.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Offensive', action: 'detail_off' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Managed SOC', action: 'prod_soc' },
+          { label: 'CTI', action: 'prod_cti' },
+          { label: 'Incident Management', action: 'prod_incident' },
+          { label: 'Digital Forensic', action: 'prod_forensic' },
+          { label: 'Network Hardening', action: 'prod_hardening' }
         ];
         break;
-      case 'off_redteam':
-        botText = '🛡️ Red Teaming mensimulasikan taktik serangan nyata (Advanced Persistent Threat) tanpa pemberitahuan sebelumnya untuk menguji kesiapan tim deteksi dan respons keamanan Anda.';
+
+      case 'menu_academy':
+        botText = 'Tingkatkan kompetensi SDM melalui program pelatihan cybersecurity RTI.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Offensive', action: 'detail_off' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Cyber Awareness', action: 'prod_academy_awareness' },
+          { label: 'Technical Training', action: 'prod_academy_technical' },
+          { label: 'Bootcamp', action: 'prod_academy_bootcamp' },
+          { label: 'Certification', action: 'prod_academy_certification' },
+          { label: 'Corporate Training', action: 'prod_academy_corporate' }
         ];
         break;
-      case 'detail_gov':
-        botText = 'Layanan Cybersecurity Governance RTI mencakup berbagai program strategis. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+
+      // Menu Level 2 Strategy
+      case 'prod_blueprint':
+        botText = 'Kami membantu menyusun roadmap keamanan siber yang sesuai dengan regulasi dan kebutuhan bisnis.';
         options = [
-          { label: '📘 Cybersecurity Blueprint', action: 'gov_blueprint' },
-          { label: '📜 Policy-SOP Development', action: 'gov_policy' },
-          { label: '🔒 ISO/IEC Implementation', action: 'gov_iso' },
-          { label: '🔄 BCM-BCP-DRP (Cyber Drill)', action: 'gov_bcm' },
-          { label: '📊 Digital Maturity Assessment', action: 'gov_maturity' },
-          { label: '🎓 Awareness & Training', action: 'gov_awareness' },
-          { label: '🔎 IT Audit', action: 'gov_audit' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '✅ Learn More', action: 'start_qualification:Cybersecurity Blueprint' },
+          { label: '📅 Book Consultation', action: 'book_consultation_start:Cybersecurity Blueprint' },
+          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Cybersecurity Blueprint' }
         ];
         break;
-      case 'gov_blueprint':
-        botText = '📘 Cybersecurity Blueprint membantu organisasi menyusun rencana induk (roadmap) jangka panjang pertahanan siber yang selaras dengan tata kelola TI dan tujuan bisnis Anda.';
+
+      case 'prod_maturity':
+        botText = 'Mengukur tingkat kematangan keamanan siber organisasi berdasarkan framework global (NIST CSF, COBIT, CIS Controls).';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '✅ Learn More', action: 'start_qualification:Digital Maturity Assessment' },
+          { label: '📅 Book Consultation', action: 'book_consultation_start:Digital Maturity Assessment' },
+          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Digital Maturity Assessment' }
         ];
         break;
-      case 'gov_policy':
-        botText = '📜 Policy-SOP Development (Tata Kelola TI) merancang kebijakan keamanan informasi, pedoman kerja, dan Standar Operasional Prosedur (SOP) tata kelola siber organisasi Anda.';
+
+      case 'prod_risk_rating':
+        botText = 'Evaluasi risiko siber pihak ketiga dan penilaian postur keamanan eksternal organisasi Anda secara kontinu.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '✅ Learn More', action: 'start_qualification:Security Risk Rating' },
+          { label: '📅 Book Consultation', action: 'book_consultation_start:Security Risk Rating' },
+          { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Security Risk Rating' }
         ];
         break;
-      case 'gov_iso':
-        botText = '🔒 ISO/IEC Implementation membantu persiapan kepatuhan sertifikasi standar ISO/IEC 27001 (Sistem Manajemen Keamanan Informasi) secara end-to-end dari gap analisis hingga pendampingan audit.';
+
+      // Menu Level 2 Governance
+      case 'prod_iso_impl':
+        botText = 'RTI mendampingi implementasi ISO/IEC menggunakan pendekatan PDCA hingga proses sertifikasi.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '📄 Request Proposal', action: 'start_qualification:ISO/IEC 27001 Implementation' },
+          { label: '📅 Consultation', action: 'book_consultation_start:ISO/IEC 27001 Implementation' }
         ];
         break;
-      case 'gov_bcm':
-        botText = '🔄 BCM-BCP-DRP Services (Cyber Drill) menguji ketahanan bisnis dan pemulihan bencana sistem melalui simulasi ancaman siber (cyber drill) nyata untuk memastikan kelangsungan operasional.';
+
+      case 'prod_it_grc':
+        botText = 'Penyusunan kerangka kerja tata kelola TI, manajemen risiko, dan kepatuhan (IT GRC) sesuai standar COBIT dan NIST.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '📄 Request Proposal', action: 'start_qualification:IT Governance / IT GRC' },
+          { label: '📅 Consultation', action: 'book_consultation_start:IT Governance / IT GRC' }
         ];
         break;
-      case 'gov_maturity':
-        botText = '📊 Digital Maturity Assessment mengukur indeks kematangan keamanan siber dan kesiapan digital organisasi Anda saat ini berdasarkan framework standar internasional.';
+
+      case 'prod_bcm_bcp':
+        botText = 'Merancang strategi Business Continuity Plan (BCP) dan Disaster Recovery Plan (DRP) untuk menjaga kelangsungan operasional.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '📄 Request Proposal', action: 'start_qualification:BCM / BCP / DRP' },
+          { label: '📅 Consultation', action: 'book_consultation_start:BCM / BCP / DRP' }
         ];
         break;
-      case 'gov_awareness':
-        botText = '🎓 Awareness & Training mengedukasi seluruh staf mengenai ancaman siber terbaru, metode rekayasa sosial (phishing), serta melatih refleks kepatuhan siber dasar.';
+
+      case 'prod_it_audit':
+        botText = 'Audit TI independen untuk menilai keamanan sistem informasi, kontrol internal, dan kepatuhan regulasi.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: '📄 Request Proposal', action: 'start_qualification:IT Audit' },
+          { label: '📅 Consultation', action: 'book_consultation_start:IT Audit' }
         ];
         break;
-      case 'gov_audit':
-        botText = '🔎 IT Audit melakukan penilaian independen terhadap kepatuhan, keandalan kontrol internal sistem informasi, dan infrastruktur tata kelola TI organisasi Anda.';
+
+      // Menu Level 2 Assessment
+      case 'prod_va':
+        botText = 'Pemindaian otomatis terhadap server, aplikasi, cloud, maupun jaringan untuk menemukan celah keamanan.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Governance', action: 'detail_gov' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'View Methodology', action: 'view_methodology' },
+          { label: 'Get Quotation', action: 'start_qualification:Vulnerability Assessment' },
+          { label: 'Book Consultation', action: 'book_consultation_start:Vulnerability Assessment' }
         ];
         break;
-      case 'detail_def':
-        botText = 'Layanan Defensive Cybersecurity RTI mencakup berbagai sistem pertahanan dan respons siber aktif. Layanan mana yang ingin Anda pelajari lebih lanjut?';
+
+      case 'prod_pentest':
+        botText = 'Simulasi serangan menggunakan metode Black Box, Gray Box, atau White Box.';
         options = [
-          { label: '🛡️ Security Operation Center (SOC) 24/7', action: 'def_soc' },
-          { label: '📡 Cyber Threat Intelligence (CTI)', action: 'def_cti' },
-          { label: '🔒 Network & Endpoint Hardening', action: 'def_hardening' },
-          { label: '🚨 Incident Management', action: 'def_incident' },
-          { label: '🔎 Digital Forensic', action: 'def_forensic' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Web Application', action: 'start_qualification:Penetration Testing (Web App)' },
+          { label: 'Mobile Application', action: 'start_qualification:Penetration Testing (Mobile App)' },
+          { label: 'API Testing', action: 'start_qualification:Penetration Testing (API)' },
+          { label: 'Network', action: 'start_qualification:Penetration Testing (Network)' },
+          { label: 'Cloud', action: 'start_qualification:Penetration Testing (Cloud)' }
         ];
         break;
-      case 'def_soc':
-        botText = '🛡️ Security Operation Center (SOC) 24/7 menyediakan pemantauan keamanan siber secara real-time non-stop untuk mendeteksi, menganalisis, dan merespons ancaman secara instan.';
+
+      case 'prod_redteaming':
+        botText = 'Simulasi Advanced Persistent Threat (APT) untuk menguji kesiapan sistem siber dan tim keamanan Anda.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Book Assessment', action: 'start_qualification:Red Teaming' }
         ];
         break;
-      case 'def_cti':
-        botText = '📡 Cyber Threat Intelligence (CTI) mengumpulkan dan menganalisis data ancaman siber global untuk memprediksi, mencegah, dan mengantisipasi serangan sebelum terjadi pada organisasi Anda.';
+
+      case 'prod_secure_sdlc':
+        botText = 'Integrasikan keamanan ke dalam proses pengembangan software sejak tahap desain (Shift Left / DevSecOps).';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Talk to Expert', action: 'start_qualification:Secure SDLC' }
         ];
         break;
-      case 'def_hardening':
-        botText = '🔒 Network & Endpoint Hardening memperkuat pertahanan infrastruktur jaringan, server, dan perangkat kerja (endpoints) dengan menutup celah konfigurasi berbahaya.';
+
+      case 'prod_cyberdrill':
+        botText = 'Uji kesiapan organisasi melalui Tabletop Exercise, Cyber Range, Social Engineering, dan Attack Simulation.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Schedule Demo', action: 'start_qualification:Cyber Drill' }
         ];
         break;
-      case 'def_incident':
-        botText = '🚨 Cyber Security Incident Management memberikan penanganan dan penanggulangan cepat saat insiden serangan siber terjadi guna meminimalisir dampak kerugian bisnis.';
+
+      // Menu Level 2 SecOps
+      case 'prod_soc':
+        botText = 'Monitoring ancaman keamanan secara real-time menggunakan SIEM, SOAR, Threat Intelligence dan AI Analytics.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'SOC Demo', action: 'start_qualification:Managed SOC Demo' },
+          { label: 'Pricing', action: 'start_qualification:Managed SOC Pricing' },
+          { label: 'Book Consultation', action: 'book_consultation_start:Managed SOC' }
         ];
         break;
-      case 'def_forensic':
-        botText = '🔎 Digital Forensic melakukan investigasi mendalam pasca-insiden untuk melacak asal-usul serangan, mengumpulkan bukti digital, dan menyusun laporan forensik formal.';
+
+      case 'prod_cti':
+        botText = 'Deteksi kebocoran data dan ancaman global sebelum berdampak terhadap bisnis Anda.';
         options = [
-          { label: '💰 Estimasi Proyek', action: 'start_lead' },
-          { label: '↩ Layanan Defensive', action: 'detail_def' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Live Demo', action: 'start_qualification:CTI Live Demo' }
         ];
         break;
-      case 'frameworks':
-        botText = 'Kami menggunakan kerangka kerja internasional berbasis best practice seperti COBIT 2019 (tata kelola TI), TOGAF 9.2 (arsitektur enterprise), ISO 27001 (SMKI), NIST CSF (cybersecurity), SABSA, PCI DSS, CIS Controls, dan MITRE ATT&CK.';
+
+      case 'prod_incident':
+        botText = 'Tim RTI membantu mendeteksi, mengisolasi dan memulihkan insiden keamanan sesuai NIST Incident Response Framework.';
         options = [
-          { label: '💰 Asesmen Kematangan', action: 'start_lead' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Emergency Response', action: 'chat_whatsapp:Emergency Incident Response' }
         ];
         break;
-      case 'consultant':
-        botText = 'Anda dapat berkonsultasi langsung dengan Tim Konsultan Senior RTI. Silakan tinggalkan detail kontak Anda agar kami dapat menghubungi Anda dalam waktu 1x24 jam.';
+
+      case 'prod_forensic':
+        botText = 'Investigasi bukti digital yang memenuhi standar hukum dan regulasi.';
         options = [
-          { label: '✍ Mulai Isi Kontak', action: 'start_lead' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Talk to Investigator', action: 'start_qualification:Digital Forensic' }
         ];
         break;
-      case 'academy_flow':
-        botText = '🎓 RTI Cybersecurity Academy menyediakan Program Cybersecurity Professional Bootcamp (Industry Ready Cybersecurity Workforce Program) untuk melatih SDM siber handal siap kerja.\n\nApakah Anda ingin mendaftar ke program Bootcamp ini atau berkonsultasi terlebih dahulu dengan tim Admisi RTI Academy?';
+
+      case 'prod_hardening':
+        botText = 'Penguatan konfigurasi server, cloud, firewall, endpoint dan perangkat jaringan.';
         options = [
-          { label: '📝 Daftar Bootcamp Sekarang', action: 'go_academy_register' },
-          { label: '💬 Konsultasi Admisi Academy', action: 'go_academy_consult' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Assessment', action: 'start_qualification:Network Hardening' }
         ];
         break;
-      case 'main_menu':
-        botText = 'Bagaimana saya bisa membantu organisasi Anda hari ini?';
+
+      // Menu Level 2 Academy
+      case 'prod_academy_awareness':
+        botText = 'Edukasi keamanan siber untuk seluruh karyawan disertai simulasi phishing.';
         options = [
-          { label: '🔍 Tanya Layanan', action: 'services' },
-          { label: '📊 Jelaskan Framework', action: 'frameworks' },
-          { label: '💰 Estimasi Biaya Proyek', action: 'start_lead' },
-          { label: '🎓 RTI Academy', action: 'academy_flow' },
-          { label: '📞 Hubungi Konsultan', action: 'consultant' }
+          { label: 'Corporate Package', action: 'start_qualification:Academy Cyber Awareness' }
         ];
         break;
-      case 'thank_you':
-        botText = 'Senang bisa membantu Anda hari ini! Khusus untuk langkah awal Anda hari ini, kami menyertakan analisis risiko awal gratis di sesi pertama kita. Jangan lewatkan kesempatan ini—amankan slot Anda sekarang dengan klik [Schedule a Call] dan mari buat bisnis Anda selangkah lebih aman.';
+
+      case 'prod_academy_technical':
+        botText = 'Pelatihan praktis bagi engineer, SOC Analyst, Security Engineer, dan Auditor.';
         options = [
-          { label: '📅 Schedule a Call', action: 'go_consultation' },
-          { label: '↩ Menu Utama', action: 'main_menu' }
+          { label: 'Training Catalog', action: 'start_qualification:Academy Technical Training' }
         ];
         break;
+
+      case 'prod_academy_bootcamp':
+        botText = 'Program bootcamp intensif hingga siap kerja. Silakan pilih level program:';
+        options = [
+          { label: 'Basic', action: 'start_qualification:Academy Bootcamp (Basic)' },
+          { label: 'Intermediate', action: 'start_qualification:Academy Bootcamp (Intermediate)' },
+          { label: 'Advanced', action: 'start_qualification:Academy Bootcamp (Advanced)' }
+        ];
+        break;
+
+      case 'prod_academy_certification':
+        botText = 'Persiapan sertifikasi internasional cybersecurity.';
+        options = [
+          { label: 'View Certification Roadmap', action: 'start_qualification:Academy Certification Roadmap' }
+        ];
+        break;
+
+      case 'prod_academy_corporate':
+        botText = 'Program pelatihan siber kustom yang disesuaikan dengan kebutuhan dan skala organisasi Anda.';
+        options = [
+          { label: 'Custom Training Proposal', action: 'start_qualification:Academy Corporate Training' }
+        ];
+        break;
+
+      // Other actions
+      case 'view_methodology':
+        botText = 'Metodologi Vulnerability Assessment RTI mencakup:\n1. Reconnaissance & Asset Discovery\n2. Vulnerability Scanning (Nessus, OpenVAS)\n3. Risk Analysis & Prioritization\n4. Reporting & Remediation Guidance';
+        options = [
+          { label: 'Get Quotation', action: 'start_qualification:Vulnerability Assessment' },
+          { label: 'Book Consultation', action: 'book_consultation_start:Vulnerability Assessment' },
+          { label: '↩ Kembali', action: 'prod_va' }
+        ];
+        break;
+
+      case 'chat_whatsapp':
+        botText = 'Apakah Anda ingin berbicara langsung dengan konsultan kami?';
+        options = [
+          { label: '💬 Open WhatsApp', action: 'open_whatsapp_now' }
+        ];
+        break;
+
+      case 'book_consultation_start':
+        setBookingTopic('General Cybersecurity Consultation');
+        setFlowType('booking_date');
+        botText = 'Pilih tanggal konsultasi.';
+        isCalendar = true;
+        break;
+
       default:
-        botText = 'Maaf, saya tidak mengerti perintah itu. Hubungi konsultan kami untuk diskusi lebih lanjut.';
-        options = [{ label: '↩ Menu Utama', action: 'main_menu' }];
+        botText = 'Maaf, saya tidak mengerti tindakan itu. Silakan pilih menu di bawah ini untuk bantuan:';
+        options = [
+          { label: '🔍 Explore Solutions', action: 'explore_solutions' },
+          { label: '🏠 Menu Utama', action: 'go_home' }
+        ];
     }
 
     setMessages(prev => [
@@ -318,331 +435,808 @@ export default function Chatbot() {
         id: Math.random().toString(),
         sender: 'bot',
         text: botText,
-        options
+        options,
+        isCalendar
       }
     ]);
   };
 
-  // Lead collection flow
-  const handleLeadFlow = async (text: string) => {
-    let nextStep = leadStep;
-    let botText = '';
-    let options: { label: string; action: string }[] | undefined = undefined;
+  const getRecommendations = (challenge: string, targetService: string): string[] => {
+    const recs: string[] = [];
+    const lowChallenge = challenge ? challenge.toLowerCase() : '';
 
-    const currentData = { ...leadData };
-
-    if (leadStep === 1) {
-      currentData.name = text;
-      nextStep = 2;
-      botText = `Terima kasih Pak/Bu ${text}. Apa nama Perusahaan/Instansi Anda dan apa Jabatan Anda?`;
-    } else if (leadStep === 2) {
-      currentData.company = text;
-      if (currentData.service) {
-        nextStep = 5;
-        botText = `Baik, terkait layanan ${currentData.service} yang telah Anda pilih, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.`;
-      } else {
-        nextStep = 3;
-        botText = 'Layanan apa yang Anda butuhkan?';
-        options = [
-          { label: 'Offensive Cybersecurity (VA/Pentest)', action: 'lead_off' },
-          { label: 'Cybersecurity Governance (GRC/ISO)', action: 'lead_gov' },
-          { label: 'Defensive Cybersecurity (SOC/CTI)', action: 'lead_def' },
-          { label: 'Lainnya', action: 'lead_other' }
-        ];
-      }
-    } else if (leadStep === 5) {
-      currentData.email = text;
-      nextStep = 6;
-      botText = 'Untuk memudahkan proses koordinasi lebih lanjut dan agar kami bisa mengirim penawaran, mohon disampaikan nomor handphone/WhatsApp Anda?';
-    } else if (leadStep === 6) {
-      currentData.phone = text;
-      nextStep = 7;
-      botText = 'Berapa perkiraan budget proyek ini?';
-      options = [
-        { label: '< Rp 50 Juta', action: 'budget_small' },
-        { label: 'Rp 50Jt - Rp 150Jt', action: 'budget_med' },
-        { label: 'Rp 150Jt+', action: 'budget_large' }
-      ];
-    } else if (leadStep === 3 || leadStep === 4 || leadStep === 7 || leadStep === 8) {
-      botText = 'Mohon pilih salah satu opsi tombol di atas untuk melanjutkan.';
+    if (lowChallenge.includes('iso') || lowChallenge.includes('compliance')) {
+      recs.push('ISO/IEC 27001 Implementation');
+      recs.push('IT Governance / IT GRC');
+    } else if (lowChallenge.includes('vulner') || lowChallenge.includes('celah') || lowChallenge.includes('lemah')) {
+      recs.push('Vulnerability Assessment');
+      recs.push('Penetration Testing');
+    } else if (lowChallenge.includes('soc') || lowChallenge.includes('monitor') || lowChallenge.includes('siem')) {
+      recs.push('Managed SOC 24/7');
+      recs.push('Network & Endpoint Hardening');
+    } else if (lowChallenge.includes('incident') || lowChallenge.includes('ransom') || lowChallenge.includes('serang') || lowChallenge.includes('tanggul')) {
+      recs.push('Cyber Security Incident Management');
+      recs.push('Digital Forensic');
+      recs.push('Cyber Threat Intelligence (CTI)');
+    } else if (lowChallenge.includes('audit')) {
+      recs.push('IT Audit');
+      recs.push('IT Governance / IT GRC');
+    } else if (lowChallenge.includes('train') || lowChallenge.includes('didik') || lowChallenge.includes('academy') || lowChallenge.includes('sadar')) {
+      recs.push('Cyber Security Awareness Training');
+      recs.push('Technical Security Training');
     }
 
-    setLeadData(currentData);
-    setLeadStep(nextStep);
+    if (targetService && !recs.includes(targetService)) {
+      recs.unshift(targetService);
+    }
 
-    setIsTyping(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setIsTyping(false);
+    if (recs.length === 0) {
+      recs.push('Penetration Testing');
+      recs.push('ISO/IEC 27001 Implementation');
+      recs.push('Managed SOC 24/7');
+    }
 
-    setMessages(prev => [
-      ...prev,
-      {
-        id: Math.random().toString(),
-        sender: 'bot',
-        text: botText,
-        options
-      }
-    ]);
+    return Array.from(new Set(recs)).slice(0, 3);
   };
 
   const handleOptionClick = async (label: string, action: string) => {
-    // Add user message
+    // Add user message for UI trace
     setMessages(prev => [
       ...prev,
       { id: Math.random().toString(), sender: 'user', text: label }
     ]);
 
-    // Handle lead wizard actions
-    if (action === 'start_lead') {
-      setLeadStep(1);
-      setLeadData({
-        name: '',
-        company: '',
-        role: '',
-        service: currentContextService || '',
-        scopingDetails: '',
-        email: '',
-        phone: '',
-        budget: '',
-        timeline: '',
-      });
+    // Handle Quick Links or Menu Redirects
+    if (action === 'go_home') {
+      setFlowType('idle');
+      setQualStep(1);
+      setContactStep(1);
+      setBookingDate(null);
+      setBookingTime(null);
+      setCurrentContextService(null);
+      
       setIsTyping(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 400));
       setIsTyping(false);
       setMessages(prev => [
         ...prev,
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Perkenankan kami memahami kebutuhan Anda dengan lebih baik. Siapa nama lengkap Anda?'
-        }
-      ]);
-      return;
-    }
-
-    if (action === 'main_menu') {
-      setLeadStep(0);
-      triggerBotResponse('main_menu', label);
-      return;
-    }
-
-    if (action === 'go_proposal') {
-      window.location.href = '/request-proposal';
-      return;
-    }
-
-    if (action === 'go_consultation') {
-      window.location.href = '/online-consultation';
-      return;
-    }
-
-    if (action === 'go_order') {
-      window.location.href = '/online-order';
-      return;
-    }
-
-    if (action === 'go_academy_register') {
-      window.location.href = '/academy/register';
-      return;
-    }
-
-    if (action === 'go_academy_consult') {
-      const waText = 'Halo Tim Admisi RTI Academy, saya tertarik untuk berkonsultasi mengenai program Cybersecurity Professional Bootcamp.';
-      const url = `https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(waText)}`;
-      window.open(url, '_blank');
-      return;
-    }
-
-    if (leadStep === 3 && action.startsWith('lead_')) {
-      const servicesMap: Record<string, string> = {
-        lead_off: 'Offensive Cybersecurity (VA/Pentest)',
-        lead_gov: 'Cybersecurity Governance (GRC/ISO)',
-        lead_def: 'Defensive Cybersecurity (SOC/CTI)',
-        lead_other: 'Lainnya'
-      };
-      const chosenService = servicesMap[action];
-      setLeadData(prev => ({ ...prev, service: chosenService }));
-      setLeadStep(5);
-      setIsTyping(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setIsTyping(false);
-
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Math.random().toString(),
-          sender: 'bot',
-          text: `Baik, terkait layanan ${chosenService} yang telah Anda pilih, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.`
-        }
-      ]);
-      return;
-    }
-
-    if (leadStep === 4 && action.startsWith('scoping_')) {
-      const scopingMap: Record<string, string> = {
-        scoping_off_1_3: '1-3 Target Aplikasi/IP',
-        scoping_off_4_10: '4-10 Target Aplikasi/IP',
-        scoping_off_10: '10+ Target / Skala Enterprise',
-        scoping_gov_iso: 'Sertifikasi ISO/IEC 27001',
-        scoping_gov_reg: 'Kepatuhan Regulasi BI/OJK/UU PDP',
-        scoping_gov_blue: 'Penyusunan Blueprint / Policy-SOP',
-        scoping_def_soc: 'SOC Monitoring 24/7',
-        scoping_def_hard: 'Hardening & Incident Response',
-        scoping_def_cti: 'Threat Intelligence',
-        scoping_oth_audit: 'Persiapan Audit Eksternal',
-        scoping_oth_routine: 'Perlindungan Rutin Berkala',
-        scoping_oth_general: 'Konsultasi Umum'
-      };
-
-      setLeadData(prev => ({ ...prev, scopingDetails: scopingMap[action] }));
-      setLeadStep(5);
-      setIsTyping(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setIsTyping(false);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Math.random().toString(),
-          sender: 'bot',
-          text: 'Baik, selanjutnya untuk memudahkan tim RTI berkomunikasi lebih lanjut dengan Anda, mohon disampaikan alamat email profesional Anda.'
-        }
-      ]);
-      return;
-    }
-
-    if (leadStep === 7 && action.startsWith('budget_')) {
-      const budgetMap: Record<string, string> = {
-        budget_small: '< Rp 50 Juta',
-        budget_med: 'Rp 50Jt - Rp 150Jt',
-        budget_large: 'Rp 150Jt+'
-      };
-      setLeadData(prev => ({ ...prev, budget: budgetMap[action] }));
-      setLeadStep(8);
-      setIsTyping(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setIsTyping(false);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Math.random().toString(),
-          sender: 'bot',
-          text: 'Berapa target timeline proyek ini?',
+          text: '👋 Selamat datang di **RTI - Riset Teknologi Indonesia**.\n\nSaya **RTI AI Cybersecurity Consultant**.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari **2 menit**.',
           options: [
-            { label: '1 Bulan', action: 'timeline_1m' },
-            { label: '2 Bulan', action: 'timeline_2m' },
-            { label: '3-6 Bulan', action: 'timeline_3_6m' }
+            { label: '🔍 Explore Solutions', action: 'explore_solutions' },
+            { label: '📅 Book a Consultation', action: 'book_consultation_start' },
+            { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
+            { label: '🎓 RTI Academy', action: 'menu_academy' }
           ]
         }
       ]);
       return;
     }
 
-    if (leadStep === 8 && action.startsWith('timeline_')) {
-      const timelineMap: Record<string, string> = {
-        timeline_1m: '1 Bulan',
-        timeline_2m: '2 Bulan',
-        timeline_3_6m: '3-6 Bulan'
-      };
+    // WhatsApp Triggers
+    if (action === 'open_whatsapp_now') {
+      window.open(getWhatsAppLink(), '_blank');
+      return;
+    }
+    if (action === 'chat_whatsapp_booking_done') {
+      const text = `Halo RTI,\n\nSaya telah menjadwalkan konsultasi pada tanggal ${bookingDate} pukul ${bookingTime} WIB.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
+      window.open(getWhatsAppLink(text), '_blank');
+      return;
+    }
+    if (action === 'chat_whatsapp_proposal_done') {
+      const text = `Halo RTI,\n\nSaya tertarik dengan proposal untuk layanan: ${currentContextService || qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
+      window.open(getWhatsAppLink(text), '_blank');
+      return;
+    }
+    if (action === 'chat_whatsapp_qual_done') {
+      const text = `Halo RTI,\n\nSaya tertarik dengan layanan: ${qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name || 'N/A'}\nPerusahaan: ${contactData.company || 'N/A'}\nKebutuhan: Tantangan: ${qualData.challenge}. Timeline: ${qualData.timeline}`;
+      window.open(getWhatsAppLink(text), '_blank');
+      return;
+    }
+    if (action.startsWith('chat_whatsapp:')) {
+      const service = action.replace('chat_whatsapp:', '');
+      const text = `Halo RTI,\n\nSaya tertarik dengan layanan: ${service}\n\nPerusahaan:\nNama:\nKebutuhan:`;
+      window.open(getWhatsAppLink(text), '_blank');
+      return;
+    }
 
-      const finalData = {
-        ...leadData,
-        timeline: timelineMap[action]
-      };
+    // Google Calendar Trigger
+    if (action.startsWith('gcal:')) {
+      const link = action.replace('gcal:', '');
+      window.open(link, '_blank');
+      return;
+    }
 
-      setLeadData(finalData);
-      setLeadStep(9);
+    // Book Consultation Trigger
+    if (action.startsWith('book_consultation_start')) {
+      const parts = action.split(':');
+      const serviceName = parts[1] || 'General Cybersecurity Consultation';
+      setBookingTopic(serviceName);
+      setFlowType('booking_date');
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Pilih tanggal konsultasi.',
+          isCalendar: true
+        }
+      ]);
+      return;
+    }
+
+    // AI Qualification Flow start
+    if (action.startsWith('start_qualification')) {
+      const parts = action.split(':');
+      const serviceName = parts[1] || 'RTI Cybersecurity Solution';
+      
+      setQualStep(1);
+      setQualData({
+        industry: '',
+        employees: '',
+        challenge: '',
+        timeline: '',
+        targetService: serviceName
+      });
+      setFlowType('qualification');
 
       setIsTyping(true);
-      // Save lead to database API
+      await new Promise(resolve => setTimeout(resolve, 400));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Industri perusahaan Anda? (Langkah 1 dari 4)',
+          options: [
+            { label: '🏦 Banking', action: 'qual_q1:Banking' },
+            { label: '🏢 Enterprise', action: 'qual_q1:Enterprise' },
+            { label: '🏭 Manufacturing', action: 'qual_q1:Manufacturing' },
+            { label: '🏥 Healthcare', action: 'qual_q1:Healthcare' },
+            { label: '🏛 Government', action: 'qual_q1:Government' },
+            { label: '📦 Others', action: 'qual_q1:Others' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    // AI Qualification Q1
+    if (action.startsWith('qual_q1:')) {
+      const val = action.replace('qual_q1:', '');
+      setQualData(prev => ({ ...prev, industry: val }));
+      setQualStep(2);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Jumlah karyawan? (Langkah 2 dari 4)',
+          options: [
+            { label: '1-100', action: 'qual_q2:1-100' },
+            { label: '100-500', action: 'qual_q2:100-500' },
+            { label: '500-1000', action: 'qual_q2:500-1000' },
+            { label: '1000+', action: 'qual_q2:1000+' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    // AI Qualification Q2
+    if (action.startsWith('qual_q2:')) {
+      const val = action.replace('qual_q2:', '');
+      setQualData(prev => ({ ...prev, employees: val }));
+      setQualStep(3);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Apa tantangan utama Anda? (Langkah 3 dari 4)',
+          options: [
+            { label: 'Compliance', action: 'qual_q3:Compliance' },
+            { label: 'ISO 27001', action: 'qual_q3:ISO 27001' },
+            { label: 'Vulnerability', action: 'qual_q3:Vulnerability' },
+            { label: 'SOC', action: 'qual_q3:SOC' },
+            { label: 'Incident', action: 'qual_q3:Incident' },
+            { label: 'Audit', action: 'qual_q3:Audit' },
+            { label: 'Training', action: 'qual_q3:Training' },
+            { label: 'Others', action: 'qual_q3:Others' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    // AI Qualification Q3
+    if (action.startsWith('qual_q3:')) {
+      const val = action.replace('qual_q3:', '');
+      setQualData(prev => ({ ...prev, challenge: val }));
+      setQualStep(4);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Kapan proyek akan dimulai? (Langkah 4 dari 4)',
+          options: [
+            { label: 'ASAP', action: 'qual_q4:ASAP' },
+            { label: '1 Month', action: 'qual_q4:1 Month' },
+            { label: '3 Months', action: 'qual_q4:3 Months' },
+            { label: 'Just Exploring', action: 'qual_q4:Just Exploring' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    // AI Qualification Q4 (Recommend Solutions)
+    if (action.startsWith('qual_q4:')) {
+      const val = action.replace('qual_q4:', '');
+      const finalQualData = { ...qualData, timeline: val };
+      setQualData(finalQualData);
+      setQualStep(5);
+      
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsTyping(false);
+
+      const recommendations = getRecommendations(finalQualData.challenge, finalQualData.targetService);
+      const recText = recommendations.map((r: string) => `✅ ${r}`).join('\n');
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: `Terima kasih.\n\nBerdasarkan jawaban Anda, solusi yang kami rekomendasikan adalah:\n\n${recText}`,
+          options: [
+            { label: '📄 Request Proposal', action: 'qual_request_proposal' },
+            { label: '📅 Book Consultation', action: `book_consultation_start:${finalQualData.targetService}` },
+            { label: '💬 WhatsApp Expert', action: 'chat_whatsapp_qual_done' }
+          ]
+        }
+      ]);
+      return;
+    }
+
+    // Request Proposal Trigger from Qualification
+    if (action === 'qual_request_proposal') {
+      setContactPurpose('proposal');
+      setFlowType('contact_collect');
+      setContactStep(1);
+
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Mohon isi data kontak Anda untuk pengiriman proposal.\n\nSiapa nama lengkap Anda?'
+        }
+      ]);
+      return;
+    }
+
+    // Booking time select
+    if (action.startsWith('book_time:')) {
+      const timeVal = action.replace('book_time:', '');
+      setBookingTime(timeVal);
+      setContactPurpose('booking');
+      setFlowType('contact_collect');
+      setContactStep(1);
+
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: 'Hampir selesai. Mohon isi data berikut.\n\nSiapa nama lengkap Anda?'
+        }
+      ]);
+      return;
+    }
+
+    // Default bot routing
+    triggerBotResponse(action, label);
+  };
+
+  const handleDateSelect = (dateStr: string) => {
+    setBookingDate(dateStr);
+    setFlowType('booking_time');
+    
+    setMessages(prev => [
+      ...prev,
+      { id: Math.random().toString(), sender: 'user', text: `📅 Tanggal: ${dateStr}` },
+      {
+        id: Math.random().toString(),
+        sender: 'bot',
+        text: 'Pilih Jam',
+        options: [
+          { label: '09.00', action: 'book_time:09.00' },
+          { label: '10.00', action: 'book_time:10.00' },
+          { label: '13.00', action: 'book_time:13.00' },
+          { label: '15.00', action: 'book_time:15.00' }
+        ]
+      }
+    ]);
+  };
+
+  const handleContactCollection = async (text: string) => {
+    const updatedData = { ...contactData };
+    let nextStep = contactStep + 1;
+    let botText = '';
+    let isLast = false;
+
+    if (contactStep === 1) {
+      updatedData.name = text;
+      botText = 'Apa nama Perusahaan Anda?';
+    } else if (contactStep === 2) {
+      updatedData.company = text;
+      botText = 'Mohon masukkan alamat Email Anda:';
+    } else if (contactStep === 3) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(text)) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Format email kurang sesuai. Mohon masukkan email yang valid (contoh: nama@perusahaan.com):'
+          }
+        ]);
+        return;
+      }
+      updatedData.email = text;
+      botText = 'Mohon masukkan Nomor HP/WhatsApp Anda:';
+    } else if (contactStep === 4) {
+      updatedData.phone = text;
+      botText = 'Apa Jabatan Anda?';
+    } else if (contactStep === 5) {
+      updatedData.title = text;
+      isLast = true;
+    }
+
+    setContactData(updatedData);
+
+    if (isLast) {
+      setFlowType('completed');
+      setIsTyping(true);
+
+      if (contactPurpose === 'proposal') {
+        try {
+          const needsStr = `Request Proposal untuk: ${currentContextService || qualData.targetService || 'RTI Cybersecurity Solution'}. Industri: ${qualData.industry || 'N/A'}. Karyawan: ${qualData.employees || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}. Mulai Proyek: ${qualData.timeline || 'N/A'}.`;
+          
+          await fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: updatedData.name,
+              email: updatedData.email,
+              phone: updatedData.phone,
+              company: updatedData.company,
+              role: updatedData.title,
+              needs: needsStr,
+              budget: 'Unspecified',
+              timeline: qualData.timeline || 'Unspecified',
+              source: 'CHATBOT'
+            })
+          });
+        } catch (err) {
+          console.error('Failed to save lead:', err);
+        }
+        setIsTyping(false);
+
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: `Terima kasih.\n\nBerdasarkan jawaban Anda, proposal sedang kami siapkan. Konsultan RTI akan menghubungi Anda di ${updatedData.email} atau ${updatedData.phone}.\n\nApakah ada hal lain yang bisa kami bantu?`,
+            options: [
+              { label: '💬 Chat WhatsApp', action: 'chat_whatsapp_proposal_done' },
+              { label: '🏠 Menu Utama', action: 'go_home' }
+            ]
+          }
+        ]);
+      } else {
+        // Submit booking
+        try {
+          const descStr = `Jabatan: ${updatedData.title}. Industri: ${qualData.industry || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}.`;
+          
+          await fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              topic: bookingTopic || currentContextService || 'Cybersecurity Consultation',
+              date: bookingDate,
+              time: bookingTime + ' WIB',
+              platform: 'Google Meet',
+              name: updatedData.name,
+              email: updatedData.email,
+              company: updatedData.company,
+              phone: updatedData.phone,
+              description: descStr
+            })
+          });
+        } catch (err) {
+          console.error('Failed to save booking:', err);
+        }
+        setIsTyping(false);
+
+        const gCalLink = getGoogleCalendarLink(bookingDate!, bookingTime!);
+
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: `Terima kasih.\n\nKonsultan RTI akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`,
+            options: [
+              { label: '✔ Add to Google Calendar', action: `gcal:${gCalLink}` },
+              { label: '💬 Chat WhatsApp', action: 'chat_whatsapp_booking_done' },
+              { label: '🏠 Menu Utama', action: 'go_home' }
+            ]
+          }
+        ]);
+      }
+    } else {
+      setContactStep(nextStep);
+      setIsTyping(true);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      setIsTyping(false);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'bot',
+          text: botText
+        }
+      ]);
+    }
+  };
+
+  const handleExitCaptureSubmit = async (text: string) => {
+    if (exitCaptureType === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(text)) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Format email kurang sesuai. Mohon masukkan email yang valid (contoh: nama@perusahaan.com):'
+          }
+        ]);
+        return;
+      }
+      
+      setIsTyping(true);
       try {
         await fetch('/api/leads', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: finalData.name,
-            email: finalData.email,
-            phone: finalData.phone,
-            company: finalData.company,
-            role: 'Client Portal Chat',
-            needs: `Kebutuhan Layanan: ${finalData.service} (${finalData.scopingDetails || ''}). Budget: ${finalData.budget}. Timeline: ${finalData.timeline}.`,
-            budget: finalData.budget,
-            timeline: finalData.timeline,
+            name: 'Prospek Web (Exit Capture)',
+            email: text,
+            phone: '08000000000',
+            company: 'Unspecified',
+            role: 'Exit Prospect',
+            needs: `Katalog/Brosur Request. Layanan yang diminati: ${currentContextService || 'Cybersecurity Solutions'}.`,
+            budget: 'Unspecified',
+            timeline: 'Unspecified',
             source: 'CHATBOT'
           })
         });
       } catch (err) {
-        console.error('Failed to save chatbot lead:', err);
+        console.error('Failed to save exit lead:', err);
       }
       setIsTyping(false);
-
-      // Generate WhatsApp Link
-      const waText = `Halo RTI, saya tertarik menggunakan layanan berikut: ${finalData.service} (${finalData.scopingDetails || ''}).\nNama: ${finalData.name}\nPerusahaan: ${finalData.company}\nEmail: ${finalData.email}\nNomor HP: ${finalData.phone}\nTimeline: ${finalData.timeline}\nBudget: ${finalData.budget}`;
-      const waLink = `https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(waText)}`;
 
       setMessages(prev => [
         ...prev,
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: `Terima kasih! Kami telah mencatat detail kebutuhan Anda:\n• Layanan: ${finalData.service} (${finalData.scopingDetails || ''})\n• Estimasi Budget: ${finalData.budget}\n• Target Timeline: ${finalData.timeline}\n\nUntuk memproses penawaran resmi atau konsultasi tatap muka, Anda dapat langsung melakukan estimasi formal dan memesan solusi dengan menjadwalkan konsultasi gratis atau mengirimkan request proposal di bawah ini.`,
-          options: [
-            { label: '📄 Request Proposal', action: 'go_proposal' },
-            { label: '📅 Jadwalkan Konsultasi', action: 'go_consultation' },
-            { label: '🛒 Order Solusi Instan', action: 'go_order' },
-            { label: '📲 Hubungkan ke WhatsApp', action: `wa_link:${waLink}` },
-            { label: '↩ Menu Utama', action: 'main_menu' }
-          ]
+          text: 'Terima kasih! Brosur dan katalog layanan RTI akan dikirimkan ke email Anda sebentar lagi. Semoga hari Anda menyenangkan!'
         }
       ]);
-      return;
+      setFlowType('completed');
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 2500);
     }
+  };
 
-    if (action.startsWith('wa_link:')) {
-      const url = action.replace('wa_link:', '');
-      window.open(url, '_blank');
-      return;
-    }
-
-    // Default flow
-    triggerBotResponse(action, label);
+  const handleFreeTextInput = (text: string) => {
+    const lowText = text.toLowerCase();
+    setIsTyping(true);
+    
+    setTimeout(() => {
+      setIsTyping(false);
+      
+      if (lowText.includes('iso') || lowText.includes('27001') || lowText.includes('sertifikasi') || lowText.includes('kepatuhan')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Saya merekomendasikan layanan ISO/IEC Implementation, yang dapat dilengkapi dengan IT GRC Development untuk memperkuat tata kelola serta IT Audit sebagai kesiapan sebelum sertifikasi.',
+            options: [
+              { label: '📄 Request Proposal', action: 'start_qualification:ISO/IEC 27001 Implementation' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start:ISO/IEC 27001 Implementation' },
+              { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:ISO/IEC 27001 Implementation' }
+            ]
+          }
+        ]);
+      } else if (lowText.includes('website') && (lowText.includes('serang') || lowText.includes('hack') || lowText.includes('dihack') || lowText.includes('ddos') || lowText.includes('hacked'))) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Untuk kondisi tersebut, saya menyarankan kombinasi Vulnerability Assessment, Penetration Testing, dan Managed Security Operation Center (SOC) agar kerentanan dapat ditemukan, diuji, serta dipantau secara berkelanjutan.',
+            options: [
+              { label: '📄 Request Proposal', action: 'start_qualification:Vulnerability Assessment & Pentest' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start:Vulnerability Assessment & Pentest' },
+              { label: '💬 WhatsApp Expert', action: 'chat_whatsapp:Vulnerability Assessment & Pentest' }
+            ]
+          }
+        ]);
+      } else if (lowText.includes('ransomware') || lowText.includes('virus') || lowText.includes('malware') || lowText.includes('terinfeksi') || lowText.includes('insiden') || lowText.includes('terserang')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Situasi ini memerlukan respons segera. Tim RTI dapat membantu melalui Cyber Security Incident Management, Digital Forensic, dan Cyber Threat Intelligence (CTI) untuk investigasi, pemulihan, dan pencegahan insiden lanjutan.',
+            options: [
+              { label: '🚨 Emergency Response', action: 'chat_whatsapp:Emergency Incident Response' },
+              { label: '📞 Talk to Expert', action: 'start_qualification:Incident Response' }
+            ]
+          }
+        ]);
+      } else if (lowText.includes('vapt') || lowText.includes('pentest') || lowText.includes('penetration') || lowText.includes('va')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'RTI menawarkan layanan Vulnerability Assessment (VA) dan Penetration Testing (Pentest) untuk menguji kerentanan pada Web App, Mobile App, API, Network, maupun Cloud Anda.',
+            options: [
+              { label: '🛡️ Vulnerability Assessment', action: 'prod_va' },
+              { label: '⚔️ Penetration Testing', action: 'prod_pentest' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start:VAPT' }
+            ]
+          }
+        ]);
+      } else if (lowText.includes('soc') || lowText.includes('siem') || lowText.includes('monitoring') || lowText.includes('soar')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'RTI menyediakan layanan Managed SOC 24/7 untuk mendeteksi dan merespons ancaman keamanan siber secara real-time dengan teknologi SIEM, SOAR, dan AI Analytics.',
+            options: [
+              { label: '🛡️ Managed SOC', action: 'prod_soc' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start:Managed SOC' }
+            ]
+          }
+        ]);
+      } else if (lowText.includes('academy') || lowText.includes('bootcamp') || lowText.includes('training') || lowText.includes('pelatihan') || lowText.includes('sertifikasi')) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Meningkatkan kompetensi SDM melalui program pelatihan cybersecurity RTI Academy. Tersedia Cyber Awareness, Technical Training, Bootcamp, dan Sertifikasi.',
+            options: [
+              { label: '📖 Explore RTI Academy', action: 'menu_academy' },
+              { label: '🏠 Menu Utama', action: 'go_home' }
+            ]
+          }
+        ]);
+      } else {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: 'Saya RTI AI Cybersecurity Consultant. Saya dapat membantu merekomendasikan solusi keamanan siber terbaik untuk organisasi Anda. Silakan ketik pertanyaan Anda secara spesifik atau gunakan menu di bawah ini:',
+            options: [
+              { label: '🔍 Explore Solutions', action: 'explore_solutions' },
+              { label: '📅 Book Consultation', action: 'book_consultation_start' },
+              { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' }
+            ]
+          }
+        ]);
+      }
+    }, 600);
   };
 
   const handleSend = () => {
     if (!inputText.trim()) return;
-
-    // Add user text
-    const text = inputText;
+    const text = inputText.trim();
+    
     setMessages(prev => [
       ...prev,
       { id: Math.random().toString(), sender: 'user', text }
     ]);
     setInputText('');
 
-    if (leadStep > 0 && leadStep < 9) {
-      handleLeadFlow(text);
+    if (flowType === 'contact_collect') {
+      handleContactCollection(text);
+    } else if (flowType === 'exit_capture') {
+      handleExitCaptureSubmit(text);
     } else {
-      // Rule-based keyword matching
-      const lowText = text.toLowerCase();
-      if (lowText.includes('vapt') || lowText.includes('pentest') || lowText.includes('penetrasi') || lowText.includes('offensive') || lowText.includes('ofensif')) {
-        triggerBotResponse('detail_off', text);
-      } else if (lowText.includes('iso') || lowText.includes('27001') || lowText.includes('kepatuhan') || lowText.includes('governance') || lowText.includes('grc') || lowText.includes('kebijakan')) {
-        triggerBotResponse('detail_gov', text);
-      } else if (lowText.includes('soc') || lowText.includes('defensive') || lowText.includes('defensif') || lowText.includes('hardening')) {
-        triggerBotResponse('detail_def', text);
-      } else if (lowText.includes('biaya') || lowText.includes('harga') || lowText.includes('estimasi') || lowText.includes('budget')) {
-        handleOptionClick('💰 Estimasi Biaya Proyek', 'start_lead');
-      } else if (lowText.includes('academy') || lowText.includes('bootcamp') || lowText.includes('pelatihan') || lowText.includes('belajar') || lowText.includes('admisi') || lowText.includes('training')) {
-        triggerBotResponse('academy_flow', text);
-      } else if (lowText.includes('terima kasih') || lowText.includes('terimakasih') || lowText.includes('cukup') || lowText.includes('akhiri')) {
-        triggerBotResponse('thank_you', text);
-      } else {
-        triggerBotResponse('main_menu', text);
-      }
+      handleFreeTextInput(text);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSend();
+  };
+
+  const handleCloseClick = () => {
+    const hasContact = contactData.email || contactData.phone;
+    if (messages.length > 2 && !hasContact && flowType !== 'completed') {
+      setShowExitCapture(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handlePersistentMenuClick = (action: string) => {
+    setFlowType('idle');
+    setQualStep(1);
+    setContactStep(1);
+    setBookingDate(null);
+    setBookingTime(null);
+
+    const labels: Record<string, string> = {
+      home: '🏠 Home',
+      solutions: '🛡 Solutions',
+      academy: '🎓 Academy',
+      consultation: '📅 Consultation',
+      whatsapp: '☎ WhatsApp'
+    };
+
+    setMessages(prev => [
+      ...prev,
+      { id: Math.random().toString(), sender: 'user', text: labels[action] }
+    ]);
+
+    if (action === 'home') {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [
+          ...prev,
+          {
+            id: Math.random().toString(),
+            sender: 'bot',
+            text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
+            options: [
+              { label: '🔍 Explore Solutions', action: 'explore_solutions' },
+              { label: '📅 Book a Consultation', action: 'book_consultation_start' },
+              { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
+              { label: '🎓 RTI Academy', action: 'menu_academy' }
+            ]
+          }
+        ]);
+      }, 500);
+    } else if (action === 'solutions') {
+      triggerBotResponse('explore_solutions', labels[action]);
+    } else if (action === 'academy') {
+      triggerBotResponse('menu_academy', labels[action]);
+    } else if (action === 'consultation') {
+      triggerBotResponse('book_consultation_start', labels[action]);
+    } else if (action === 'whatsapp') {
+      triggerBotResponse('chat_whatsapp', labels[action]);
+    }
+  };
+
+  const CalendarWidget = ({ onSelect }: { onSelect: (d: string) => void }) => {
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const monthNames = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cells: React.ReactNode[] = [];
+    
+    for (let i = 0; i < firstDay; i++) {
+      cells.push(<div key={`empty-${i}`} className="w-8 h-8" />);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateObj = new Date(year, month, day);
+      const isPast = dateObj < today;
+      const isSunday = dateObj.getDay() === 0;
+      const isDisabled = isPast || isSunday;
+
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+      cells.push(
+        <button
+          key={`day-${day}`}
+          disabled={isDisabled}
+          onClick={() => onSelect(dateStr)}
+          className={`w-8 h-8 text-[11px] font-bold rounded-full flex items-center justify-center transition-all ${
+            isDisabled
+              ? 'text-slate-300 cursor-not-allowed'
+              : 'text-slate-700 hover:bg-blue-600 hover:text-white border border-slate-100 shadow-sm'
+          }`}
+        >
+          {day}
+        </button>
+      );
+    }
+
+    return (
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-3 shadow-md max-w-[280px] mt-2">
+        <div className="flex items-center justify-between mb-3 px-1">
+          <button 
+            onClick={() => setCurrentDate(new Date(year, month - 1, 1))} 
+            className="p-1 hover:bg-slate-100 rounded-lg text-slate-500"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <span className="text-xs font-extrabold text-slate-800">
+            {monthNames[month]} {year}
+          </span>
+          <button 
+            onClick={() => setCurrentDate(new Date(year, month + 1, 1))} 
+            className="p-1 hover:bg-slate-100 rounded-lg text-slate-500"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="grid grid-cols-7 gap-1 text-center mb-1 font-extrabold text-[10px] text-slate-400">
+          <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+        </div>
+        <div className="grid grid-cols-7 gap-1">
+          {cells}
+        </div>
+        <div className="mt-2 text-[9px] text-slate-400 font-semibold text-center border-t border-slate-100 pt-2">
+          Hari Minggu libur. Silakan pilih hari kerja.
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -663,8 +1257,67 @@ export default function Chatbot() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed z-[60] bottom-20 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-24 w-auto sm:w-96 h-[500px] max-w-[calc(100vw-2rem)] sm:max-w-none flex flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden"
+            className="fixed z-[60] bottom-20 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-24 w-auto sm:w-96 h-[520px] max-w-[calc(100vw-2rem)] sm:max-w-none flex flex-col rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden"
           >
+            {/* Exit intent dialog */}
+            {showExitCapture && (
+              <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+                <div className="bg-white rounded-2xl p-5 shadow-2xl border border-slate-100 max-w-[300px] text-center space-y-4">
+                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto">
+                    <Bot className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-sm text-slate-800">Boleh kami hubungi Anda?</h4>
+                    <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                      Sebelum Anda menutup chat, boleh kami kirimkan brosur layanan atau menghubungkan Anda dengan konsultan kami?
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={() => {
+                        setExitCaptureType('email');
+                        setShowExitCapture(false);
+                        setFlowType('exit_capture');
+                        setMessages(prev => [
+                          ...prev,
+                          {
+                            id: Math.random().toString(),
+                            sender: 'bot',
+                            text: "Silakan masukkan alamat Email Anda agar kami dapat mengirimkan penawaran dan katalog layanan RTI:"
+                          }
+                        ]);
+                      }}
+                      className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center justify-center space-x-1.5"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>✉ Kirim via Email</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowExitCapture(false);
+                        setIsOpen(false);
+                        const waUrl = getWhatsAppLink("Halo RTI, saya ingin mendapatkan brosur dan katalog layanan cybersecurity.");
+                        window.open(waUrl, '_blank');
+                      }}
+                      className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center justify-center space-x-1.5"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>💬 Hubungi via WhatsApp</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowExitCapture(false);
+                        setIsOpen(false);
+                      }}
+                      className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all"
+                    >
+                      Tutup Percakapan
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Header */}
             <div className="bg-slate-900 text-white px-4 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
@@ -674,15 +1327,15 @@ export default function Chatbot() {
                   className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
                 />
                 <div>
-                  <div className="font-display font-extrabold text-sm leading-tight">RTI Cyber Assistant</div>
+                  <div className="font-display font-extrabold text-sm leading-tight">RTI AI Consultant</div>
                   <div className="text-[10px] text-slate-400 font-semibold flex items-center space-x-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span>Aktif &bull; Online</span>
+                    <span>Cybersecurity Expert &bull; Online</span>
                   </div>
                 </div>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleCloseClick}
                 className="p-1 rounded hover:bg-slate-800 transition-colors text-slate-400 hover:text-white"
               >
                 <X className="w-5 h-5" />
@@ -710,7 +1363,12 @@ export default function Chatbot() {
                     </div>
                   </div>
 
-                  {/* Render Options (Only for the latest message) */}
+                  {msg.isCalendar && flowType === 'booking_date' && messages[messages.length - 1].id === msg.id && (
+                    <div className="pl-9">
+                      <CalendarWidget onSelect={handleDateSelect} />
+                    </div>
+                  )}
+
                   {msg.options && msg.options.length > 0 && messages[messages.length - 1].id === msg.id && (
                     <div className="flex flex-wrap gap-2 pl-9">
                       {msg.options.map((opt, idx) => (
@@ -740,16 +1398,68 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* Persistent Navigation Menu */}
+            <div className="flex border-t border-slate-100 bg-white justify-around py-2 shrink-0 shadow-inner">
+              <button
+                onClick={() => handlePersistentMenuClick('home')}
+                className="flex flex-col items-center justify-center flex-1 text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <Home className="w-4 h-4" />
+                <span className="text-[9px] font-extrabold mt-0.5">Home</span>
+              </button>
+              <button
+                onClick={() => handlePersistentMenuClick('solutions')}
+                className="flex flex-col items-center justify-center flex-1 text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <Shield className="w-4 h-4" />
+                <span className="text-[9px] font-extrabold mt-0.5">Solutions</span>
+              </button>
+              <button
+                onClick={() => handlePersistentMenuClick('academy')}
+                className="flex flex-col items-center justify-center flex-1 text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span className="text-[9px] font-extrabold mt-0.5">Academy</span>
+              </button>
+              <button
+                onClick={() => handlePersistentMenuClick('consultation')}
+                className="flex flex-col items-center justify-center flex-1 text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <Calendar className="w-4 h-4" />
+                <span className="text-[9px] font-extrabold mt-0.5">Consult</span>
+              </button>
+              <button
+                onClick={() => handlePersistentMenuClick('whatsapp')}
+                className="flex flex-col items-center justify-center flex-1 text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                <span className="text-[9px] font-extrabold mt-0.5">WhatsApp</span>
+              </button>
+            </div>
+
             {/* Input Footer */}
-            <div className="border-t border-slate-200 bg-white">
-              {leadStep > 0 && (
+            <div className="border-t border-slate-200 bg-white shrink-0">
+              {flowType === 'contact_collect' && (
                 <div className="px-3 pt-2 pb-1.5 bg-slate-50/50 border-b border-slate-100 flex items-start space-x-1.5">
                   <Shield className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                   <p className="text-[9px] leading-relaxed text-slate-400 font-medium">
-                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan kami memahami kebutuhan Anda dengan lebih baik sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
+                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan memahami kebutuhan layanan sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
                   </p>
                 </div>
               )}
+              
+              {flowType === 'qualification' && qualStep < 5 && (
+                <div className="px-3 py-1 bg-blue-50 border-b border-blue-100 text-[10px] text-blue-600 font-bold text-center">
+                  Progres Kualifikasi: Langkah {qualStep} dari 4
+                </div>
+              )}
+
+              {flowType === 'contact_collect' && (
+                <div className="px-3 py-1 bg-slate-50 border-b border-slate-100 text-[10px] text-slate-600 font-bold text-center">
+                  Form Kontak: Langkah {contactStep} dari 5
+                </div>
+              )}
+
               <div className="p-3 flex items-center space-x-2">
                 <input
                   type="text"
@@ -757,11 +1467,14 @@ export default function Chatbot() {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder={
-                    leadStep === 1 ? 'Ketik nama lengkap Anda...' :
-                    leadStep === 2 ? 'Ketik nama perusahaan Anda...' :
-                    leadStep === 4 ? 'Ketik alamat email Anda...' :
-                    leadStep === 5 ? 'Ketik nomor HP WhatsApp...' :
-                    'Ketik pesan Anda...'
+                    flowType === 'contact_collect'
+                      ? contactStep === 1 ? 'Ketik nama lengkap Anda...'
+                        : contactStep === 2 ? 'Ketik nama perusahaan Anda...'
+                        : contactStep === 3 ? 'Ketik alamat email Anda...'
+                        : contactStep === 4 ? 'Ketik nomor HP/WhatsApp...'
+                        : 'Ketik jabatan Anda...'
+                      : flowType === 'exit_capture' ? 'Ketik alamat email Anda...'
+                      : 'Ketik pesan Anda...'
                   }
                   className="flex-1 text-xs font-semibold text-slate-800 border border-slate-200 focus:border-blue-500 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 focus:outline-none transition-all duration-200"
                 />

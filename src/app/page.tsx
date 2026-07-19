@@ -485,7 +485,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-10 pb-20 lg:pt-16 lg:pb-28 overflow-hidden bg-slate-50 cyber-grid">
+      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 overflow-hidden bg-slate-50 cyber-grid">
         {/* Background Glowing Effects */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] aurora-blue opacity-50 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] aurora-cyan opacity-40 blur-3xl pointer-events-none" />
