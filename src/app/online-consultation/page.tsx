@@ -8,7 +8,7 @@ import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { 
   Calendar as CalendarIcon, Clock, Video, User, CheckCircle2, 
-  HelpCircle, ChevronRight, Laptop, VideoOff, Loader2
+  HelpCircle, ChevronRight, Laptop, VideoOff, Loader2, ExternalLink
 } from 'lucide-react';
 
 const timeSlots = [
@@ -29,6 +29,16 @@ export default function OnlineConsultation() {
   const [bookedSlots, setBookedSlots] = useState<{ date: string, time: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+
+  const getCleanWhatsAppNumber = () => {
+    const rawNumber = siteConfig?.general?.whatsappNumber || '0856-6872-2734';
+    const clean = rawNumber.replace(/\D/g, '');
+    if (clean.startsWith('0')) {
+      return '62' + clean.slice(1);
+    }
+    return clean.startsWith('62') ? clean : '62' + clean;
+  };
 
   const [bookingDetails, setBookingDetails] = useState({
     topic: 'Cybersecurity Governance & IT GRC',
@@ -51,6 +61,11 @@ export default function OnlineConsultation() {
         }
       })
       .catch(err => console.error('Failed to load booked slots:', err));
+
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSiteConfig(data))
+      .catch(err => console.error('Settings fallback in online consultation.'));
   }, []);
 
   const isSlotBooked = (date: string, time: string) => {
@@ -429,10 +444,21 @@ export default function OnlineConsultation() {
                     </div>
                   </div>
 
-                  <div className="pt-6">
+                  <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a
+                      href={`https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(
+                        `Halo Admin RTI, saya baru saja melakukan Booking Virtual Consultation.\n\nDetail Pertemuan:\n• Nama: ${bookingDetails.name}\n• Perusahaan: ${bookingDetails.company}\n• Topik: ${bookingDetails.topic}\n• Jadwal: ${bookingDetails.date} pukul ${bookingDetails.time}\n• Platform: ${bookingDetails.platform}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center space-x-1.5"
+                    >
+                      <span>Kirim Konfirmasi ke WhatsApp Admin</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                     <Link
                       href="/"
-                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+                      className="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors text-center inline-block"
                     >
                       Kembali ke Beranda
                     </Link>

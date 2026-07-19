@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,7 +9,7 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 import { 
   GraduationCap, ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, 
   User, Mail, Phone, Briefcase, Award, BookOpen, AlertCircle,
-  FileText, CreditCard, Plus, Trash2, Check, PenTool
+  FileText, CreditCard, Plus, Trash2, Check, PenTool, ExternalLink
 } from 'lucide-react';
 
 interface CertificationEntry {
@@ -20,6 +20,24 @@ interface CertificationEntry {
 
 export default function AcademyRegisterPage() {
   const [step, setStep] = useState(1);
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(res => res.json())
+      .then(data => setSiteConfig(data))
+      .catch(err => console.log('Settings fallback in register page.'));
+  }, []);
+
+  const getCleanWhatsAppNumber = () => {
+    const rawNumber = siteConfig?.general?.whatsappNumber || '0856-6872-2734';
+    const clean = rawNumber.replace(/\D/g, '');
+    if (clean.startsWith('0')) {
+      return '62' + clean.slice(1);
+    }
+    return clean.startsWith('62') ? clean : '62' + clean;
+  };
+
   const [formData, setFormData] = useState({
     // A. Informasi Program
     classOption: 'Basic Level',
@@ -1266,10 +1284,21 @@ export default function AcademyRegisterPage() {
                     Tim akademik kami akan segera melakukan verifikasi dokumen dan mengirimkan tautan <strong>Placement Assessment</strong> ke nomor WhatsApp atau email Anda dalam 1x24 jam kerja.
                   </p>
                 </div>
-                <div className="pt-4">
+                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <a
+                    href={`https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(
+                      `Halo Admin RTI, saya baru saja mengirimkan Pendaftaran Resmi untuk RTI Cybersecurity Academy.\n\nDetail Pendaftaran:\n• Nama: ${formData.name}\n• Kelas: ${formData.classOption}\n• Tipe: ${formData.participantType}\n• Email: ${formData.email}\n• WhatsApp: ${formData.phone}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center space-x-1.5"
+                  >
+                    <span>Hubungi Admin via WhatsApp</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                   <Link 
                     href="/academy"
-                    className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors inline-block"
+                    className="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors text-center inline-block"
                   >
                     Kembali ke RTI Academy
                   </Link>
