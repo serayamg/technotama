@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,7 +8,7 @@ import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import { 
   Calendar as CalendarIcon, Clock, Video, User, CheckCircle2, 
-  HelpCircle, ChevronRight, Laptop, VideoOff
+  HelpCircle, ChevronRight, Laptop, VideoOff, Loader2
 } from 'lucide-react';
 
 const timeSlots = [
@@ -26,6 +26,10 @@ const topics = [
 
 export default function OnlineConsultation() {
   const [step, setStep] = useState(1);
+  const [bookedSlots, setBookedSlots] = useState<{ date: string, time: string }[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const [bookingDetails, setBookingDetails] = useState({
     topic: 'Cybersecurity Governance & IT GRC',
     date: '2026-07-20', // Default date
@@ -37,6 +41,21 @@ export default function OnlineConsultation() {
     phone: '',
     description: ''
   });
+
+  useEffect(() => {
+    fetch('/api/bookings')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setBookedSlots(data);
+        }
+      })
+      .catch(err => console.error('Failed to load booked slots:', err));
+  }, []);
+
+  const isSlotBooked = (date: string, time: string) => {
+    return bookedSlots.some(b => b.date === date && b.time === time);
+  };
 
   const handleSelectTopic = (name: string) => {
     setBookingDetails(prev => ({ ...prev, topic: name }));
@@ -52,10 +71,33 @@ export default function OnlineConsultation() {
     setBookingDetails(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleConfirmBooking = (e: React.FormEvent) => {
+  const handleConfirmBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStep(4);
-    console.log('[AUDIT LOG] Meeting booked: topic=', bookingDetails.topic, 'date=', bookingDetails.date, 'time=', bookingDetails.time, 'platform=', bookingDetails.platform);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingDetails)
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setSubmitError(data.error || 'Terjadi kesalahan saat membuat booking.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      setBookedSlots(prev => [...prev, { date: bookingDetails.date, time: bookingDetails.time }]);
+      setStep(4);
+      console.log('[AUDIT LOG] Meeting booked: topic=', bookingDetails.topic, 'date=', bookingDetails.date, 'time=', bookingDetails.time, 'platform=', bookingDetails.platform);
+    } catch (err) {
+      setSubmitError('Koneksi internet bermasalah. Silakan coba lagi.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -183,19 +225,26 @@ export default function OnlineConsultation() {
                     <div className="md:col-span-6 space-y-3">
                       <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Slot Waktu Tersedia</label>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {timeSlots.map((slot, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => handleSelectDateTime(bookingDetails.date, slot)}
-                            className={`p-3 rounded-lg border text-xs font-semibold text-center transition-all ${
-                              bookingDetails.time === slot
-                                ? 'bg-blue-600 text-white border-blue-600'
-                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                            }`}
-                          >
-                            {slot}
-                          </button>
-                        ))}
+                        {timeSlots.map((slot, idx) => {
+                          const booked = isSlotBooked(bookingDetails.date, slot);
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              disabled={booked}
+                              onClick={() => handleSelectDateTime(bookingDetails.date, slot)}
+                              className={`p-3 rounded-lg border text-xs font-semibold text-center transition-all ${
+                                booked
+                                  ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed line-through'
+                                  : bookingDetails.time === slot
+                                    ? 'bg-blue-600 text-white border-blue-600 cursor-pointer'
+                                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 cursor-pointer'
+                              }`}
+                            >
+                              {slot} {booked && ' (Booked)'}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -318,19 +367,28 @@ export default function OnlineConsultation() {
                     </label>
                   </div>
 
+                  {submitError && (
+                    <div className="p-3.5 bg-red-50 border border-red-200 text-red-800 text-xs font-bold rounded-xl">
+                      {submitError}
+                    </div>
+                  )}
+
                   <div className="pt-6 flex justify-between border-t border-slate-100">
                     <button
                       type="button"
+                      disabled={isSubmitting}
                       onClick={() => setStep(2)}
-                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer"
+                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors cursor-pointer disabled:opacity-50"
                     >
                       Kembali
                     </button>
                     <button
                       type="submit"
-                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer"
+                      disabled={isSubmitting}
+                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
                     >
-                      Jadwalkan Pertemuan
+                      {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      <span>{isSubmitting ? 'Memproses...' : 'Jadwalkan Pertemuan'}</span>
                     </button>
                   </div>
                 </form>

@@ -152,3 +152,17 @@ model AcademyRegistration {
   
   createdAt        DateTime @default(now())
 }
+
+model Booking {
+  id          String   @id @default(uuid())
+  topic       String
+  date        String   // Format: YYYY-MM-DD
+  time        String   // E.g.: "10:30 - 11:30 WIB"
+  platform    String
+  name        String
+  email       String
+  company     String
+  phone       String
+  description String?
+  createdAt   DateTime @default(now())
+}
