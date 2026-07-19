@@ -568,37 +568,22 @@ export default function ServiceDetail() {
               {/* Tab Content */}
               <div className="p-8">
                 {activeTab === 'overview' && (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    {/* Left/Main Column: Description & Benefits */}
-                    <div className="lg:col-span-7 space-y-8">
-                      <div className="space-y-3">
-                        <h3 className="font-display font-extrabold text-base text-slate-900">Deskripsi Layanan</h3>
-                        <p className="text-xs leading-relaxed text-slate-600 whitespace-pre-line">{service.overview}</p>
-                      </div>
-
-                      <div className="space-y-4">
-                        <h3 className="font-display font-extrabold text-base text-slate-900">Manfaat Utama</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          {service.benefits.map((b, idx) => (
-                            <div key={idx} className="flex items-start space-x-2.5">
-                              <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                              <span className="text-xs text-slate-600 leading-normal">{b}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                  <div className="space-y-8">
+                    {/* Description & Benefits */}
+                    <div className="space-y-3">
+                      <h3 className="font-display font-extrabold text-base text-slate-900">Deskripsi Layanan</h3>
+                      <p className="text-xs leading-relaxed text-slate-600 whitespace-pre-line">{service.overview}</p>
                     </div>
 
-                    {/* Right/Sidebar Column: Illustration */}
-                    <div className="lg:col-span-5 space-y-4">
-                      <h3 className="font-display font-extrabold text-base text-slate-900">Ilustrasi & Infografis</h3>
-                      <div className="border border-slate-200/80 rounded-xl overflow-hidden shadow-sm bg-slate-50 relative group">
-                        <img 
-                          src={imageUrl} 
-                          alt={`Ilustrasi ${service.title}`}
-                          className="w-full h-auto object-cover max-h-[250px] mx-auto hover:scale-105 transition-all duration-300"
-                        />
-                        <div className="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="space-y-4">
+                      <h3 className="font-display font-extrabold text-base text-slate-900">Manfaat Utama</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {service.benefits.map((b, idx) => (
+                          <div key={idx} className="flex items-start space-x-2.5">
+                            <Check className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                            <span className="text-xs text-slate-600 leading-normal">{b}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
