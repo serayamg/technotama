@@ -24,7 +24,7 @@ export default function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Custom Flow States
-  const [flowType, setFlowType] = useState<'idle' | 'qualification' | 'booking_date' | 'booking_time' | 'contact_collect' | 'exit_capture' | 'completed'>('idle');
+  const [flowType, setFlowType] = useState<'idle' | 'qualification' | 'booking_date' | 'booking_time' | 'contact_collect' | 'exit_capture' | 'completed' | 'academy_who' | 'academy_goal' | 'academy_upgrade' | 'academy_cert' | 'academy_switch' | 'academy_assessment' | 'academy_enroll'>('idle');
   
   // For contact collection step
   const [contactStep, setContactStep] = useState(1); // 1: Name, 2: Company, 3: Email, 4: Phone, 5: Title
@@ -35,7 +35,29 @@ export default function Chatbot() {
     phone: '',
     title: '',
   });
-  const [contactPurpose, setContactPurpose] = useState<'booking' | 'proposal'>('proposal');
+  const [contactPurpose, setContactPurpose] = useState<'booking' | 'proposal' | 'academic_booking'>('proposal');
+
+  // Academy Flow States
+  const [preQualIntent, setPreQualIntent] = useState<'solutions' | 'academy' | null>(null);
+  const [acadGoal, setAcadGoal] = useState<string | null>(null);
+  const [acadAssessmentStep, setAcadAssessmentStep] = useState(1); // 1: Usia, 2: Pendidikan, 3: Pengalaman IT, 4: Target
+  const [acadAssessmentData, setAcadAssessmentData] = useState({
+    age: '',
+    education: '',
+    experience: '',
+    target: '',
+  });
+  const [acadEnrollStep, setAcadEnrollStep] = useState(1); // 1: Nama, 2: Email, 3: WhatsApp, 4: Domisili, 5: Pendidikan, 6: Pekerjaan, 7: Kelas, 8: Target mulai
+  const [acadEnrollData, setAcadEnrollData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+    domisili: '',
+    pendidikan: '',
+    pekerjaan: '',
+    kelas: '',
+    targetMulai: '',
+  });
 
   // Qualification State
   const [qualStep, setQualStep] = useState(1); // 1: Industry, 2: Karyawan, 3: Tantangan, 4: Timeline
@@ -162,12 +184,12 @@ export default function Chatbot() {
       {
         id: '1',
         sender: 'bot',
-        text: '👋 Selamat datang di RTI - Riset Teknologi Indonesia.\n\nSaya RTI AI Cybersecurity Consultant.\n\nSaya dapat membantu Anda memilih solusi cybersecurity yang tepat dalam waktu kurang dari 2 menit.',
+        text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
         options: [
-          { label: '🔍 Explore Solutions', action: 'explore_solutions' },
-          { label: '📅 Book a Consultation', action: 'book_consultation_start' },
-          { label: '💬 Chat via WhatsApp', action: 'chat_whatsapp' },
-          { label: '🎓 RTI Academy', action: 'menu_academy' }
+          { label: '🛡 Explore Solutions', action: 'explore_solutions' },
+          { label: '🎓 RTI Academy', action: 'menu_academy' },
+          { label: '📅 Book Consultation', action: 'book_consultation_start' },
+          { label: '💬 WhatsApp', action: 'chat_whatsapp' }
         ]
       }
     ]);
@@ -1013,7 +1035,9 @@ export default function Chatbot() {
       } else {
         // Submit booking
         try {
-          const descStr = `Jabatan: ${updatedData.title}. Industri: ${qualData.industry || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}.`;
+          const descStr = contactPurpose === 'academic_booking'
+            ? `Konsultasi Akademik/Karir RTI Academy. Pekerjaan: ${updatedData.company || 'N/A'}. Pendidikan: ${updatedData.title || 'N/A'}.`
+            : `Jabatan: ${updatedData.title}. Industri: ${qualData.industry || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}.`;
           
           await fetch('/api/bookings', {
             method: 'POST',
@@ -1025,7 +1049,7 @@ export default function Chatbot() {
               platform: 'Google Meet',
               name: updatedData.name,
               email: updatedData.email,
-              company: updatedData.company,
+              company: contactPurpose === 'academic_booking' ? 'Individu' : updatedData.company,
               phone: updatedData.phone,
               description: descStr
             })
@@ -1037,12 +1061,16 @@ export default function Chatbot() {
 
         const gCalLink = getGoogleCalendarLink(bookingDate!, bookingTime!);
 
+        const successText = contactPurpose === 'academic_booking'
+          ? `Terima kasih.\n\nKonsultan Akademik RTI Academy akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`
+          : `Terima kasih.\n\nKonsultan RTI akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`;
+
         setMessages(prev => [
           ...prev,
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: `Terima kasih.\n\nKonsultan RTI akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`,
+            text: successText,
             options: [
               { label: '✔ Add to Google Calendar', action: `gcal:${gCalLink}` },
               { label: '💬 Chat WhatsApp', action: 'chat_whatsapp_booking_done' },

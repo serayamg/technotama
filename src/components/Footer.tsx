@@ -200,8 +200,9 @@ export default function Footer() {
 
         {/* Bottom copyright */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <span>
-            &copy; {currentYear} {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'}. Hak Cipta Dilindungi Undang-Undang.
+          <span className="flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-1.5 text-center md:text-left">
+            <span>&copy; {currentYear} {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'}.</span>
+            <span>Hak Cipta Dilindungi Undang-Undang.</span>
           </span>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">
