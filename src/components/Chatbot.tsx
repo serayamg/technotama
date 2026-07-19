@@ -116,11 +116,25 @@ export default function Chatbot() {
     };
   }, []);
 
+  const [existingBookings, setExistingBookings] = useState<{ date: string; time: string }[]>([]);
+
+  const fetchBookings = () => {
+    fetch('/api/bookings')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setExistingBookings(data);
+        }
+      })
+      .catch(err => console.error('Failed to load bookings:', err));
+  };
+
   useEffect(() => {
     fetch('/api/settings')
       .then(res => res.json())
       .then(data => setSiteConfig(data))
       .catch(err => console.log('WhatsApp fallback used in Chatbot.'));
+    fetchBookings();
   }, []);
 
   const getCleanWhatsAppNumber = () => {
@@ -501,6 +515,7 @@ export default function Chatbot() {
         break;
 
       case 'book_consultation_start':
+        fetchBookings();
         setBookingTopic('General Cybersecurity Consultation');
         setFlowType('booking_date');
         botText = 'Pilih tanggal konsultasi.';
@@ -1089,6 +1104,7 @@ export default function Chatbot() {
     }
 
     if (action === 'acad_career_consultation') {
+      fetchBookings();
       setContactPurpose('academic_booking');
       setFlowType('booking_date');
       setBookingTopic('RTI Academy Career Consultation');
@@ -1359,6 +1375,7 @@ export default function Chatbot() {
     }
 
     if (action === 'acad_consultation_start') {
+      fetchBookings();
       setContactPurpose('academic_booking');
       setFlowType('booking_date');
       setBookingTopic('Academic Consultation');
@@ -1559,6 +1576,7 @@ export default function Chatbot() {
 
     // Book Consultation Trigger
     if (action.startsWith('book_consultation_start')) {
+      fetchBookings();
       const parts = action.split(':');
       const serviceName = parts[1] || 'General Cybersecurity Consultation';
       setBookingTopic(serviceName);
@@ -1777,19 +1795,34 @@ export default function Chatbot() {
     setBookingDate(dateStr);
     setFlowType('booking_time');
     
+    // Find booked slots for this date
+    const bookedForDate = existingBookings.filter(b => b.date === dateStr);
+    const bookedTimes = bookedForDate.map(b => b.time.replace(' WIB', '').trim());
+
+    const allSlots = [
+      { label: '09.00', action: 'book_time:09.00' },
+      { label: '10.00', action: 'book_time:10.00' },
+      { label: '13.00', action: 'book_time:13.00' },
+      { label: '15.00', action: 'book_time:15.00' }
+    ];
+
+    // Filter out slots that are already booked
+    const availableSlots = allSlots.filter(slot => {
+      const slotTime = slot.label;
+      const colonTime = slotTime.replace('.', ':');
+      return !bookedTimes.includes(slotTime) && !bookedTimes.includes(colonTime);
+    });
+
     setMessages(prev => [
       ...prev,
       { id: Math.random().toString(), sender: 'user', text: `📅 Tanggal: ${dateStr}` },
       {
         id: Math.random().toString(),
         sender: 'bot',
-        text: 'Pilih Jam',
-        options: [
-          { label: '09.00', action: 'book_time:09.00' },
-          { label: '10.00', action: 'book_time:10.00' },
-          { label: '13.00', action: 'book_time:13.00' },
-          { label: '15.00', action: 'book_time:15.00' }
-        ]
+        text: availableSlots.length > 0
+          ? 'Pilih Jam'
+          : 'Maaf, semua slot waktu pada tanggal ini sudah penuh. Silakan pilih tanggal yang lain.',
+        options: availableSlots
       }
     ]);
   };
@@ -2301,13 +2334,23 @@ export default function Chatbot() {
       cells.push(<div key={`empty-${i}`} className="w-8 h-8" />);
     }
 
+    const isDateFullyBooked = (dateStr: string) => {
+      const bookedSlotsForDate = existingBookings.filter(b => b.date === dateStr);
+      const normalizedTimes = bookedSlotsForDate.map(b => b.time.replace(' WIB', '').trim());
+      const slots = ['09.00', '10.00', '13.00', '15.00'];
+      return slots.every(s => 
+        normalizedTimes.includes(s) || 
+        normalizedTimes.includes(s.replace('.', ':'))
+      );
+    };
+
     for (let day = 1; day <= daysInMonth; day++) {
       const dateObj = new Date(year, month, day);
       const isPast = dateObj < today;
       const isSunday = dateObj.getDay() === 0;
-      const isDisabled = isPast || isSunday;
-
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const isFullyBooked = isDateFullyBooked(dateStr);
+      const isDisabled = isPast || isSunday || isFullyBooked;
 
       cells.push(
         <button
