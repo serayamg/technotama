@@ -920,7 +920,7 @@ export default function AcademyPage() {
             <div className="relative space-y-4">
               <h2 className="font-display font-extrabold text-2xl lg:text-3xl">Siap Menjadi Tenaga Kerja Siber Unggulan?</h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-                Tentukan jalur karir siber Anda hari ini. Ambil Assessment awal gratis untuk memetakan individual learning plan Anda di RTI Academy.
+                Tentukan jalur karir siber Anda hari ini. Ambil Assessment awal gratis untuk memetakan individual learning plan Anda di Cyber Academy.
               </p>
               <div className="pt-4 flex justify-center gap-3">
                 <Link

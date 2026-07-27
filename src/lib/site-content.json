@@ -11,7 +11,7 @@
     "showPhone": false,
     "whatsappNumbers": [
       { "label": "Customer Support & General", "number": "0878-8333-6017" },
-      { "label": "Admisi RTI Academy", "number": "0878-8333-6017" }
+      { "label": "Admisi Cyber Academy", "number": "0878-8333-6017" }
     ]
   },
   "hero": {
@@ -37,7 +37,7 @@
     },
     {
       "id": "academy",
-      "name": "RTI Academy",
+      "name": "Cyber Academy",
       "path": "/academy"
     },
     {

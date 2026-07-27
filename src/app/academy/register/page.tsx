@@ -284,7 +284,7 @@ export default function AcademyRegisterPage() {
             className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke RTI Academy</span>
+            <span>Kembali ke Cyber Academy</span>
           </Link>
         </div>
 
@@ -1112,7 +1112,7 @@ export default function AcademyRegisterPage() {
                             className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                           />
                           <span className="text-[10px] leading-relaxed text-slate-500 font-bold">
-                            Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pendaftaran program bootcamp RTI Academy ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                            Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pendaftaran program bootcamp Cyber Academy ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                           </span>
                         </label>
 
@@ -1125,7 +1125,7 @@ export default function AcademyRegisterPage() {
                             className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                           />
                           <span className="text-[10px] leading-relaxed text-slate-500 font-bold">
-                            Saya menyetujui seluruh Terms and Conditions (poin P) yang diberlakukan oleh penyelenggara RTI Academy. *
+                            Saya menyetujui seluruh Terms and Conditions (poin P) yang diberlakukan oleh penyelenggara Cyber Academy. *
                           </span>
                         </label>
                       </div>
@@ -1172,7 +1172,7 @@ export default function AcademyRegisterPage() {
                             <span className="font-signature text-xl text-blue-600/90 italic tracking-wider block mb-1">
                               {formData.signatureName || '[ E-Signature ]'}
                             </span>
-                            <span className="text-[8px] font-semibold text-slate-400 block">SISTEM VALIDASI DIGITAL RTI ACADEMY</span>
+                            <span className="text-[8px] font-semibold text-slate-400 block">SISTEM VALIDASI DIGITAL CYBER ACADEMY</span>
                           </div>
                         </div>
 
@@ -1300,7 +1300,7 @@ export default function AcademyRegisterPage() {
                     href="/academy"
                     className="w-full sm:w-auto px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors text-center inline-block"
                   >
-                    Kembali ke RTI Academy
+                    Kembali ke Cyber Academy
                   </Link>
                 </div>
               </div>

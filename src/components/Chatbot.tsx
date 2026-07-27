@@ -94,7 +94,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Terima kasih telah mengunjungi RTI - Technotama.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun RTI Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
+          text: 'Terima kasih telah mengunjungi RTI - Technotama.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun Cyber Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
         }
       ]);
       setFlowType('completed');
@@ -201,7 +201,7 @@ export default function Chatbot() {
         text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
         options: [
           { label: '🛡 Explore Solutions', action: 'explore_solutions' },
-          { label: '🎓 RTI Academy', action: 'menu_academy' },
+          { label: '🎓 Cyber Academy', action: 'menu_academy' },
           { label: '📅 Book Consultation', action: 'book_consultation_start' },
           { label: '💬 WhatsApp', action: 'chat_whatsapp' }
         ]
@@ -609,7 +609,7 @@ export default function Chatbot() {
           text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
           options: [
             { label: '🛡 Explore Solutions', action: 'explore_solutions' },
-            { label: '🎓 RTI Academy', action: 'menu_academy' },
+            { label: '🎓 Cyber Academy', action: 'menu_academy' },
             { label: '📅 Book Consultation', action: 'book_consultation_start' },
             { label: '💬 WhatsApp', action: 'chat_whatsapp' }
           ]
@@ -685,7 +685,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Senang bertemu dengan Anda.\n\nApa tujuan Anda mengikuti RTI Academy?',
+          text: 'Senang bertemu dengan Anda.\n\nApa tujuan Anda mengikuti Cyber Academy?',
           options: [
             { label: '🚀 Ingin Berkarir di Cybersecurity', action: 'acad_goal:career' },
             { label: '📈 Upgrade Skill', action: 'acad_goal:upgrade' },
@@ -708,7 +708,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Pilihan yang tepat.\n\nRTI Academy memiliki Bootcamp yang dirancang untuk mempersiapkan peserta menjadi tenaga cybersecurity yang siap bekerja.',
+          text: 'Pilihan yang tepat.\n\nCyber Academy memiliki Bootcamp yang dirancang untuk mempersiapkan peserta menjadi tenaga cybersecurity yang siap bekerja.',
           options: [
             { label: 'Lihat Bootcamp', action: 'acad_view_bootcamps' },
             { label: 'Lihat Roadmap Belajar', action: 'acad_view_roadmap' },
@@ -791,7 +791,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: `Berdasarkan pilihan Anda, kami merekomendasikan:\n\n${recText}\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?`,
+          text: `Berdasarkan pilihan Anda, kami merekomendasikan:\n\n${recText}\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?`,
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -851,7 +851,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: `Pilihan sertifikasi yang sangat baik. Kami menyediakan kelas persiapan sertifikasi ${cert} dengan kurikulum resmi, instruktur berpengalaman, serta latihan soal komprehensif.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?`,
+            text: `Pilihan sertifikasi yang sangat baik. Kami menyediakan kelas persiapan sertifikasi ${cert} dengan kurikulum resmi, instruktur berpengalaman, serta latihan soal komprehensif.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?`,
             options: [
               { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
               { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1049,7 +1049,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Estimasi waktu belajar: 6–9 bulan.\n\nTingkat keberhasilan sangat bergantung pada komitmen belajar dan praktik. RTI Academy menyediakan pembelajaran berbasis proyek, simulasi, dan pendampingan agar peserta memiliki pengalaman yang relevan dengan kebutuhan industri.',
+          text: 'Estimasi waktu belajar: 6–9 bulan.\n\nTingkat keberhasilan sangat bergantung pada komitmen belajar dan praktik. Cyber Academy menyediakan pembelajaran berbasis proyek, simulasi, dan pendampingan agar peserta memiliki pengalaman yang relevan dengan kebutuhan industri.',
           options: [
             { label: 'Basic', action: 'acad_detail:basic' },
             { label: 'Intermediate', action: 'acad_detail:intermediate' },
@@ -1072,7 +1072,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Berikut adalah program Bootcamp di RTI Academy:',
+          text: 'Berikut adalah program Bootcamp di Cyber Academy:',
           options: [
             { label: '🟢 Basic Bootcamp', action: 'acad_detail:basic' },
             { label: '🔵 Intermediate Bootcamp', action: 'acad_detail:intermediate' },
@@ -1093,7 +1093,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Rekomendasi Jalur Belajar (Roadmap):\n\n🟢 Basic (8 minggu) -> Fundamental & Linux\n↓\n🔵 Intermediate (12 minggu) -> SOC, SIEM & Pentesting\n↓\n🟣 Advanced (16 minggu) -> Red Team & Incident Response\n↓\n🏆 Persiapan Sertifikasi Internasional\n↓\n💼 Pendampingan Kerja (Job Ready)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Rekomendasi Jalur Belajar (Roadmap):\n\n🟢 Basic (8 minggu) -> Fundamental & Linux\n↓\n🔵 Intermediate (12 minggu) -> SOC, SIEM & Pentesting\n↓\n🟣 Advanced (16 minggu) -> Red Team & Incident Response\n↓\n🏆 Persiapan Sertifikasi Internasional\n↓\n💼 Pendampingan Kerja (Job Ready)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1107,7 +1107,7 @@ export default function Chatbot() {
       fetchBookings();
       setContactPurpose('academic_booking');
       setFlowType('booking_date');
-      setBookingTopic('RTI Academy Career Consultation');
+      setBookingTopic('Cyber Academy Career Consultation');
       
       setIsTyping(true);
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -1190,7 +1190,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Setelah menyelesaikan Bootcamp Intermediate, peserta dapat mengikuti kelas persiapan sertifikasi internasional sesuai jalur karier yang dipilih.\n\nPilihan sertifikasi meliputi:\n\n🏅 CompTIA Security+\n🏅 CompTIA CySA+\n🏅 CEH\n🏅 CHFI\n🏅 ISO/IEC 27001 Lead Implementer\n🏅 ISO/IEC 27001 Lead Auditor\n🏅 CISSP (bagi peserta yang telah memenuhi persyaratan pengalaman)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Setelah menyelesaikan Bootcamp Intermediate, peserta dapat mengikuti kelas persiapan sertifikasi internasional sesuai jalur karier yang dipilih.\n\nPilihan sertifikasi meliputi:\n\n🏅 CompTIA Security+\n🏅 CompTIA CySA+\n🏅 CEH\n🏅 CHFI\n🏅 ISO/IEC 27001 Lead Implementer\n🏅 ISO/IEC 27001 Lead Auditor\n🏅 CISSP (bagi peserta yang telah memenuhi persyaratan pengalaman)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1230,7 +1230,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Kurikulum Basic Bootcamp:\nMinggu 1-2: Fundamental OS & Networking\nMinggu 3-4: Linux Administration & Security\nMinggu 5-6: Web Fundamentals & OWASP Top 10\nMinggu 7-8: Intro to Ethical Hacking & Security Awareness.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Kurikulum Basic Bootcamp:\nMinggu 1-2: Fundamental OS & Networking\nMinggu 3-4: Linux Administration & Security\nMinggu 5-6: Web Fundamentals & OWASP Top 10\nMinggu 7-8: Intro to Ethical Hacking & Security Awareness.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1249,7 +1249,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Kurikulum Intermediate Bootcamp:\nMinggu 1-3: Security Operations Center (SOC) & SIEM\nMinggu 4-6: Vulnerability Assessment & Penetration Testing\nMinggu 7-9: Incident Response & Threat Hunting\nMinggu 10-12: Cloud Security Fundamentals.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Kurikulum Intermediate Bootcamp:\nMinggu 1-3: Security Operations Center (SOC) & SIEM\nMinggu 4-6: Vulnerability Assessment & Penetration Testing\nMinggu 7-9: Incident Response & Threat Hunting\nMinggu 10-12: Cloud Security Fundamentals.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1268,7 +1268,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Kurikulum Advanced Bootcamp:\nMinggu 1-4: Red Teaming & Active Directory Attacks\nMinggu 5-8: Digital Forensics & Incident Response (DFIR)\nMinggu 9-12: Threat Intelligence & Malware Analysis\nMinggu 13-16: DevSecOps & Cloud Pentesting.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Kurikulum Advanced Bootcamp:\nMinggu 1-4: Red Teaming & Active Directory Attacks\nMinggu 5-8: Digital Forensics & Incident Response (DFIR)\nMinggu 9-12: Threat Intelligence & Malware Analysis\nMinggu 13-16: DevSecOps & Cloud Pentesting.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1287,7 +1287,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Paket Belajar RTI Academy:\n- Basic Bootcamp: Rp 3.500.000\n- Intermediate Bootcamp: Rp 6.000.000\n- Advanced Bootcamp: Rp 8.500.000\n- Bundle Complete: Rp 15.000.000\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Paket Belajar Cyber Academy:\n- Basic Bootcamp: Rp 3.500.000\n- Intermediate Bootcamp: Rp 6.000.000\n- Advanced Bootcamp: Rp 8.500.000\n- Bundle Complete: Rp 15.000.000\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1306,7 +1306,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Diskon Early Bird 10% untuk pendaftaran 2 minggu sebelum kelas dimulai, serta diskon kelompok sebesar 15% (minimal 3 orang).\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Diskon Early Bird 10% untuk pendaftaran 2 minggu sebelum kelas dimulai, serta diskon kelompok sebesar 15% (minimal 3 orang).\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1325,7 +1325,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Tersedia cicilan tanpa bunga (0%) hingga 3x pembayaran atau opsi pembiayaan cicilan bulanan melalui mitra kami.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Tersedia cicilan tanpa bunga (0%) hingga 3x pembayaran atau opsi pembiayaan cicilan bulanan melalui mitra kami.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1344,7 +1344,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Paket pelatihan khusus untuk peningkatan kompetensi tim IT & Security korporasi dengan materi dan jadwal yang fleksibel.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Paket pelatihan khusus untuk peningkatan kompetensi tim IT & Security korporasi dengan materi dan jadwal yang fleksibel.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1368,7 +1368,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Siap bergabung bersama RTI Academy?\n\nMari isi form pendaftaran singkat.\n\nSiapa nama lengkap Anda?'
+          text: 'Siap bergabung bersama Cyber Academy?\n\nMari isi form pendaftaran singkat.\n\nSiapa nama lengkap Anda?'
         }
       ]);
       return;
@@ -1404,7 +1404,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Anda dapat men-download Brosur Lengkap Bootcamp RTI Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://rti.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di RTI Academy?',
+          text: 'Anda dapat men-download Brosur Lengkap Bootcamp Cyber Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://rti.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1429,7 +1429,7 @@ export default function Chatbot() {
             { label: '⚙ Governance & Compliance', action: 'menu_gov' },
             { label: '🔍 Assessment & Testing', action: 'menu_assessment' },
             { label: '🛡 Security Operations', action: 'menu_secops' },
-            { label: '🎓 RTI Academy', action: 'menu_academy' },
+            { label: '🎓 Cyber Academy', action: 'menu_academy' },
             { label: '💬 Tulis Pertanyaan Sendiri', action: 'write_own_question' }
           ]
         }
@@ -1465,12 +1465,12 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Terima kasih telah mengunjungi RTI Academy.\n\nCybersecurity merupakan salah satu bidang dengan pertumbuhan karier yang sangat pesat. Melalui kurikulum berbasis praktik, studi kasus industri, dan pendampingan dari para praktisi, RTI Academy membantu Anda membangun kompetensi yang relevan dengan kebutuhan dunia kerja.\n\nJika Anda ingin mendiskusikan jalur belajar yang paling sesuai atau membutuhkan informasi lebih lanjut mengenai kelas, jadwal, maupun sertifikasi, kami siap membantu.',
+            text: 'Terima kasih telah mengunjungi Cyber Academy.\n\nCybersecurity merupakan salah satu bidang dengan pertumbuhan karier yang sangat pesat. Melalui kurikulum berbasis praktik, studi kasus industri, dan pendampingan dari para praktisi, Cyber Academy membantu Anda membangun kompetensi yang relevan dengan kebutuhan dunia kerja.\n\nJika Anda ingin mendiskusikan jalur belajar yang paling sesuai atau membutuhkan informasi lebih lanjut mengenai kelas, jadwal, maupun sertifikasi, kami siap membantu.',
             options: [
               { label: '🚀 Daftar Bootcamp Sekarang', action: 'acad_enroll_start' },
               { label: '📅 Book Free Academic Consultation', action: 'acad_consultation_start' },
               { label: '🎓 Lihat Roadmap Karier Cybersecurity', action: 'acad_view_roadmap' },
-              { label: '💬 Chat RTI Academy', action: 'open_whatsapp_now' }
+              { label: '💬 Chat Cyber Academy', action: 'open_whatsapp_now' }
             ]
           }
         ]);
@@ -1908,7 +1908,7 @@ export default function Chatbot() {
         // Submit booking
         try {
           const descStr = contactPurpose === 'academic_booking'
-            ? `Konsultasi Akademik/Karir RTI Academy. Pekerjaan: ${updatedData.company || 'N/A'}. Pendidikan: ${updatedData.title || 'N/A'}.`
+            ? `Konsultasi Akademik/Karir Cyber Academy. Pekerjaan: ${updatedData.company || 'N/A'}. Pendidikan: ${updatedData.title || 'N/A'}.`
             : `Jabatan: ${updatedData.title}. Industri: ${qualData.industry || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}.`;
           
           await fetch('/api/bookings', {
@@ -1934,7 +1934,7 @@ export default function Chatbot() {
         const gCalLink = getGoogleCalendarLink(bookingDate!, bookingTime!);
 
         const successText = contactPurpose === 'academic_booking'
-          ? `Terima kasih.\n\nKonsultan Akademik RTI Academy akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`
+          ? `Terima kasih.\n\nKonsultan Akademik Cyber Academy akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`
           : `Terima kasih.\n\nKonsultan RTI akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`;
 
         setMessages(prev => [
@@ -2098,9 +2098,9 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Meningkatkan kompetensi SDM melalui program pelatihan cybersecurity RTI Academy. Tersedia Cyber Awareness, Technical Training, Bootcamp, dan Sertifikasi.',
+            text: 'Meningkatkan kompetensi SDM melalui program pelatihan cybersecurity Cyber Academy. Tersedia Cyber Awareness, Technical Training, Bootcamp, dan Sertifikasi.',
             options: [
-              { label: '📖 Explore RTI Academy', action: 'menu_academy' },
+              { label: '📖 Explore Cyber Academy', action: 'menu_academy' },
               { label: '🏠 Menu Utama', action: 'go_home' }
             ]
           }
@@ -2214,11 +2214,11 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Terima kasih.\n\nTim RTI Academy akan menghubungi Anda untuk membantu proses pendaftaran, menjelaskan jadwal kelas, metode pembelajaran, pilihan pembayaran, serta menjawab pertanyaan yang mungkin masih Anda miliki.',
+          text: 'Terima kasih.\n\nTim Cyber Academy akan menghubungi Anda untuk membantu proses pendaftaran, menjelaskan jadwal kelas, metode pembelajaran, pilihan pembayaran, serta menjawab pertanyaan yang mungkin masih Anda miliki.',
           options: [
             { label: '📅 Jadwalkan Konsultasi Akademik', action: 'acad_consultation_start' },
             { label: '📘 Download Brosur Bootcamp', action: 'acad_download_brochure' },
-            { label: '💬 Chat Admin RTI Academy', action: 'open_whatsapp_now' }
+            { label: '💬 Chat Admin Cyber Academy', action: 'open_whatsapp_now' }
           ]
         }
       ]);
@@ -2294,7 +2294,7 @@ export default function Chatbot() {
             text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
             options: [
               { label: '🛡 Explore Solutions', action: 'explore_solutions' },
-              { label: '🎓 RTI Academy', action: 'menu_academy' },
+              { label: '🎓 Cyber Academy', action: 'menu_academy' },
               { label: '📅 Book Consultation', action: 'book_consultation_start' },
               { label: '💬 WhatsApp', action: 'chat_whatsapp' }
             ]
@@ -2654,3 +2654,4 @@ export default function Chatbot() {
     </>
   );
 }
+
