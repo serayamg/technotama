@@ -160,7 +160,7 @@ export default function CustomerPortal() {
             /* Login panel */
             <div className="max-w-md mx-auto">
               <div className="text-center mb-8">
-                <h1 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight">Portal Klien RTI</h1>
+                <h1 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight">Portal Klien Technotama</h1>
                 <p className="text-xs text-slate-500 mt-1">Lacak milestones proyek dan download deliverables Anda secara aman.</p>
               </div>
 

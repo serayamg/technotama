@@ -111,7 +111,7 @@ export default function BlogDetail() {
                 </span>
                 <span className="flex items-center space-x-1">
                   <User className="w-3.5 h-3.5" />
-                  <span>RTI Research Team</span>
+                  <span>Technotama Research Team</span>
                 </span>
               </div>
 
@@ -142,7 +142,7 @@ export default function BlogDetail() {
               <div className="border-t border-slate-100 pt-8 mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-left">
                   <h4 className="font-display font-extrabold text-xs text-slate-800">Butuh bantuan konsultasi keamanan siber?</h4>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Diskusikan perlindungan sistem organisasi Anda bersama tim RTI.</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5">Diskusikan perlindungan sistem organisasi Anda bersama tim Technotama.</p>
                 </div>
                 <Link
                   href="/online-consultation?ref=blog"

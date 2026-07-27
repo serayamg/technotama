@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     if (email) {
       const emailHtml = `
         <p>Halo <strong>${name || 'Klien'}</strong>,</p>
-        <p>Terima kasih telah mempercayakan kebutuhan keamanan siber Anda kepada <strong>PT Risetin Teknologi Indonesia (RTI) Neo</strong>.</p>
+        <p>Terima kasih telah mempercayakan kebutuhan keamanan siber Anda kepada <strong>PT Risetin Teknologi Indonesia (Technotama) Neo</strong>.</p>
         <p>Pemesanan Anda untuk layanan <strong>${serviceType}</strong> dari perusahaan <strong>${companyName}</strong> telah berhasil kami terima dan terdaftar di sistem kami dengan Nomor Proyek: <strong>PROJ-${newOrder.id.substring(0, 8).toUpperCase()}</strong>.</p>
         
         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -77,12 +77,12 @@ export async function POST(request: Request) {
         </p>
 
         <p style="margin-top: 30px;">Tim konsultan teknis kami akan menghubungi Anda dalam waktu 1x24 jam untuk koordinasi kickoff meeting dan tahap pengumpulan informasi awal.</p>
-        <p>Salam hangat,<br/><strong>RTI Customer Success Team</strong></p>
+        <p>Salam hangat,<br/><strong>Technotama Customer Success Team</strong></p>
       `;
 
       await sendProposalEmail({
         to: email,
-        subject: `Aktivasi Akun Portal Klien RTI Neo - ${companyName}`,
+        subject: `Aktivasi Akun Portal Klien Technotama Neo - ${companyName}`,
         html: emailHtml
       }).catch(err => {
         console.error('[API ERROR] Failed to send activation email:', err);

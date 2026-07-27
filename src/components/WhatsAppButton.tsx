@@ -45,7 +45,7 @@ export default function WhatsAppButton() {
     e.preventDefault();
 
     // Assemble text parameter for WhatsApp Business
-    const text = `Halo RTI,
+    const text = `Halo Technotama,
 Saya tertarik menggunakan layanan berikut: ${formData.service}
 
 Nama: ${formData.name}

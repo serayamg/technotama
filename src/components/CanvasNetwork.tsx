@@ -272,7 +272,7 @@ export default function CanvasNetwork() {
         <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Live Threat Intelligence Map</div>
         <div className="flex items-center space-x-1.5 mt-0.5">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-ping" />
-          <div className="text-xs font-bold text-slate-600">RTI SECURE GATEWAY v3.1</div>
+          <div className="text-xs font-bold text-slate-600">Technotama SECURE GATEWAY v3.1</div>
         </div>
       </div>
     </div>

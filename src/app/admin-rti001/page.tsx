@@ -607,7 +607,7 @@ export default function AdminDashboard() {
     setProposalTitle(proposal.proposalTitle || `Proposal Layanan Keamanan Siber ${proposal.serviceType} - ${proposal.company}`);
     setProposalContent(proposal.generatedContent || '');
     setAdditionalInstructions('');
-    setEmailSubject(proposal.proposalTitle || `Penawaran Resmi: ${proposal.serviceType} - RTI Neo`);
+    setEmailSubject(proposal.proposalTitle || `Penawaran Resmi: ${proposal.serviceType} - Technotama Neo`);
     setEmailBody(proposal.generatedContent ? convertMarkdownToHtml(proposal.generatedContent) : '');
     setEmailSendStatus(null);
     setIsBuilderOpen(true);
@@ -651,7 +651,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         setProposalTitle(data.title);
         setProposalContent(data.content);
-        setEmailSubject(`Penawaran Resmi: ${selectedProposal.serviceType} - RTI Neo`);
+        setEmailSubject(`Penawaran Resmi: ${selectedProposal.serviceType} - Technotama Neo`);
         setEmailBody(convertMarkdownToHtml(data.content));
         
         fetchAdminData();
@@ -760,7 +760,7 @@ export default function AdminDashboard() {
             /* Login Admin */
             <div className="max-w-md mx-auto">
               <div className="text-center mb-8">
-                <h1 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight">RTI Administrator CMS</h1>
+                <h1 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight">Technotama Administrator CMS</h1>
                 <p className="text-xs text-slate-500 mt-1">Gunakan otentikasi admin untuk masuk ke konsol manajemen leads.</p>
               </div>
 
@@ -1405,7 +1405,7 @@ export default function AdminDashboard() {
                   {activeTab === 'settings' && siteConfig && (
                     <form onSubmit={handleSubmitSettings} className="space-y-8">
                       <div className="flex items-center justify-between border-b pb-3">
-                        <h2 className="font-display font-extrabold text-base text-slate-900">Pengaturan Konten Website RTI</h2>
+                        <h2 className="font-display font-extrabold text-base text-slate-900">Pengaturan Konten Website Technotama</h2>
                         {settingsSuccess && (
                           <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-lg">
                             Pengaturan Berhasil Disimpan!
@@ -1497,7 +1497,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5">
                                 <label className="block text-[10px] font-bold text-slate-700 uppercase tracking-wider">Daftar Hubungan WhatsApp Terkoneksi</label>
-                                <p className="text-[9px] text-slate-400 font-medium">Nomor WhatsApp departemen/kontak tambahan yang terhubung dengan website RTI.</p>
+                                <p className="text-[9px] text-slate-400 font-medium">Nomor WhatsApp departemen/kontak tambahan yang terhubung dengan website Technotama.</p>
                               </div>
                               <button
                                 type="button"
@@ -2212,7 +2212,7 @@ export default function AdminDashboard() {
                       <select className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-50 focus:outline-none">
                         <option>Gemini 2.5 Flash (Medium - Rekomendasi)</option>
                         <option>Gemini 2.5 Pro (High - Detail & Kompleks)</option>
-                        <option>RTI Local Template Engine (Offline Fallback)</option>
+                        <option>Technotama Local Template Engine (Offline Fallback)</option>
                       </select>
                     </div>
 
@@ -2414,7 +2414,7 @@ export default function AdminDashboard() {
 
                           <div>
                             <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Catatan Pengantar Email (Opsional)</label>
-                            <p className="text-[9px] text-slate-400 mb-1 leading-snug">Konten proposal otomatis terlampir di dalam badan email menggunakan desain RTI resmi.</p>
+                            <p className="text-[9px] text-slate-400 mb-1 leading-snug">Konten proposal otomatis terlampir di dalam badan email menggunakan desain Technotama resmi.</p>
                             <textarea
                               rows={4}
                               value={emailBody.replace(/<[^>]*>/g, '').substring(0, 150) + '...'}

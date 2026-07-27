@@ -71,7 +71,7 @@ const servicesDetails: Record<string, {
     ],
     timeline: '2 - 3 Bulan',
     faq: [
-      { q: 'Bagaimana RTI menilai kematangan tata kelola TI?', a: 'Kami menggunakan metrik COBIT 2019 yang mengklasifikasikan tingkat kematangan dari Level 0 (Incomplete) hingga Level 5 (Optimizing).' }
+      { q: 'Bagaimana Technotama menilai kematangan tata kelola TI?', a: 'Kami menggunakan metrik COBIT 2019 yang mengklasifikasikan tingkat kematangan dari Level 0 (Incomplete) hingga Level 5 (Optimizing).' }
     ]
   },
   'iso-implementation': {
@@ -213,7 +213,7 @@ const servicesDetails: Record<string, {
     methodology: [
       'Target Scope - Mendefinisikan IP Address atau domain target.',
       'Automated Scanning - Menjalankan pemindaian kerentanan otomatis.',
-      'Result Filtering - Menyaring temuan false-positive oleh analis siber RTI.',
+      'Result Filtering - Menyaring temuan false-positive oleh analis siber Technotama.',
       'Prioritization - Mengklasifikasikan celah dari High, Medium, ke Low.'
     ],
     deliverables: [
@@ -228,7 +228,7 @@ const servicesDetails: Record<string, {
   'penetration-testing': {
     title: 'Penetration Testing (Pen-Test)',
     icon: Key,
-    overview: 'Simulasi serangan siber aktif secara terkendali oleh ethical hacker RTI untuk menembus pertahanan aplikasi web, mobile app, API, dan jaringan internal/eksternal klien.',
+    overview: 'Simulasi serangan siber aktif secara terkendali oleh ethical hacker Technotama untuk menembus pertahanan aplikasi web, mobile app, API, dan jaringan internal/eksternal klien.',
     benefits: [
       'Menguji ketahanan sistem secara nyata terhadap skenario eksploitasi canggih.',
       'Memenuhi kepatuhan regulasi OJK terkait audit keamanan berkala sistem keuangan.',
@@ -397,7 +397,7 @@ const servicesDetails: Record<string, {
     ],
     timeline: '1 - 2 Bulan (Penyusunan SOP) / Respon Cepat (Saat Insiden)',
     faq: [
-      { q: 'Berapa cepat tim respon insiden RTI merespon?', a: 'Untuk insiden aktif (ransomware/data breach), tim tanggap darurat kami siap berkoordinasi dalam waktu kurang dari 2 jam setelah laporan diterima.' }
+      { q: 'Berapa cepat tim respon insiden Technotama merespon?', a: 'Untuk insiden aktif (ransomware/data breach), tim tanggap darurat kami siap berkoordinasi dalam waktu kurang dari 2 jam setelah laporan diterima.' }
     ]
   },
   'digital-forensic': {
@@ -619,7 +619,7 @@ export default function ServiceDetail() {
                   <div className="space-y-6">
                     <h3 className="font-display font-extrabold text-base text-slate-900">Deliverables & Laporan Resmi</h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      Di akhir pengerjaan, RTI akan menyerahkan dokumen resmi berikut yang dapat digunakan untuk kepentingan audit internal maupun audit kepatuhan eksternal:
+                      Di akhir pengerjaan, Technotama akan menyerahkan dokumen resmi berikut yang dapat digunakan untuk kepentingan audit internal maupun audit kepatuhan eksternal:
                     </p>
                     <div className="space-y-3">
                       {service.deliverables.map((d, idx) => (

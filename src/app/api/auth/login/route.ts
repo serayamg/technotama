@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'rti-super-secret-key-32-chars-long';
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'Technotama-super-secret-key-32-chars-long';
 
 export async function POST(request: Request) {
   try {

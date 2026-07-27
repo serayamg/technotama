@@ -37,7 +37,7 @@ export default function AcademyPage() {
     return digitsOnly;
   };
 
-  const waLink = `https://wa.me/${getCleanWhatsAppNumber()}?text=Halo%20RTI%20Academy,%20saya%20tertarik%20untuk%20mengikuti%20Cybersecurity%20Bootcamp.%20Boleh%20minta%20informasi%20lebih%20lanjut?`;
+  const waLink = `https://wa.me/${getCleanWhatsAppNumber()}?text=Halo%20Technotama%20Academy,%20saya%20tertarik%20untuk%20mengikuti%20Cybersecurity%20Bootcamp.%20Boleh%20minta%20informasi%20lebih%20lanjut?`;
 
   const targetParticipants = [
     'Fresh Graduate (Lulusan Baru)',
@@ -86,7 +86,7 @@ export default function AcademyPage() {
     'Program Career Coaching intensif',
     'Simulasi wawancara kerja (Mock Interview)',
     'Review CV Profesional & optimasi LinkedIn',
-    'Job Matching dengan perusahaan partner RTI',
+    'Job Matching dengan perusahaan partner Technotama',
     'Akses komunitas alumni cybersecurity'
   ];
 
@@ -863,7 +863,7 @@ export default function AcademyPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Kurikulum RTI didesain secara bertahap agar alumni siap meniti tangga karir profesional siber secara matang:
+                  Kurikulum Technotama didesain secara bertahap agar alumni siap meniti tangga karir profesional siber secara matang:
                 </p>
 
                 <div className="relative border-l border-slate-200 ml-4 pl-6 space-y-8">

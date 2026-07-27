@@ -94,7 +94,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Terima kasih telah mengunjungi RTI - Technotama.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun Cyber Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
+          text: 'Terima kasih telah mengunjungi Technotama.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun Cyber Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
         }
       ]);
       setFlowType('completed');
@@ -161,7 +161,7 @@ export default function Chatbot() {
       needsText = `Tantangan: ${qualData.challenge}. Timeline: ${qualData.timeline}`;
     }
 
-    const defaultMessage = `Halo RTI,\n\nSaya tertarik dengan layanan: ${serviceText}\n\nPerusahaan: ${companyText}\nNama: ${nameText}\nKebutuhan: ${needsText}`;
+    const defaultMessage = `Halo Technotama,\n\nSaya tertarik dengan layanan: ${serviceText}\n\nPerusahaan: ${companyText}\nNama: ${nameText}\nKebutuhan: ${needsText}`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`;
   };
 
@@ -178,8 +178,8 @@ export default function Chatbot() {
     };
     
     const datesStr = `${formatUTC(startLocal)}/${formatUTC(endLocal)}`;
-    const title = encodeURIComponent("Cybersecurity Consultation - RTI");
-    const details = encodeURIComponent(`Konsultasi virtual cybersecurity dengan RTI. Topik: ${bookingTopic}. Dijadwalkan via Google Meet.`);
+    const title = encodeURIComponent("Cybersecurity Consultation - Technotama");
+    const details = encodeURIComponent(`Konsultasi virtual cybersecurity dengan Technotama. Topik: ${bookingTopic}. Dijadwalkan via Google Meet.`);
     
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${datesStr}&details=${details}&location=Google+Meet`;
   };
@@ -198,7 +198,7 @@ export default function Chatbot() {
       {
         id: '1',
         sender: 'bot',
-        text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+        text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
         options: [
           { label: '🛡 Explore Solutions', action: 'explore_solutions' },
           { label: '🎓 Cyber Academy', action: 'menu_academy' },
@@ -279,7 +279,7 @@ export default function Chatbot() {
         break;
 
       case 'menu_secops':
-        botText = 'Lindungi bisnis Anda 24x7 dengan layanan operasi keamanan RTI.';
+        botText = 'Lindungi bisnis Anda 24x7 dengan layanan operasi keamanan Technotama.';
         options = [
           { label: 'Managed SOC', action: 'prod_soc' },
           { label: 'CTI', action: 'prod_cti' },
@@ -301,7 +301,7 @@ export default function Chatbot() {
         break;
 
       case 'menu_academy_corporate_direct':
-        botText = 'Tingkatkan kompetensi SDM melalui program pelatihan cybersecurity RTI.';
+        botText = 'Tingkatkan kompetensi SDM melalui program pelatihan cybersecurity Technotama.';
         options = [
           { label: 'Cyber Awareness', action: 'prod_academy_awareness' },
           { label: 'Technical Training', action: 'prod_academy_technical' },
@@ -338,7 +338,7 @@ export default function Chatbot() {
 
       // Menu Level 2 Governance
       case 'prod_iso_impl':
-        botText = 'RTI mendampingi implementasi ISO/IEC menggunakan pendekatan PDCA hingga proses sertifikasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
+        botText = 'Technotama mendampingi implementasi ISO/IEC menggunakan pendekatan PDCA hingga proses sertifikasi.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
           { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
           { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -433,7 +433,7 @@ export default function Chatbot() {
         break;
 
       case 'prod_incident':
-        botText = 'Tim RTI membantu mendeteksi, mengisolasi dan memulihkan insiden keamanan sesuai NIST Incident Response Framework.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
+        botText = 'Tim Technotama membantu mendeteksi, mengisolasi dan memulihkan insiden keamanan sesuai NIST Incident Response Framework.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
           { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
           { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -500,7 +500,7 @@ export default function Chatbot() {
 
       // Other actions
       case 'view_methodology':
-        botText = 'Metodologi Vulnerability Assessment RTI mencakup:\n1. Reconnaissance & Asset Discovery\n2. Vulnerability Scanning (Nessus, OpenVAS)\n3. Risk Analysis & Prioritization\n4. Reporting & Remediation Guidance\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
+        botText = 'Metodologi Vulnerability Assessment Technotama mencakup:\n1. Reconnaissance & Asset Discovery\n2. Vulnerability Scanning (Nessus, OpenVAS)\n3. Risk Analysis & Prioritization\n4. Reporting & Remediation Guidance\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?';
         options = [
           { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
           { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -606,7 +606,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+          text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
           options: [
             { label: '🛡 Explore Solutions', action: 'explore_solutions' },
             { label: '🎓 Cyber Academy', action: 'menu_academy' },
@@ -906,7 +906,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Tidak perlu khawatir.\n\nBootcamp RTI dimulai dari level Basic sehingga peserta tanpa pengalaman cybersecurity tetap dapat mengikuti.',
+          text: 'Tidak perlu khawatir.\n\nBootcamp Technotama dimulai dari level Basic sehingga peserta tanpa pengalaman cybersecurity tetap dapat mengikuti.',
           options: [
             { label: 'Lihat Detail Bootcamp', action: 'acad_view_bootcamps' },
             { label: 'Mulai Career Assessment', action: 'acad_goal:confused' }
@@ -1035,7 +1035,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Berdasarkan jawaban Anda, jalur belajar yang kami rekomendasikan adalah:\n\nRTI Bootcamp Roadmap\n\n🟢 Basic Bootcamp\n↓\n🔵 Intermediate Bootcamp\n↓\n🟣 Advanced Bootcamp\n↓\n🏆 International Certification\n↓\n💼 Job Ready Program'
+          text: 'Berdasarkan jawaban Anda, jalur belajar yang kami rekomendasikan adalah:\n\nTechnotama Bootcamp Roadmap\n\n🟢 Basic Bootcamp\n↓\n🔵 Intermediate Bootcamp\n↓\n🟣 Advanced Bootcamp\n↓\n🏆 International Certification\n↓\n💼 Job Ready Program'
         }
       ]);
 
@@ -1404,7 +1404,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Anda dapat men-download Brosur Lengkap Bootcamp Cyber Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://rti.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
+          text: 'Anda dapat men-download Brosur Lengkap Bootcamp Cyber Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://Technotama.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -1481,23 +1481,23 @@ export default function Chatbot() {
 
       const closingOptions = [
         {
-          text: "Terima kasih telah berkonsultasi dengan RTI AI Cybersecurity Consultant.\n\nSetiap organisasi memiliki tantangan keamanan siber yang berbeda. Tim konsultan RTI siap membantu Anda merancang solusi yang tepat, efektif, dan sesuai dengan kebutuhan bisnis maupun regulasi industri.",
+          text: "Terima kasih telah berkonsultasi dengan Technotama AI Cybersecurity Consultant.\n\nSetiap organisasi memiliki tantangan keamanan siber yang berbeda. Tim konsultan Technotama siap membantu Anda merancang solusi yang tepat, efektif, dan sesuai dengan kebutuhan bisnis maupun regulasi industri.",
           options: [
             { label: '📅 Book Free Consultation', action: 'book_consultation_start' },
             { label: '📄 Request Proposal', action: 'qual_request_proposal' },
-            { label: '💬 Chat with RTI Expert', action: 'open_whatsapp_now' }
+            { label: '💬 Chat with Technotama Expert', action: 'open_whatsapp_now' }
           ]
         },
         {
-          text: "Keamanan siber bukan hanya tentang teknologi, tetapi tentang menjaga keberlangsungan bisnis, kepercayaan pelanggan, dan kepatuhan terhadap regulasi.\n\nRTI siap menjadi mitra strategis dalam membangun ketahanan siber organisasi Anda.",
+          text: "Keamanan siber bukan hanya tentang teknologi, tetapi tentang menjaga keberlangsungan bisnis, kepercayaan pelanggan, dan kepatuhan terhadap regulasi.\n\nTechnotama siap menjadi mitra strategis dalam membangun ketahanan siber organisasi Anda.",
           options: [
             { label: '📅 Jadwalkan Konsultasi Gratis', action: 'book_consultation_start' },
             { label: '📄 Minta Penawaran', action: 'qual_request_proposal' },
-            { label: '☎ Hubungi Konsultan RTI', action: 'open_whatsapp_now' }
+            { label: '☎ Hubungi Konsultan Technotama', action: 'open_whatsapp_now' }
           ]
         },
         {
-          text: "Terima kasih atas waktu Anda.\n\nTim RTI telah membantu berbagai organisasi dalam meningkatkan tata kelola keamanan siber, memperkuat pertahanan digital, serta memenuhi berbagai kebutuhan kepatuhan dan audit.\n\nKami siap mendiskusikan solusi yang paling sesuai untuk organisasi Anda.",
+          text: "Terima kasih atas waktu Anda.\n\nTim Technotama telah membantu berbagai organisasi dalam meningkatkan tata kelola keamanan siber, memperkuat pertahanan digital, serta memenuhi berbagai kebutuhan kepatuhan dan audit.\n\nKami siap mendiskusikan solusi yang paling sesuai untuk organisasi Anda.",
           options: [
             { label: '🚀 Mulai Diskusi', action: 'open_whatsapp_now' },
             { label: '📅 Book Consultation', action: 'book_consultation_start' },
@@ -1505,7 +1505,7 @@ export default function Chatbot() {
           ]
         },
         {
-          text: "Terima kasih telah menggunakan RTI AI Cybersecurity Consultant.\n\nDalam banyak kasus, konsultasi singkat selama 30 menit sudah cukup untuk mengidentifikasi area risiko utama dan memberikan rekomendasi awal yang dapat segera ditindaklanjuti.\n\nTidak ada biaya konsultasi awal, dan seluruh diskusi dijaga kerahasiaannya melalui komitmen profesional RTI.",
+          text: "Terima kasih telah menggunakan Technotama AI Cybersecurity Consultant.\n\nDalam banyak kasus, konsultasi singkat selama 30 menit sudah cukup untuk mengidentifikasi area risiko utama dan memberikan rekomendasi awal yang dapat segera ditindaklanjuti.\n\nTidak ada biaya konsultasi awal, dan seluruh diskusi dijaga kerahasiaannya melalui komitmen profesional Technotama.",
           options: [
             { label: '📅 Book Free 30-Minute Consultation', action: 'book_consultation_start' },
             { label: '📄 Request Solution Proposal', action: 'qual_request_proposal' },
@@ -1513,7 +1513,7 @@ export default function Chatbot() {
           ]
         },
         {
-          text: "Sebelum mengakhiri percakapan ini, izinkan kami membantu Anda mengambil langkah berikutnya.\n\nTim RTI siap memberikan assessment awal, rekomendasi solusi, hingga estimasi implementasi yang disesuaikan dengan kondisi organisasi Anda tanpa komitmen awal.\n\nMari bangun pertahanan siber yang lebih kuat bersama RTI.",
+          text: "Sebelum mengakhiri percakapan ini, izinkan kami membantu Anda mengambil langkah berikutnya.\n\nTim Technotama siap memberikan assessment awal, rekomendasi solusi, hingga estimasi implementasi yang disesuaikan dengan kondisi organisasi Anda tanpa komitmen awal.\n\nMari bangun pertahanan siber yang lebih kuat bersama Technotama.",
           options: [
             { label: '🛡 Free Security Consultation', action: 'book_consultation_start' },
             { label: '📅 Schedule Meeting', action: 'book_consultation_start' },
@@ -1546,23 +1546,23 @@ export default function Chatbot() {
       return;
     }
     if (action === 'chat_whatsapp_booking_done') {
-      const text = `Halo RTI,\n\nSaya telah menjadwalkan konsultasi pada tanggal ${bookingDate} pukul ${bookingTime} WIB.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
+      const text = `Halo Technotama,\n\nSaya telah menjadwalkan konsultasi pada tanggal ${bookingDate} pukul ${bookingTime} WIB.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
       window.open(getWhatsAppLink(text), '_blank');
       return;
     }
     if (action === 'chat_whatsapp_proposal_done') {
-      const text = `Halo RTI,\n\nSaya tertarik dengan proposal untuk layanan: ${currentContextService || qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
+      const text = `Halo Technotama,\n\nSaya tertarik dengan proposal untuk layanan: ${currentContextService || qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name}\nPerusahaan: ${contactData.company}\nJabatan: ${contactData.title}`;
       window.open(getWhatsAppLink(text), '_blank');
       return;
     }
     if (action === 'chat_whatsapp_qual_done') {
-      const text = `Halo RTI,\n\nSaya tertarik dengan layanan: ${qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name || 'N/A'}\nPerusahaan: ${contactData.company || 'N/A'}\nKebutuhan: Tantangan: ${qualData.challenge}. Timeline: ${qualData.timeline}`;
+      const text = `Halo Technotama,\n\nSaya tertarik dengan layanan: ${qualData.targetService || 'Cybersecurity Solutions'}.\n\nNama: ${contactData.name || 'N/A'}\nPerusahaan: ${contactData.company || 'N/A'}\nKebutuhan: Tantangan: ${qualData.challenge}. Timeline: ${qualData.timeline}`;
       window.open(getWhatsAppLink(text), '_blank');
       return;
     }
     if (action.startsWith('chat_whatsapp:')) {
       const service = action.replace('chat_whatsapp:', '');
-      const text = `Halo RTI,\n\nSaya tertarik dengan layanan: ${service}\n\nPerusahaan:\nNama:\nKebutuhan:`;
+      const text = `Halo Technotama,\n\nSaya tertarik dengan layanan: ${service}\n\nPerusahaan:\nNama:\nKebutuhan:`;
       window.open(getWhatsAppLink(text), '_blank');
       return;
     }
@@ -1897,7 +1897,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: `Terima kasih.\n\nBerdasarkan jawaban Anda, proposal sedang kami siapkan. Konsultan RTI akan menghubungi Anda di ${updatedData.email} atau ${updatedData.phone}.\n\nApakah ada hal lain yang bisa kami bantu?`,
+            text: `Terima kasih.\n\nBerdasarkan jawaban Anda, proposal sedang kami siapkan. Konsultan Technotama akan menghubungi Anda di ${updatedData.email} atau ${updatedData.phone}.\n\nApakah ada hal lain yang bisa kami bantu?`,
             options: [
               { label: '💬 Chat WhatsApp', action: 'chat_whatsapp_proposal_done' },
               { label: '🏠 Menu Utama', action: 'go_home' }
@@ -1935,7 +1935,7 @@ export default function Chatbot() {
 
         const successText = contactPurpose === 'academic_booking'
           ? `Terima kasih.\n\nKonsultan Akademik Cyber Academy akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`
-          : `Terima kasih.\n\nKonsultan RTI akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`;
+          : `Terima kasih.\n\nKonsultan Technotama akan menghubungi Anda sesuai jadwal yang dipilih:\n\n📅 Tanggal: ${bookingDate}\n⏰ Waktu: ${bookingTime} WIB\n📍 Platform: Google Meet`;
 
         setMessages(prev => [
           ...prev,
@@ -2009,7 +2009,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Terima kasih! Brosur dan katalog layanan RTI akan dikirimkan ke email Anda sebentar lagi. Semoga hari Anda menyenangkan!'
+          text: 'Terima kasih! Brosur dan katalog layanan Technotama akan dikirimkan ke email Anda sebentar lagi. Semoga hari Anda menyenangkan!'
         }
       ]);
       setFlowType('completed');
@@ -2058,7 +2058,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Situasi ini memerlukan respons segera. Tim RTI dapat membantu melalui Cyber Security Incident Management, Digital Forensic, dan Cyber Threat Intelligence (CTI) untuk investigasi, pemulihan, dan pencegahan insiden lanjutan.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?',
+            text: 'Situasi ini memerlukan respons segera. Tim Technotama dapat membantu melalui Cyber Security Incident Management, Digital Forensic, dan Cyber Threat Intelligence (CTI) untuk investigasi, pemulihan, dan pencegahan insiden lanjutan.\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait kebutuhan cybersecurity perusahaan Anda?',
             options: [
               { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
               { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -2071,7 +2071,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'RTI menawarkan layanan Vulnerability Assessment (VA) dan Penetration Testing (Pentest) untuk menguji kerentanan pada Web App, Mobile App, API, Network, maupun Cloud Anda.',
+            text: 'Technotama menawarkan layanan Vulnerability Assessment (VA) dan Penetration Testing (Pentest) untuk menguji kerentanan pada Web App, Mobile App, API, Network, maupun Cloud Anda.',
             options: [
               { label: '🛡️ Vulnerability Assessment', action: 'prod_va' },
               { label: '⚔️ Penetration Testing', action: 'prod_pentest' },
@@ -2085,7 +2085,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'RTI menyediakan layanan Managed SOC 24/7 untuk mendeteksi dan merespons ancaman keamanan siber secara real-time dengan teknologi SIEM, SOAR, dan AI Analytics.',
+            text: 'Technotama menyediakan layanan Managed SOC 24/7 untuk mendeteksi dan merespons ancaman keamanan siber secara real-time dengan teknologi SIEM, SOAR, dan AI Analytics.',
             options: [
               { label: '🛡️ Managed SOC', action: 'prod_soc' },
               { label: '📅 Book Consultation', action: 'book_consultation_start:Managed SOC' }
@@ -2111,7 +2111,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: 'Saya RTI AI Cybersecurity Consultant. Saya dapat membantu merekomendasikan solusi keamanan siber terbaik untuk organisasi Anda. Silakan ketik pertanyaan Anda secara spesifik atau gunakan menu di bawah ini:',
+            text: 'Saya Technotama AI Cybersecurity Consultant. Saya dapat membantu merekomendasikan solusi keamanan siber terbaik untuk organisasi Anda. Silakan ketik pertanyaan Anda secara spesifik atau gunakan menu di bawah ini:',
             options: [
               { label: '🔍 Explore Solutions', action: 'explore_solutions' },
               { label: '📅 Book Consultation', action: 'book_consultation_start' },
@@ -2291,7 +2291,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+            text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
             options: [
               { label: '🛡 Explore Solutions', action: 'explore_solutions' },
               { label: '🎓 Cyber Academy', action: 'menu_academy' },
@@ -2406,7 +2406,7 @@ export default function Chatbot() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-[60] flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-xl hover:scale-105 transition-all duration-200 focus:outline-none"
-        aria-label="Chatbot RTI"
+        aria-label="Chatbot Technotama"
       >
         <MessageSquare className="w-6 h-6" />
       </button>
@@ -2444,7 +2444,7 @@ export default function Chatbot() {
                           {
                             id: Math.random().toString(),
                             sender: 'bot',
-                            text: "Silakan masukkan alamat Email Anda agar kami dapat mengirimkan penawaran dan katalog layanan RTI:"
+                            text: "Silakan masukkan alamat Email Anda agar kami dapat mengirimkan penawaran dan katalog layanan Technotama:"
                           }
                         ]);
                       }}
@@ -2457,7 +2457,7 @@ export default function Chatbot() {
                       onClick={() => {
                         setShowExitCapture(false);
                         setIsOpen(false);
-                        const waUrl = getWhatsAppLink("Halo RTI, saya ingin mendapatkan brosur dan katalog layanan cybersecurity.");
+                        const waUrl = getWhatsAppLink("Halo Technotama, saya ingin mendapatkan brosur dan katalog layanan cybersecurity.");
                         window.open(waUrl, '_blank');
                       }}
                       className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-sm flex items-center justify-center space-x-1.5"
@@ -2488,7 +2488,7 @@ export default function Chatbot() {
                   className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
                 />
                 <div>
-                  <div className="font-display font-extrabold text-sm leading-tight">RTI AI Consultant</div>
+                  <div className="font-display font-extrabold text-sm leading-tight">Technotama AI Consultant</div>
                   <div className="text-[10px] text-slate-400 font-semibold flex items-center space-x-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     <span>Cybersecurity Expert &bull; Online</span>
@@ -2604,7 +2604,7 @@ export default function Chatbot() {
                 <div className="px-3 pt-2 pb-1.5 bg-slate-50/50 border-b border-slate-100 flex items-start space-x-1.5">
                   <Shield className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
                   <p className="text-[9px] leading-relaxed text-slate-400 font-medium">
-                    Saya menyetujui pemrosesan data pribadi saya oleh RTI untuk keperluan memahami kebutuhan layanan sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
+                    Saya menyetujui pemrosesan data pribadi saya oleh Technotama untuk keperluan memahami kebutuhan layanan sesuai regulasi UU Pelindungan Data Pribadi (UU PDP).
                   </p>
                 </div>
               )}

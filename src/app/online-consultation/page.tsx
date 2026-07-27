@@ -417,7 +417,7 @@ export default function OnlineConsultation() {
                   </div>
                   <h2 className="font-display font-extrabold text-xl text-slate-900">Jadwal Konsultasi Dikonfirmasi!</h2>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Pertemuan Anda dengan Konsultan Senior RTI telah dijadwalkan secara otomatis. Kami telah mengirimkan undangan Google Calendar ke email Anda beserta tautan virtual room:
+                    Pertemuan Anda dengan Konsultan Senior Technotama telah dijadwalkan secara otomatis. Kami telah mengirimkan undangan Google Calendar ke email Anda beserta tautan virtual room:
                   </p>
 
                   <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl text-left text-xs space-y-2.5 font-medium">
@@ -439,7 +439,7 @@ export default function OnlineConsultation() {
                       <span className="text-slate-400 font-bold uppercase text-[9px] block">Platform & Link</span>
                       <div className="text-slate-600 font-semibold flex items-center space-x-1.5">
                         <Video className="w-4 h-4 text-slate-450 shrink-0" />
-                        <span>Link meeting dikirimkan melalui email yang terdaftar pada RTI</span>
+                        <span>Link meeting dikirimkan melalui email yang terdaftar pada Technotama</span>
                       </div>
                     </div>
                   </div>
@@ -447,7 +447,7 @@ export default function OnlineConsultation() {
                   <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
                     <a
                       href={`https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(
-                        `Halo Admin RTI, saya baru saja melakukan Booking Virtual Consultation.\n\nDetail Pertemuan:\n• Nama: ${bookingDetails.name}\n• Perusahaan: ${bookingDetails.company}\n• Topik: ${bookingDetails.topic}\n• Jadwal: ${bookingDetails.date} pukul ${bookingDetails.time}\n• Platform: ${bookingDetails.platform}`
+                        `Halo Admin Technotama, saya baru saja melakukan Booking Virtual Consultation.\n\nDetail Pertemuan:\n• Nama: ${bookingDetails.name}\n• Perusahaan: ${bookingDetails.company}\n• Topik: ${bookingDetails.topic}\n• Jadwal: ${bookingDetails.date} pukul ${bookingDetails.time}\n• Platform: ${bookingDetails.platform}`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"

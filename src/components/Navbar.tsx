@@ -93,12 +93,12 @@ export default function Navbar() {
       }`}
     >
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-[88px]">
           <Link href="/" className="flex items-center group">
             <img 
               src="/logo.png" 
               alt="Logo Technotama" 
-              className="h-14 sm:h-[72px] w-auto object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply"
+              className="h-[62px] sm:h-[79px] w-auto object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply"
             />
           </Link>
 

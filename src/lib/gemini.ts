@@ -38,7 +38,7 @@ export async function generateProposalWithAI(proposal: ProposalData, additionalI
   const defaultTitle = `Proposal Layanan Keamanan Siber ${proposal.serviceType} - ${proposal.company}`;
 
   const systemInstructions = `
-Anda adalah Konsultan Senior Keamanan Siber di RTI (Risetin Teknologi Indonesia) Neo.
+Anda adalah Konsultan Senior Keamanan Siber di Technotama (Risetin Teknologi Indonesia) Neo.
 Tugas Anda adalah membuat proposal penawaran formal yang profesional, mendalam, meyakinkan, dan terstruktur dengan sangat rapi menggunakan Markdown.
 
 Gunakan data berikut untuk mengkustomisasi proposal:
@@ -55,11 +55,11 @@ Gunakan data berikut untuk mengkustomisasi proposal:
 ${additionalInstructions ? `Instruksi Tambahan dari Tim Customer Care: ${additionalInstructions}` : ''}
 
 Struktur Proposal yang harus diikuti:
-1. **EXECUTIVE SUMMARY**: Ringkasan kebutuhan client, masalah keamanan siber yang dihadapi industri mereka, dan bagaimana solusi RTI membantu.
+1. **EXECUTIVE SUMMARY**: Ringkasan kebutuhan client, masalah keamanan siber yang dihadapi industri mereka, dan bagaimana solusi Technotama membantu.
 2. **SCOPE OF WORK**: Rincian teknis cakupan pekerjaan disesuaikan dengan jenis layanan (${proposal.serviceType}).
 3. **METODOLOGI**: Langkah-langkah pengerjaan terperinci (misal: Discovery, Assessment, Remediation, Reporting).
 4. **TIMELINE & DELIVERABLES**: Rencana jadwal proyek dalam periode ${proposal.timeline} serta laporan/hasil akhir yang didapatkan client.
-5. **TIM PROYEK & KUALIFIKASI**: Deskripsi singkat tim konsultan RTI (misal: CEH, CISSP, ISO Lead Auditor).
+5. **TIM PROYEK & KUALIFIKASI**: Deskripsi singkat tim konsultan Technotama (misal: CEH, CISSP, ISO Lead Auditor).
 6. **PENUTUP**: Langkah selanjutnya untuk negosiasi atau kick-off meeting.
 
 Gunakan Bahasa Indonesia yang sangat formal, persuasif, taktis, dan terstruktur dengan rapi. Tambahkan tabel dan bullet points jika diperlukan untuk mempermudah pembacaan. Jangan sebutkan harga spesifik di luar kisaran budget yang diajukan, tawarkan estimasi bernilai tambah tinggi.
@@ -140,12 +140,12 @@ function generateFallbackProposal(p: ProposalData, additional?: string): string 
 
 ## 1. RINGKASAN EKSEKUTIF (EXECUTIVE SUMMARY)
 
-PT Risetin Teknologi Indonesia (RTI) Neo dengan bangga mengajukan proposal penawaran layanan teknologi dan keamanan siber ini untuk **${p.company}**. Di era digitalisasi yang sangat dinamis saat ini, khususnya pada sektor **${p.industry || 'Swasta/Industri'}**, perlindungan terhadap aset digital, data rahasia perusahaan, serta kepercayaan customer adalah prioritas utama.
+PT Risetin Teknologi Indonesia (Technotama) Neo dengan bangga mengajukan proposal penawaran layanan teknologi dan keamanan siber ini untuk **${p.company}**. Di era digitalisasi yang sangat dinamis saat ini, khususnya pada sektor **${p.industry || 'Swasta/Industri'}**, perlindungan terhadap aset digital, data rahasia perusahaan, serta kepercayaan customer adalah prioritas utama.
 
 Berdasarkan deskripsi kebutuhan yang Anda sampaikan:
 > "${p.details}"
 
-RTI merancang program implementasi khusus guna menjawab tantangan tersebut dengan memperkirakan total pengerjaan sesuai dengan target waktu **${p.timeline}** dan kisaran anggaran **${p.budget}**.
+Technotama merancang program implementasi khusus guna menjawab tantangan tersebut dengan memperkirakan total pengerjaan sesuai dengan target waktu **${p.timeline}** dan kisaran anggaran **${p.budget}**.
 
 ---
 
@@ -159,14 +159,14 @@ ${getScopeText(p.serviceType)}
 
 ## 3. METODOLOGI PENGERJAAN
 
-Metodologi pengerjaan yang digunakan oleh tim RTI didasarkan pada standar keamanan internasional (seperti OWASP, OSSTMM, NIST, atau ISO 27001) yang terbagi menjadi empat fase utama:
+Metodologi pengerjaan yang digunakan oleh tim Technotama didasarkan pada standar keamanan internasional (seperti OWASP, OSSTMM, NIST, atau ISO 27001) yang terbagi menjadi empat fase utama:
 
 | Fase Pengerjaan | Aktivitas Utama | Output |
 | :--- | :--- | :--- |
 | **Fase 1: Discovery & Recon** | Pengumpulan informasi awal, identifikasi aset digital target, penentuan parameter pengujian. | Kick-off memo & daftar aset terverifikasi. |
 | **Fase 2: Assessment & Analysis** | Pengujian kerentanan (VA/Pentest) atau gap assessment kebijakan keamanan sesuai standar terkait. | Log kerentanan / analisis kesenjangan (Gap Analysis). |
 | **Fase 3: Reporting & Advisory** | Penyusunan laporan temuan beserta panduan teknis perbaikan (remediasi). | Draft Laporan Keamanan & Rekomendasi Mitigasi. |
-| **Fase 4: Verification / Retest** | Pengujian ulang (re-testing) untuk memastikan seluruh temuan kritis telah diperbaiki dengan benar. | Laporan Akhir Keamanan (Final Report) & Sertifikat Kepatuhan RTI. |
+| **Fase 4: Verification / Retest** | Pengujian ulang (re-testing) untuk memastikan seluruh temuan kritis telah diperbaiki dengan benar. | Laporan Akhir Keamanan (Final Report) & Sertifikat Kepatuhan Technotama. |
 
 ---
 
@@ -182,13 +182,13 @@ Proyek ini diproyeksikan selesai dalam jangka waktu **${p.timeline}** dengan rin
 **Dokumen Hasil Akhir (Deliverables):**
 1. *Executive Summary Report* (Cocok untuk level Manajemen/C-Level).
 2. *Technical Security Assessment Report* (Panduan detail perbaikan untuk tim Developer/IT).
-3. *Certificate of Security Compliance* dari RTI Neo.
+3. *Certificate of Security Compliance* dari Technotama Neo.
 
 ---
 
-## 5. PROFIL RTI & TIM AHLI
+## 5. PROFIL Technotama & TIM AHLI
 
-RTI Neo didukung oleh konsultan bersertifikasi internasional terkemuka di bidangnya, memastikan pengerjaan proyek berjalan sesuai standar terbaik industri global. Tim kami memegang sertifikasi:
+Technotama Neo didukung oleh konsultan bersertifikasi internasional terkemuka di bidangnya, memastikan pengerjaan proyek berjalan sesuai standar terbaik industri global. Tim kami memegang sertifikasi:
 - **CEH** (Certified Ethical Hacker)
 - **CISSP** (Certified Information Systems Security Professional)
 - **CHFI** (Computer Hacking Forensic Investigator)
@@ -198,7 +198,7 @@ RTI Neo didukung oleh konsultan bersertifikasi internasional terkemuka di bidang
 
 ## 6. PENUTUP & KELANJUTAN PROYEK
 
-Kami berharap proposal penawaran ini dapat memperjelas pendekatan teknis dan metodologi RTI Neo dalam meningkatkan postur keamanan siber di **${p.company}**. 
+Kami berharap proposal penawaran ini dapat memperjelas pendekatan teknis dan metodologi Technotama Neo dalam meningkatkan postur keamanan siber di **${p.company}**. 
 
 Jika terdapat pertanyaan lebih lanjut atau tim Anda ingin mengadakan rapat kick-off virtual, silakan menghubungi kami langsung melalui PIC Customer Care di email **customercare@risetin.co.id**.
 
@@ -220,7 +220,7 @@ function getScopeText(serviceType: string): string {
 - **Business Continuity & BCP-DRP**: Penyusunan rencana tanggap darurat, analisis dampak bisnis (BIA), dan kesiapan infrastruktur DRC.
 - **Cyber Drill Simulation**: Uji kesiapan insiden melalui Table-Top Exercise (TTE) dan simulasi phishing terukur.`;
     case 'Defensive Cybersecurity (SOC/CTI)':
-      return `- **Managed SOC 24/7**: Pemantauan log keamanan real-time menggunakan korelasi SIEM dan tim analis siber RTI.
+      return `- **Managed SOC 24/7**: Pemantauan log keamanan real-time menggunakan korelasi SIEM dan tim analis siber Technotama.
 - **Cyber Threat Intelligence (CTI)**: Pemantauan Dark Web dan threat feed global untuk mendeteksi kebocoran kredensial secara dini.
 - **Network & Endpoint Hardening**: Pengetatan konfigurasi sistem operasi dan jaringan sesuai standar CIS Benchmarks.
 - **Incident Response & Digital Forensics**: Penanganan darurat pemulihan pasca-serangan siber beserta pengumpulan bukti digital forensik.`;

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'rti-super-secret-key-32-chars-long';
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'Technotama-super-secret-key-32-chars-long';
 
 export interface AuthUser {
   userId: string;

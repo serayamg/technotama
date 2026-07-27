@@ -59,7 +59,7 @@ export async function sendProposalEmail(options: MailOptions): Promise<{ success
       });
 
       await transporter.sendMail({
-        from: `"RTI Customer Care Team" <${from}>`,
+        from: `"Technotama Customer Care Team" <${from}>`,
         to,
         subject,
         html,
@@ -111,7 +111,7 @@ function saveSimulationLog(to: string, subject: string, html: string, smtpError?
   </style>
 </head>
 <body>
-  <h2>Simulasi Pengiriman Email RTI Neo</h2>
+  <h2>Simulasi Pengiriman Email Technotama Neo</h2>
   <div class="meta-box">
     ${smtpError ? `<div class="smtp-warning">⚠️ Gagal terhubung ke server SMTP (${smtpError}). Email disimulasikan secara aman di bawah ini.</div>` : '<div>ℹ️ Email dikirimkan dalam mode simulasi karena SMTP belum dikonfigurasi di file .env.</div>'}
     <div><span class="meta-title">Waktu:</span> ${timestamp}</div>

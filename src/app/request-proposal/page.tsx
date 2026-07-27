@@ -194,7 +194,7 @@ export default function RequestProposal() {
                 </div>
                 <h2 className="font-display font-extrabold text-xl text-slate-900">Proposal Terkirim!</h2>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Terima kasih. Permintaan proposal Anda telah aman tersimpan di database kami. Tim konsultan senior RTI akan mereview TOR/RFP Anda dan mengirimkan draft penawaran resmi dalam 1x24 jam kerja ke email: <strong>{formData.email}</strong>.
+                  Terima kasih. Permintaan proposal Anda telah aman tersimpan di database kami. Tim konsultan senior Technotama akan mereview TOR/RFP Anda dan mengirimkan draft penawaran resmi dalam 1x24 jam kerja ke email: <strong>{formData.email}</strong>.
                 </p>
                 <div className="pt-4">
                   <button 

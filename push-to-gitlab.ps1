@@ -1,12 +1,12 @@
-# PowerShell Script to easily push RTI Neo codebase to GitLab
+# PowerShell Script to easily push Technotama Neo codebase to GitLab
 
 Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host "     RTI Neo - GitLab Push Configuration" -ForegroundColor Cyan
+Write-Host "     Technotama Neo - GitLab Push Configuration" -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host ""
 
 # 1. Ask for GitLab Repository URL
-$gitlabUrl = Read-Host "Masukkan URL Repository GitLab Anda (Contoh: https://gitlab.com/username/rti-neo.git)"
+$gitlabUrl = Read-Host "Masukkan URL Repository GitLab Anda (Contoh: https://gitlab.com/username/Technotama-neo.git)"
 
 if ([string]::IsNullOrWhiteSpace($gitlabUrl)) {
     Write-Host "Error: URL tidak boleh kosong!" -ForegroundColor Red

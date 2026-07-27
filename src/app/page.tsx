@@ -160,17 +160,17 @@ const clients = {
 
 // Framework data for Popups
 const frameworks = [
-  { name: 'COBIT', desc: 'Control Objectives for Information and Related Technologies. Standar tata kelola TI untuk menyelaraskan TI dengan tujuan bisnis organisasi. RTI menggunakan COBIT 2019 untuk asesmen kematangan TI klien.' },
+  { name: 'COBIT', desc: 'Control Objectives for Information and Related Technologies. Standar tata kelola TI untuk menyelaraskan TI dengan tujuan bisnis organisasi. Technotama menggunakan COBIT 2019 untuk asesmen kematangan TI klien.' },
   { name: 'TOGAF', desc: 'The Open Group Architecture Framework. Metodologi arsitektur enterprise untuk merancang arsitektur TI dan arsitektur bisnis organisasi agar terintegrasi dengan baik.' },
-  { name: 'ISO 27001', desc: 'Standar Sistem Manajemen Keamanan Informasi (SMKI) global. RTI mendampingi instansi dari analisis kesenjangan (gap assessment), pembuatan kebijakan, penyusunan SOP, hingga kelulusan sertifikasi.' },
+  { name: 'ISO 27001', desc: 'Standar Sistem Manajemen Keamanan Informasi (SMKI) global. Technotama mendampingi instansi dari analisis kesenjangan (gap assessment), pembuatan kebijakan, penyusunan SOP, hingga kelulusan sertifikasi.' },
   { name: 'ISO 20000', desc: 'Standar internasional untuk manajemen layanan TI (ITIL-aligned). Membantu meningkatkan kehandalan operasional layanan teknologi informasi perusahaan.' },
   { name: 'ISO 22301', desc: 'Standar internasional untuk Business Continuity Management System (BCMS). Membantu organisasi mempersiapkan diri dari bencana siber/fisik (DRC/BCP).' },
   { name: 'NIST CSF', desc: 'National Institute of Standards and Technology Cybersecurity Framework. Kerangka kerja siber (Identify, Protect, Detect, Respond, Recover) untuk mengelola risiko keamanan informasi.' },
   { name: 'CIS Controls', desc: 'Center for Internet Security Controls. Kumpulan 18 tindakan defensif siber prioritas tinggi untuk menangkis vektor serangan yang paling sering terjadi.' },
-  { name: 'OWASP', desc: 'Open Web Application Security Project. Metodologi pengujian kerentanan untuk keamanan aplikasi web, mobile, dan API. RTI menggunakan OWASP Top 10 sebagai parameter utama VAPT.' },
+  { name: 'OWASP', desc: 'Open Web Application Security Project. Metodologi pengujian kerentanan untuk keamanan aplikasi web, mobile, dan API. Technotama menggunakan OWASP Top 10 sebagai parameter utama VAPT.' },
   { name: 'SABSA', desc: 'Sherwood Applied Business Security Architecture. Kerangka kerja arsitektur siber terintegrasi yang menghubungkan sasaran bisnis organisasi dengan kontrol keamanan teknis.' },
-  { name: 'MITRE ATT&CK', desc: 'Kerangka kerja taktis yang mendokumentasikan teknik serangan siber di dunia nyata. RTI menggunakannya dalam skenario adversary emulation oleh Red Team kami.' },
-  { name: 'PCI DSS', desc: 'Payment Card Industry Data Security Standard. Standar wajib untuk keamanan transaksi kartu kredit. RTI mendampingi payment gateway dan fintech meraih sertifikasi ini.' }
+  { name: 'MITRE ATT&CK', desc: 'Kerangka kerja taktis yang mendokumentasikan teknik serangan siber di dunia nyata. Technotama menggunakannya dalam skenario adversary emulation oleh Red Team kami.' },
+  { name: 'PCI DSS', desc: 'Payment Card Industry Data Security Standard. Standar wajib untuk keamanan transaksi kartu kredit. Technotama mendampingi payment gateway dan fintech meraih sertifikasi ini.' }
 ];
 
 // Project Methodology Phases with detailed bullet points and outcomes to avoid layout squishing
@@ -306,25 +306,25 @@ const caseStudies = [
 const testimonials = [
   {
     rating: 5,
-    text: "RTI membantu kami merancang tata kelola SMKI dan meloloskan sertifikasi ISO 27001 versi terbaru tepat waktu. Pemahaman mereka akan infrastruktur perbankan dan kepatuhan siber sangat mendalam.",
+    text: "Technotama membantu kami merancang tata kelola SMKI dan meloloskan sertifikasi ISO 27001 versi terbaru tepat waktu. Pemahaman mereka akan infrastruktur perbankan dan kepatuhan siber sangat mendalam.",
     author: "Kepala Divisi Keamanan Informasi",
     company: "Sektor Jasa Keuangan Nasional"
   },
   {
     rating: 5,
-    text: "Hasil pengujian VAPT dari RTI sangat detail dan memberikan langkah perbaikan yang konkrit. Rekomendasinya objektif karena mereka tidak mencoba menjual lisensi software tertentu.",
+    text: "Hasil pengujian VAPT dari Technotama sangat detail dan memberikan langkah perbaikan yang konkrit. Rekomendasinya objektif karena mereka tidak mencoba menjual lisensi software tertentu.",
     author: "Head of Technology Operations",
     company: "Penyedia Layanan Payment Gateway (Fintech)"
   },
   {
     rating: 5,
-    text: "Program awareness siber dari RTI meningkatkan kepedulian keamanan staf kami secara signifikan. Phishing simulation yang dilakukan sangat mirip dengan serangan nyata.",
+    text: "Program awareness siber dari Technotama meningkatkan kepedulian keamanan staf kami secara signifikan. Phishing simulation yang dilakukan sangat mirip dengan serangan nyata.",
     author: "VP of Human Resources",
     company: "Lembaga Pemerintahan Pusat"
   },
   {
     rating: 5,
-    text: "Kami mempercayakan penetrasi sistem inti perbankan kami ke RTI. Kerja profesional, kepatuhan kerahasiaan tinggi, dan pelaporan yang sangat eksekutif.",
+    text: "Kami mempercayakan penetrasi sistem inti perbankan kami ke Technotama. Kerja profesional, kepatuhan kerahasiaan tinggi, dan pelaporan yang sangat eksekutif.",
     author: "Chief Information Officer",
     company: "BUMN Sektor Keuangan"
   }
@@ -342,7 +342,7 @@ const insights = [
     category: "THREAT INTEL",
     categoryColor: "text-red-600 bg-red-50",
     title: "Analisis Ancaman Ransomware di Sektor Perbankan Nasional",
-    desc: "Laporan Security Operations Center (SOC) RTI mengenai taktik pemerasan ganda (double extortion) yang menargetkan server cadangan/DRC.",
+    desc: "Laporan Security Operations Center (SOC) Technotama mengenai taktik pemerasan ganda (double extortion) yang menargetkan server cadangan/DRC.",
     date: "5 Juli 2026"
   },
   {
@@ -503,10 +503,10 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] aurora-cyan opacity-40 blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] aurora-gold opacity-30 blur-3xl pointer-events-none" />
 
-        {/* Cybersecurity Motif & RTI Logo Silhouette Overlay */}
+        {/* Cybersecurity Motif & Technotama Logo Silhouette Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none opacity-[0.06] flex items-center justify-center lg:justify-end lg:pr-20">
           <svg className="w-[600px] h-[600px] text-blue-600 shrink-0" viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="0.5">
-            {/* Hexagonal cyber shields / RTI Logo shape silhouette */}
+            {/* Hexagonal cyber shields / Technotama Logo shape silhouette */}
             <polygon points="100,20 170,60 170,140 100,180 30,140 30,60" strokeDasharray="3 3" />
             <polygon points="100,30 160,65 160,135 100,170 40,135 40,65" />
             <polygon points="100,45 145,71 145,129 100,155 55,129 55,71" strokeWidth="1" />
@@ -642,7 +642,7 @@ export default function Home() {
               Dipercaya oleh Institusi Terkemuka di Indonesia
             </h2>
             <p className="text-xs text-slate-500 mt-2 font-semibold">
-              RTI telah mendampingi proyek kepatuhan dan keamanan siber di berbagai sektor:
+              Technotama telah mendampingi proyek kepatuhan dan keamanan siber di berbagai sektor:
             </p>
           </div>
 
@@ -761,7 +761,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Choose RTI Section */}
+      {/* Why Choose Technotama Section */}
       <section className="py-20 bg-slate-50 cyber-grid relative">
         <div className="absolute top-0 left-0 w-[300px] h-[300px] aurora-cyan opacity-25 blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1107,7 +1107,7 @@ export default function Home() {
             <div className="max-w-2xl">
               <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Testimoni Klien</div>
               <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-                Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang RTI</span>
+                Apa Kata Pemimpin TI <span className="whitespace-nowrap">Tentang Technotama</span>
               </h2>
             </div>
             {/* Carousel navigation buttons - Hidden on desktop since all items are visible in grid */}
@@ -1250,7 +1250,7 @@ export default function Home() {
               <div className="flex items-center justify-between p-5 border-b border-slate-100">
                 <div className="flex items-center space-x-2">
                   <Shield className="w-5 h-5 text-blue-600 animate-pulse" />
-                  <span className="font-display font-extrabold text-sm text-slate-900 tracking-tight">RTI Vulnerability Scanner</span>
+                  <span className="font-display font-extrabold text-sm text-slate-900 tracking-tight">Technotama Vulnerability Scanner</span>
                 </div>
                 <button
                   onClick={() => {

@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Wrap the email body in a professional RTI template
+    // Wrap the email body in a professional Technotama template
     const fullHtmlBody = `
 <!DOCTYPE html>
 <html>
@@ -128,7 +128,7 @@ export async function POST(request: Request) {
       ${emailBody}
     </div>
     <div class="footer">
-      <p><strong>PT Risetin Teknologi Indonesia (RTI) Neo</strong></p>
+      <p><strong>PT Risetin Teknologi Indonesia (Technotama) Neo</strong></p>
       <p>Gedung Cyber, Kuningan Barat, Jakarta Selatan, Indonesia</p>
       <p>Website: <a href="https://risetin.co.id" style="color: #2563eb; text-decoration: none;">risetin.co.id</a> | Email: customercare@risetin.co.id</p>
     </div>

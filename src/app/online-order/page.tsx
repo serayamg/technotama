@@ -217,7 +217,7 @@ export default function OnlineOrder() {
               Order Service Online
             </h1>
             <p className="text-sm text-slate-500 mt-2 max-w-xl mx-auto">
-              Sistem pengadaan layanan siber instan RTI. Dapatkan quotation, lakukan approval dokumen, dan lacak progres pekerjaan Anda secara transparan.
+              Sistem pengadaan layanan siber instan Technotama. Dapatkan quotation, lakukan approval dokumen, dan lacak progres pekerjaan Anda secara transparan.
             </p>
           </div>
 
@@ -289,7 +289,7 @@ export default function OnlineOrder() {
               {step === 1 && (
                 <div className="space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Solusi RTI</h2>
+                    <h2 className="font-display font-extrabold text-base text-slate-900">Pilih Solusi Technotama</h2>
                     
                     {/* Cluster Filter Buttons */}
                     <div className="flex flex-wrap gap-1.5">
@@ -470,7 +470,7 @@ export default function OnlineOrder() {
                 <div className="space-y-6">
                   <h2 className="font-display font-extrabold text-base text-slate-900">Deskripsi Kebutuhan & Dokumen Scoping</h2>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Berikan rincian deskripsi mengenai rencana proyek Anda atau unggah file scoping pendukung (seperti topologi jaringan atau daftar target IP/URL) untuk mempermudah konsultan RTI menyusun proposal teknis.
+                    Berikan rincian deskripsi mengenai rencana proyek Anda atau unggah file scoping pendukung (seperti topologi jaringan atau daftar target IP/URL) untuk mempermudah konsultan Technotama menyusun proposal teknis.
                   </p>
 
                   <div className="space-y-2">
@@ -482,7 +482,7 @@ export default function OnlineOrder() {
                       required
                       value={formData.projectDetails}
                       onChange={(e) => setFormData({ ...formData, projectDetails: e.target.value })}
-                      placeholder="Jelaskan secara singkat rencana pekerjaan (misal: pengujian berkala website e-commerce) dan hasil atau kebutuhan spesifik yang ingin dicapai melalui penugasan RTI..."
+                      placeholder="Jelaskan secara singkat rencana pekerjaan (misal: pengujian berkala website e-commerce) dan hasil atau kebutuhan spesifik yang ingin dicapai melalui penugasan Technotama..."
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-none leading-relaxed"
                     />
                   </div>
@@ -536,10 +536,10 @@ export default function OnlineOrder() {
                   
                   <div className="space-y-3.5 text-xs text-slate-500 leading-relaxed">
                     <p>
-                      Terima kasih banyak atas kepercayaan Anda bermitra dengan <strong>RTI</strong>.
+                      Terima kasih banyak atas kepercayaan Anda bermitra dengan <strong>Technotama</strong>.
                     </p>
                     <p>
-                      Pesanan Anda telah aman terdaftar di database kami. Sebagai langkah awal kolaborasi strategis ini, kami telah membuatkan akun akses resmi Anda untuk masuk ke <strong>Portal Klien RTI</strong>.
+                      Pesanan Anda telah aman terdaftar di database kami. Sebagai langkah awal kolaborasi strategis ini, kami telah membuatkan akun akses resmi Anda untuk masuk ke <strong>Portal Klien Technotama</strong>.
                     </p>
                     <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl text-left text-blue-900 space-y-1.5 shadow-sm">
                       <div className="font-bold flex items-center space-x-1.5">
