@@ -542,7 +542,7 @@ export default function Home() {
               <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200/80 px-3 py-1.5 rounded-full">
                 <Shield className="w-4 h-4 text-blue-600" />
                 <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider">
-                  {siteConfig?.hero?.badge || 'Partner Keamanan Siber Terpercaya Sejak 2014'}
+                  {siteConfig?.hero?.badge || 'Partner Keamanan Siber Terpercaya'}
                 </span>
               </div>
 

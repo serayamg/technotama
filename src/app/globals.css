@@ -22,6 +22,8 @@
   --color-blue-900: #0a1220;
   --color-blue-950: #05080f;
 
+  --font-size-xs: 0.9rem;
+
   --animate-aurora: aurora 20s infinite linear;
   --animate-cyber-scan: cyber-scan 6s infinite linear;
 }
@@ -128,3 +130,21 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Global overrides to increase smallest font sizes by 20% */
+.text-\[8px\] {
+  font-size: 9.6px !important;
+}
+.text-\[9px\] {
+  font-size: 10.8px !important;
+}
+.text-\[10px\] {
+  font-size: 12px !important;
+}
+.text-\[11px\] {
+  font-size: 13.2px !important;
+}
+.text-\[12px\] {
+  font-size: 14.4px !important;
+}
+
