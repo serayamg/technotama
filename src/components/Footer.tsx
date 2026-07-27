@@ -57,7 +57,7 @@ export default function Footer() {
               <img 
                 src="/logo.png" 
                 alt="Logo Technotama" 
-                className="w-9 h-9 object-contain bg-white rounded-md p-0.5"
+                className="w-9 h-9 object-contain bg-slate-950 rounded-md p-0.5 border border-slate-800"
               />
               <span className="font-display font-bold text-white text-lg tracking-tight">
                 {siteConfig?.general?.companyShortName || 'Technotama'}

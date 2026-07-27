@@ -2485,7 +2485,7 @@ export default function Chatbot() {
                 <img 
                   src="/logo.png" 
                   alt="Logo Technotama" 
-                  className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
+                  className="w-8 h-8 object-contain bg-slate-950 rounded-md p-0.5 border border-slate-800"
                 />
                 <div>
                   <div className="font-display font-extrabold text-sm leading-tight">Technotama AI Consultant</div>

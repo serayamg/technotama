@@ -98,7 +98,11 @@ export default function Navbar() {
             <img 
               src="/logo.png" 
               alt="Logo Technotama" 
-              className="h-[71px] sm:h-[91px] w-auto object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply"
+              className={`h-[71px] sm:h-[91px] w-auto object-contain group-hover:scale-105 transition-transform duration-200 ${
+                scrolled || isOpen || isSolidPage
+                  ? 'filter invert hue-rotate-180 mix-blend-multiply'
+                  : 'mix-blend-screen'
+              }`}
             />
           </Link>
 
