@@ -4,11 +4,23 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand-blue: #2563eb;
-  --color-brand-blue-hover: #1d4ed8;
+  --color-brand-blue: #1e3a8a;
+  --color-brand-blue-hover: #172554;
   --color-brand-cyan: #06b6d4;
   --color-brand-gold: #d97706;
   --color-brand-gold-hover: #b45309;
+
+  --color-blue-50: #f4f7fa;
+  --color-blue-100: #e2ebf4;
+  --color-blue-200: #c5d7e8;
+  --color-blue-300: #9dbadc;
+  --color-blue-400: #6996c8;
+  --color-blue-500: #1e3a8a;
+  --color-blue-600: #1e3a8a;
+  --color-blue-700: #172554;
+  --color-blue-800: #0f1e36;
+  --color-blue-900: #0a1220;
+  --color-blue-950: #05080f;
 
   --animate-aurora: aurora 20s infinite linear;
   --animate-cyber-scan: cyber-scan 6s infinite linear;
@@ -64,8 +76,8 @@ body {
 
 .glass-panel-hover:hover {
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(37, 99, 235, 0.2); /* Brand blue border glow */
-  box-shadow: 0 12px 40px 0 rgba(37, 99, 235, 0.08);
+  border-color: rgba(30, 58, 138, 0.2); /* Brand blue border glow */
+  box-shadow: 0 12px 40px 0 rgba(30, 58, 138, 0.08);
   transform: translateY(-2px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -81,13 +93,13 @@ body {
 /* Hexagon Pattern */
 .cyber-hex {
   opacity: 0.03;
-  background-image: radial-gradient(circle, #2563eb 1px, transparent 1px);
+  background-image: radial-gradient(circle, #1e3a8a 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
 /* Aurora Glow Spots */
 .aurora-blue {
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(30, 58, 138, 0.15) 0%, transparent 70%);
 }
 
 .aurora-cyan {
