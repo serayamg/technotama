@@ -1,7 +1,7 @@
 {
   "general": {
-    "companyName": "PT Riset Teknologi Indonesia",
-    "companyShortName": "RTI Cybersecurity",
+    "companyName": "Technotama",
+    "companyShortName": "Technotama",
     "email": "customercare@risetin.co.id",
     "phone": "0878-8333-6017",
     "address": "Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190",
@@ -17,7 +17,7 @@
   "hero": {
     "badge": "Partner Keamanan Siber Terpercaya Sejak 2014",
     "title": "Secure Your Digital Future with Enterprise Cybersecurity Excellence",
-    "subtitle": "PT Riset Teknologi Indonesia membantu mengamankan infrastruktur digital, kepatuhan tata kelola TI, dan audit keamanan sistem finansial nasional."
+    "subtitle": "Technotama membantu mengamankan infrastruktur digital, kepatuhan tata kelola TI, dan audit keamanan sistem finansial nasional."
   },
   "menus": [
     {

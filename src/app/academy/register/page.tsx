@@ -340,7 +340,7 @@ export default function AcademyRegisterPage() {
 
         {/* Form Container */}
         <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden relative">
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
           
           <div className="p-6 sm:p-10">
             {errorMsg && (
@@ -1095,7 +1095,7 @@ export default function AcademyRegisterPage() {
                         </div>
                         <div>
                           <span className="font-bold text-slate-800 block mb-1">TERMS AND CONDITIONS (KETENTUAN HUKUM):</span>
-                          <p>• Seluruh materi pelatihan merupakan hak kekayaan intelektual (HAKI) PT Riset Teknologi Indonesia.</p>
+                          <p>• Seluruh materi pelatihan merupakan hak kekayaan intelektual (HAKI) Technotama.</p>
                           <p>• Akun Learning Management System (LMS) hanya boleh digunakan oleh peserta terdaftar secara eksklusif.</p>
                           <p>• Rekaman kelas tidak boleh diperjualbelikan, disebarluaskan, atau dipublikasikan ke publik.</p>
                           <p>• Kehadiran minimal 80% kelas interaktif merupakan syarat kelulusan program.</p>
@@ -1112,7 +1112,7 @@ export default function AcademyRegisterPage() {
                             className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                           />
                           <span className="text-[10px] leading-relaxed text-slate-500 font-bold">
-                            Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pendaftaran program bootcamp RTI Academy ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                            Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pendaftaran program bootcamp RTI Academy ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                           </span>
                         </label>
 
@@ -1278,7 +1278,7 @@ export default function AcademyRegisterPage() {
                 <div className="space-y-2">
                   <h2 className="font-display font-extrabold text-xl text-slate-900">Pendaftaran Bootcamp Terkirim!</h2>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Terima kasih telah mendaftar di <strong>RTI Cybersecurity Academy</strong>. Dokumen pendaftaran dan identitas Anda telah masuk ke sistem kami.
+                    Terima kasih telah mendaftar di <strong>Technotama Academy</strong>. Dokumen pendaftaran dan identitas Anda telah masuk ke sistem kami.
                   </p>
                   <p className="text-[10px] text-slate-400 leading-relaxed">
                     Tim akademik kami akan segera melakukan verifikasi dokumen dan mengirimkan tautan <strong>Placement Assessment</strong> ke nomor WhatsApp atau email Anda dalam 1x24 jam kerja.
@@ -1287,7 +1287,7 @@ export default function AcademyRegisterPage() {
                 <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <a
                     href={`https://wa.me/${getCleanWhatsAppNumber()}?text=${encodeURIComponent(
-                      `Halo Admin RTI, saya baru saja mengirimkan Pendaftaran Resmi untuk RTI Cybersecurity Academy.\n\nDetail Pendaftaran:\n• Nama: ${formData.name}\n• Kelas: ${formData.classOption}\n• Tipe: ${formData.participantType}\n• Email: ${formData.email}\n• WhatsApp: ${formData.phone}`
+                      `Halo Admin Technotama, saya baru saja mengirimkan Pendaftaran Resmi untuk Technotama Academy.\n\nDetail Pendaftaran:\n• Nama: ${formData.name}\n• Kelas: ${formData.classOption}\n• Tipe: ${formData.participantType}\n• Email: ${formData.email}\n• WhatsApp: ${formData.phone}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

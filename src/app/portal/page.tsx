@@ -165,7 +165,7 @@ export default function CustomerPortal() {
               </div>
 
               <div className="bg-white border border-slate-200/80 p-8 rounded-2xl shadow-sm relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
                 
 
                 <form onSubmit={handleLogin} className="space-y-4">

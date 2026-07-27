@@ -532,7 +532,7 @@ export default function ServiceDetail() {
                   <span className="text-xs font-bold uppercase tracking-wider">Secure by Design</span>
                 </div>
                 <p className="text-[10px] leading-relaxed text-slate-400">
-                  PT Riset Teknologi Indonesia mengimplementasikan prinsip kerahasiaan data penuh (NDA) di setiap penugasan. Seluruh data asesmen disimpan terenkripsi dengan kontrol akses berlapis.
+                  Technotama mengimplementasikan prinsip kerahasiaan data penuh (NDA) di setiap penugasan. Seluruh data asesmen disimpan terenkripsi dengan kontrol akses berlapis.
                 </p>
               </div>
             </div>

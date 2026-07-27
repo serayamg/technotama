@@ -56,15 +56,15 @@ export default function Footer() {
             <div className="flex items-center space-x-2">
               <img 
                 src="/logo.png" 
-                alt="Logo PT Riset Teknologi Indonesia" 
+                alt="Logo Technotama" 
                 className="w-9 h-9 object-contain bg-white rounded-md p-0.5"
               />
               <span className="font-display font-bold text-white text-lg tracking-tight">
-                {siteConfig?.general?.companyShortName || 'RTI Cybersecurity'}
+                {siteConfig?.general?.companyShortName || 'Technotama'}
               </span>
             </div>
             <p className="text-xs leading-relaxed text-slate-400">
-              {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'} adalah konsultan teknologi siber dan tata kelola TI nasional. Kami mendampingi pemerintah, sektor keuangan, dan korporasi mewujudkan kepatuhan dan ketahanan siber berbasis best practice internasional.
+              {siteConfig?.general?.companyName || 'Technotama'} adalah konsultan teknologi siber dan tata kelola TI nasional. Kami mendampingi pemerintah, sektor keuangan, dan korporasi mewujudkan kepatuhan dan ketahanan siber berbasis best practice internasional.
             </p>
             <div className="flex items-center space-x-4 pt-2">
               <a 
@@ -201,7 +201,7 @@ export default function Footer() {
         {/* Bottom copyright */}
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
           <span className="flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-1.5 text-center md:text-left">
-            <span>&copy; {currentYear} {siteConfig?.general?.companyName || 'PT Riset Teknologi Indonesia'}.</span>
+            <span>&copy; {currentYear} {siteConfig?.general?.companyName || 'Technotama'}.</span>
             <span>Hak Cipta Dilindungi Undang-Undang.</span>
           </span>
           <div className="flex space-x-6 mt-4 md:mt-0">

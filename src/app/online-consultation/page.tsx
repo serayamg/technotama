@@ -126,12 +126,12 @@ export default function OnlineConsultation() {
               Booking Virtual Consultation
             </h1>
             <p className="text-sm text-slate-500 mt-2 max-w-xl mx-auto">
-              Pilih topik konsultasi dan jadwalkan tatap muka virtual dengan Konsultan TI & Ahli Cybersecurity Senior PT Riset Teknologi Indonesia.
+              Pilih topik konsultasi dan jadwalkan tatap muka virtual dengan Konsultan TI & Ahli Cybersecurity Senior Technotama.
             </p>
           </div>
 
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden relative min-h-[450px]">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
 
             {/* Mobile Stepper Header */}
             <div className="md:hidden border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-500">
@@ -378,7 +378,7 @@ export default function OnlineConsultation() {
                       className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                     />
                     <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
-                      Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan konsultasi ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                      Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan konsultasi ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                     </label>
                   </div>
 

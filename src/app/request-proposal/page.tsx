@@ -185,7 +185,7 @@ export default function RequestProposal() {
           </div>
 
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden p-8 relative">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
 
             {success ? (
               <div className="text-center py-12 space-y-4 max-w-md mx-auto">
@@ -441,7 +441,7 @@ export default function RequestProposal() {
                     className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                   />
                   <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
-                    Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pengajuan proposal RFP ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                    Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi yang saya isi di atas untuk keperluan pengajuan proposal RFP ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                   </label>
                 </div>
 

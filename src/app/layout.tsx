@@ -15,13 +15,13 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "PT Riset Teknologi Indonesia (RTI) | Enterprise Cybersecurity & IT Consulting",
-  description: "PT Riset Teknologi Indonesia (RTI) membantu kementerian, lembaga pemerintah, BUMN, perbankan, dan korporasi swasta membangun tata kelola TI, keamanan siber, kepatuhan (ISO/PCI DSS), dan audit independen.",
-  keywords: "PT Riset Teknologi Indonesia, RTI, cybersecurity indonesia, konsultan TI, VAPT, pentest, ISO 27001, tata kelola TI, audit OJK, kepatuhan UU PDP, cyber security jakarta",
-  authors: [{ name: "Riset Teknologi Indonesia" }],
+  title: "Technotama (RTI) | Enterprise Cybersecurity & IT Consulting",
+  description: "Technotama (RTI) membantu kementerian, lembaga pemerintah, BUMN, perbankan, dan korporasi swasta membangun tata kelola TI, keamanan siber, kepatuhan (ISO/PCI DSS), dan audit independen.",
+  keywords: "Technotama, RTI, cybersecurity indonesia, konsultan TI, VAPT, pentest, ISO 27001, tata kelola TI, audit OJK, kepatuhan UU PDP, cyber security jakarta",
+  authors: [{ name: "Technotama" }],
   metadataBase: new URL("https://risetin.co.id"),
   openGraph: {
-    title: "PT Riset Teknologi Indonesia | Enterprise Cybersecurity & IT Consulting",
+    title: "Technotama | Enterprise Cybersecurity & IT Consulting",
     description: "Layanan konsultansi tata kelola TI, strategi siber, penetration testing, dan sertifikasi ISO kelas dunia untuk sektor pemerintahan dan keuangan di Indonesia.",
     url: "https://risetin.co.id",
     siteName: "RTI",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "PT Riset Teknologi Indonesia | Enterprise Cybersecurity & IT Consulting",
+    title: "Technotama | Enterprise Cybersecurity & IT Consulting",
     description: "Layanan konsultansi tata kelola TI, strategi siber, penetration testing, dan sertifikasi ISO kelas dunia.",
   },
   robots: {

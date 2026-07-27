@@ -94,7 +94,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Terima kasih telah mengunjungi RTI - Riset Teknologi Indonesia.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun RTI Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
+          text: 'Terima kasih telah mengunjungi RTI - Technotama.\n\nJika di kemudian hari Anda membutuhkan informasi mengenai Cybersecurity, IT Governance, Audit, SOC, Penetration Testing, Digital Forensic, ataupun RTI Academy, cukup buka kembali chatbot ini. Tim kami siap membantu kapan saja.\n\nSemoga hari Anda menyenangkan, dan sampai bertemu kembali.'
         }
       ]);
       setFlowType('completed');
@@ -198,7 +198,7 @@ export default function Chatbot() {
       {
         id: '1',
         sender: 'bot',
-        text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+        text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
         options: [
           { label: '🛡 Explore Solutions', action: 'explore_solutions' },
           { label: '🎓 RTI Academy', action: 'menu_academy' },
@@ -606,7 +606,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+          text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
           options: [
             { label: '🛡 Explore Solutions', action: 'explore_solutions' },
             { label: '🎓 RTI Academy', action: 'menu_academy' },
@@ -1600,7 +1600,7 @@ export default function Chatbot() {
     // AI Qualification Flow start
     if (action.startsWith('start_qualification')) {
       const parts = action.split(':');
-      const serviceName = parts[1] || 'RTI Cybersecurity Solution';
+      const serviceName = parts[1] || 'Technotama Solution';
       
       setQualStep(1);
       setQualData({
@@ -1870,7 +1870,7 @@ export default function Chatbot() {
 
       if (contactPurpose === 'proposal') {
         try {
-          const needsStr = `Request Proposal untuk: ${currentContextService || qualData.targetService || 'RTI Cybersecurity Solution'}. Industri: ${qualData.industry || 'N/A'}. Karyawan: ${qualData.employees || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}. Mulai Proyek: ${qualData.timeline || 'N/A'}.`;
+          const needsStr = `Request Proposal untuk: ${currentContextService || qualData.targetService || 'Technotama Solution'}. Industri: ${qualData.industry || 'N/A'}. Karyawan: ${qualData.employees || 'N/A'}. Tantangan: ${qualData.challenge || 'N/A'}. Mulai Proyek: ${qualData.timeline || 'N/A'}.`;
           
           await fetch('/api/leads', {
             method: 'POST',
@@ -2291,7 +2291,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: '👋 Selamat datang di RTI – Riset Teknologi Indonesia.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+            text: '👋 Selamat datang di RTI – Technotama.\n\nSaya adalah RTI AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
             options: [
               { label: '🛡 Explore Solutions', action: 'explore_solutions' },
               { label: '🎓 RTI Academy', action: 'menu_academy' },
@@ -2484,7 +2484,7 @@ export default function Chatbot() {
               <div className="flex items-center space-x-2.5">
                 <img 
                   src="/logo.png" 
-                  alt="Logo PT Riset Teknologi Indonesia" 
+                  alt="Logo Technotama" 
                   className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
                 />
                 <div>

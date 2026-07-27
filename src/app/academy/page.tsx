@@ -104,7 +104,7 @@ export default function AcademyPage() {
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20">
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span>RTI Cybersecurity Academy</span>
+                <span>Technotama Academy</span>
               </span>
             </div>
 
@@ -828,7 +828,7 @@ export default function AcademyPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Program RTI Cybersecurity Bootcamp dapat diadaptasikan ke berbagai model kerja sama korporasi maupun instansi pendidikan:
+                  Program Technotama Bootcamp dapat diadaptasikan ke berbagai model kerja sama korporasi maupun instansi pendidikan:
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

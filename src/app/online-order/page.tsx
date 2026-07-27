@@ -222,7 +222,7 @@ export default function OnlineOrder() {
           </div>
 
           <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden relative">
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
 
             {/* Mobile Stepper progress */}
             <div className="md:hidden border-b border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between text-xs font-bold text-slate-500">
@@ -436,7 +436,7 @@ export default function OnlineOrder() {
                       className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500 shrink-0 mt-0.5"
                     />
                     <label htmlFor="pdp-consent" className="text-[10px] leading-relaxed text-slate-500 font-semibold select-none">
-                      Saya memberikan persetujuan kepada PT Riset Teknologi Indonesia untuk mengumpulkan, menyimpan, dan memproses data pribadi koordinator proyek (PIC) di atas untuk kepentingan pemesanan layanan ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
+                      Saya memberikan persetujuan kepada Technotama untuk mengumpulkan, menyimpan, dan memproses data pribadi koordinator proyek (PIC) di atas untuk kepentingan pemesanan layanan ini sesuai dengan regulasi UU Pelindungan Data Pribadi (UU PDP). *
                     </label>
                   </div>                   <div className="pt-6 flex flex-col-reverse sm:flex-row sm:justify-between gap-3 border-t border-slate-100">
                     <button

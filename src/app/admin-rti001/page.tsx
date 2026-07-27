@@ -6,13 +6,58 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Chatbot from '@/components/Chatbot';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import WysiwygEditor from '@/components/WysiwygEditor';
 import { 
   Lock, Mail, AlertCircle, RefreshCw, LayoutDashboard, 
   Users, Briefcase, FileText, CheckCircle2, TrendingUp, 
-  Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo, Key,
-  Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X, Trash2
+  Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo,
+  Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X, Trash2,
+  Upload
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
+const resizeImage = (file: File, maxWidth: number, maxHeight: number): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const fileType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          const dataUrl = canvas.toDataURL(fileType, fileType === 'image/jpeg' ? 0.85 : undefined);
+          resolve(dataUrl);
+        } else {
+          resolve(event.target?.result as string);
+        }
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+};
 
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,8 +87,8 @@ export default function AdminDashboard() {
   const [emailSendStatus, setEmailSendStatus] = useState<{ success?: boolean; error?: string; simulated?: boolean; logPath?: string } | null>(null);
 
   // Login form state
-  const [email, setEmail] = useState('admin@risetin.co.id');
-  const [password, setPassword] = useState('adminpassword123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [captchaInput, setCaptchaInput] = useState('');
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: 0 });
   const [loginError, setLoginError] = useState('');
@@ -209,6 +254,14 @@ export default function AdminDashboard() {
 
   const handlePublishBlog = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate content
+    const sanitizedContent = blogContent.replace(/<p><br><\/p>/g, '').trim();
+    if (!sanitizedContent || sanitizedContent === '') {
+      alert('Konten artikel tidak boleh kosong.');
+      return;
+    }
+
     try {
       const url = editingBlogId ? `/api/blogs/${editingBlogId}` : '/api/blogs';
       const method = editingBlogId ? 'PUT' : 'POST';
@@ -712,28 +765,8 @@ export default function AdminDashboard() {
               </div>
 
               <div className="bg-white border border-slate-200/80 p-8 rounded-2xl shadow-sm relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-600" />
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-slate-900" />
                 
-                {/* Admin credentials tips */}
-                <div className="bg-slate-900 text-slate-300 p-4 rounded-xl text-xs mb-6 space-y-3">
-                  <div className="flex items-center space-x-1.5 text-white font-bold">
-                    <Key className="w-4 h-4 text-blue-500" />
-                    <span>Akses Administrator & Customer Care (Demo)</span>
-                  </div>
-                  <div className="font-mono space-y-2">
-                    <div>
-                      <span className="text-blue-400 font-semibold text-[10px]">Role Admin:</span>
-                      <div className="pl-2.5 mt-0.5">Email: admin@risetin.co.id</div>
-                      <div className="pl-2.5">Password: adminpassword123</div>
-                    </div>
-                    <div className="border-t border-slate-800 pt-2">
-                      <span className="text-amber-400 font-semibold text-[10px]">Role Customer Care:</span>
-                      <div className="pl-2.5 mt-0.5">Email: customercare@risetin.co.id</div>
-                      <div className="pl-2.5">Password: customercarepassword123</div>
-                    </div>
-                  </div>
-                </div>
-
                 <form onSubmit={handleLogin} className="space-y-4">
                   {loginError && (
                     <div className="p-3 rounded-lg bg-red-50 border border-red-100 flex items-start space-x-2 text-xs text-red-700">
@@ -749,7 +782,7 @@ export default function AdminDashboard() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@risetin.co.id"
+                      placeholder="Masukkan email admin"
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                     />
                   </div>
@@ -1334,27 +1367,15 @@ export default function AdminDashboard() {
                           </div>
 
                           <div>
-                            <div className="flex items-center justify-between mb-1">
-                              <label className="block text-[10px] font-bold text-slate-500 uppercase">Konten Artikel Lengkap (Format HTML) *</label>
-                              <span className="text-[9px] text-slate-400 font-bold uppercase">Mendukung Tag Format HTML</span>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <label className="block text-[10px] font-bold text-slate-500 uppercase">Konten Artikel Lengkap *</label>
+                              <span className="text-[9px] text-slate-400 font-bold uppercase">Mendukung WYSIWYG & HTML</span>
                             </div>
-                            <textarea
-                              required
-                              rows={12}
+                            <WysiwygEditor
                               value={blogContent}
-                              onChange={(e) => setBlogContent(e.target.value)}
-                              placeholder="Ketik isi lengkap artikel di sini... (Contoh: <h2>Judul Bagian</h2> <p>Isi paragraf...</p>)"
-                              className="w-full text-xs font-mono text-slate-800 border border-slate-200 rounded-xl px-3 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all resize-y"
+                              onChange={setBlogContent}
+                              placeholder="Ketik isi lengkap artikel di sini..."
                             />
-                            <div className="mt-1.5 p-3 rounded-lg bg-blue-50/50 border border-blue-100/50 text-[10px] text-blue-700 leading-normal font-semibold">
-                              💡 <strong>Tips Blogger Profesional:</strong> Gunakan tag HTML untuk formatting konten yang indah:
-                              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 font-mono text-[9px] text-blue-600">
-                                <span>&lt;h2&gt;Judul Bagian&lt;/h2&gt;</span>
-                                <span>&lt;p&gt;Paragraf&lt;/p&gt;</span>
-                                <span>&lt;strong&gt;Tebal&lt;/strong&gt;</span>
-                                <span>&lt;ul&gt;&lt;li&gt;List Item&lt;/li&gt;&lt;/ul&gt;</span>
-                              </div>
-                            </div>
                           </div>
 
                           <div className="flex items-center space-x-3 pt-3 border-t border-slate-100">
@@ -1771,18 +1792,72 @@ export default function AdminDashboard() {
                                 </select>
                               </div>
                               <div className="sm:col-span-3">
-                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">URL Ilustrasi / Infografis</label>
-                                <input
-                                  type="text"
-                                  placeholder="Contoh: /illustrations/governance.png"
-                                  value={svc.imageUrl || ''}
-                                  onChange={(e) => {
-                                    const updatedServices = [...siteConfig.services];
-                                    updatedServices[index] = { ...svc, imageUrl: e.target.value };
-                                    setSiteConfig({ ...siteConfig, services: updatedServices });
-                                  }}
-                                  className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
-                                />
+                                <label className="block text-[9px] font-bold text-slate-500 uppercase mb-1">Ilustrasi / Infografis</label>
+                                <div className="space-y-2">
+                                  {svc.imageUrl && (
+                                    <div className="flex items-center space-x-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200/80">
+                                      <img
+                                        src={svc.imageUrl}
+                                        alt="Preview"
+                                        className="h-10 w-16 object-cover rounded-lg border border-slate-200 bg-white shadow-sm"
+                                      />
+                                      <div className="flex-1 min-w-0">
+                                        <div className="text-[8px] text-slate-400 truncate font-mono">
+                                          {svc.imageUrl.startsWith('data:') ? 'Base64 Encoded Image' : svc.imageUrl}
+                                        </div>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const updatedServices = [...siteConfig.services];
+                                          updatedServices[index] = { ...svc, imageUrl: '' };
+                                          setSiteConfig({ ...siteConfig, services: updatedServices });
+                                        }}
+                                        className="py-1 px-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors text-[9px] font-bold cursor-pointer"
+                                      >
+                                        Hapus
+                                      </button>
+                                    </div>
+                                  )}
+                                  <div className="flex items-center space-x-2">
+                                    <label className="cursor-pointer bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 px-3 py-1.5 rounded-lg font-bold text-[10px] flex items-center space-x-1.5 transition-colors shrink-0 shadow-sm">
+                                      <Upload className="w-3.5 h-3.5" />
+                                      <span>Unggah</span>
+                                      <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={async (e) => {
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            try {
+                                              const resizedBase64 = await resizeImage(file, 800, 450);
+                                              const updatedServices = [...siteConfig.services];
+                                              updatedServices[index] = { ...svc, imageUrl: resizedBase64 };
+                                              setSiteConfig({ ...siteConfig, services: updatedServices });
+                                            } catch (err) {
+                                              alert('Gagal memproses gambar.');
+                                            }
+                                          }
+                                        }}
+                                      />
+                                    </label>
+                                    <input
+                                      type="text"
+                                      placeholder="Atau masukkan URL gambar..."
+                                      value={svc.imageUrl || ''}
+                                      onChange={(e) => {
+                                        const updatedServices = [...siteConfig.services];
+                                        updatedServices[index] = { ...svc, imageUrl: e.target.value };
+                                        setSiteConfig({ ...siteConfig, services: updatedServices });
+                                      }}
+                                      className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
+                                    />
+                                  </div>
+                                  <div className="text-[8px] text-slate-400 font-semibold leading-normal uppercase">
+                                    💡 Gambar diunggah akan otomatis disesuaikan (maksimal lebar 800px).
+                                  </div>
+                                </div>
                               </div>
                             </div>
                             <div>

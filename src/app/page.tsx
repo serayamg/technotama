@@ -560,7 +560,7 @@ export default function Home() {
               </h1>
 
               <p className="text-sm sm:text-base leading-relaxed text-slate-600 max-w-xl mx-auto lg:mx-0">
-                {siteConfig?.hero?.subtitle || 'PT Riset Teknologi Indonesia membantu kementerian, lembaga pemerintah, BUMN, perbankan, fintech, dan perusahaan swasta membangun tata kelola TI, keamanan siber, kepatuhan regulasi, serta mitigasi insiden berbasis standar internasional.'}
+                {siteConfig?.hero?.subtitle || 'Technotama membantu kementerian, lembaga pemerintah, BUMN, perbankan, fintech, dan perusahaan swasta membangun tata kelola TI, keamanan siber, kepatuhan regulasi, serta mitigasi insiden berbasis standar internasional.'}
               </p>
 
               {/* CTAs */}
@@ -1355,7 +1355,7 @@ export default function Home() {
                     </div>
 
                     <div className="bg-blue-50/55 border border-blue-100 rounded-xl p-3.5 text-xs text-blue-900 leading-relaxed font-semibold">
-                      Tim konsultan keamanan PT Riset Teknologi Indonesia merekomendasikan asesmen formal untuk hardening web server Anda. Silakan klik tombol di bawah untuk konsultasi penanganan atau koordinasi lanjutan.
+                      Tim konsultan keamanan Technotama merekomendasikan asesmen formal untuk hardening web server Anda. Silakan klik tombol di bawah untuk konsultasi penanganan atau koordinasi lanjutan.
                     </div>
 
                     <div className="grid grid-cols-2 gap-3 pt-2">
