@@ -768,7 +768,7 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Mengapa Memilih Kami</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Kombinasi Reputasi-Track Record Sektor Publik & <span className="whitespace-nowrap">FSI</span>
+              Reputasi & Rekam Jejak Tim di Sektor Publik & <span className="whitespace-nowrap">FSI</span>
             </h2>
             <p className="text-sm text-slate-500 mt-3 leading-relaxed">
               Kami membawa pendekatan holistik yang berbasis regulasi nasional dan kerangka kerja terbaik dunia untuk memastikan kepatuhan yang berkelanjutan.
@@ -788,7 +788,7 @@ export default function Home() {
               <CheckCircle2 className="w-8 h-8 text-blue-600" />
               <h3 className="font-display font-extrabold text-base text-slate-900">Pengalaman Pemerintah</h3>
               <p className="text-xs leading-relaxed text-slate-500">
-                Dipercaya oleh BSSN, Kejaksaan Agung, dan Kemenkumham untuk menyusun peta jalan dan audit keamanan siber SPBE nasional.
+                Tim ahli kami telah dipercaya oleh BSSN, Kejaksaan Agung, dan Kemenkumham untuk menyusun peta jalan dan audit keamanan siber SPBE nasional.
               </p>
             </div>
 
@@ -796,7 +796,7 @@ export default function Home() {
               <CheckCircle2 className="w-8 h-8 text-blue-600" />
               <h3 className="font-display font-extrabold text-base text-slate-900">Pengalaman Perbankan & Fintech</h3>
               <p className="text-xs leading-relaxed text-slate-500">
-                Memiliki rekam jejak mendampingi Bank UOB, Bank DKI, payment gateway, dan fintech memenuhi kepatuhan regulasi OJK & Bank Indonesia.
+                Personil kami memiliki rekam jejak mendampingi Bank UOB, Bank DKI, payment gateway, dan fintech memenuhi kepatuhan regulasi OJK & Bank Indonesia.
               </p>
             </div>
 
@@ -1003,7 +1003,7 @@ export default function Home() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Kisah Sukses</div>
             <h2 className="font-display font-extrabold text-3xl text-slate-900 tracking-tight">
-              Studi Kasus Proyek Enterprise & <span className="whitespace-nowrap">Sektor Publik</span>
+              Portofolio Pengalaman Proyek Tim Kami
             </h2>
           </div>
 

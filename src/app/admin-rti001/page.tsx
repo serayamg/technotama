@@ -783,6 +783,7 @@ export default function AdminDashboard() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Masukkan email admin"
+                      autoComplete="new-username"
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                     />
                   </div>
@@ -795,6 +796,7 @@ export default function AdminDashboard() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                      autoComplete="new-password"
                       className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all"
                     />
                   </div>
