@@ -200,7 +200,7 @@ Technotama Neo didukung oleh konsultan bersertifikasi internasional terkemuka di
 
 Kami berharap proposal penawaran ini dapat memperjelas pendekatan teknis dan metodologi Technotama Neo dalam meningkatkan postur keamanan siber di **${p.company}**. 
 
-Jika terdapat pertanyaan lebih lanjut atau tim Anda ingin mengadakan rapat kick-off virtual, silakan menghubungi kami langsung melalui PIC Customer Care di email **customercare@risetin.co.id**.
+Jika terdapat pertanyaan lebih lanjut atau tim Anda ingin mengadakan rapat kick-off virtual, silakan menghubungi kami langsung melalui PIC Customer Care di email **customercare@technotama.co.id**.
 
 ${additional ? `\n--- \n### Catatan Tambahan (Kustomisasi Admin):\n*${additional}*` : ''}
 `;

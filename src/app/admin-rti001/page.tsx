@@ -2039,7 +2039,7 @@ export default function AdminDashboard() {
                                   ...siteConfig,
                                   integrations: { ...siteConfig.integrations, smtpUser: e.target.value }
                                 })}
-                                placeholder="customercare@risetin.co.id"
+                                placeholder="customercare@technotama.co.id"
                                 className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                               />
                             </div>
@@ -2067,7 +2067,7 @@ export default function AdminDashboard() {
                                   ...siteConfig,
                                   integrations: { ...siteConfig.integrations, smtpFrom: e.target.value }
                                 })}
-                                placeholder="customercare@risetin.co.id"
+                                placeholder="customercare@technotama.co.id"
                                 className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                               />
                             </div>

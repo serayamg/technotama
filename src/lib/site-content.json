@@ -2,7 +2,7 @@
   "general": {
     "companyName": "Technotama",
     "companyShortName": "Technotama",
-    "email": "customercare@risetin.co.id",
+    "email": "customercare@technotama.co.id",
     "phone": "0878-8333-6017",
     "address": "Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190",
     "linkedin": "https://linkedin.com/company/riset-teknologi-indonesia",
@@ -53,7 +53,7 @@
       "desc": "Perancangan strategi dan peta jalan (roadmap) keamanan TI yang terintegrasi secara jangka panjang.",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/cyber-blueprint.png"
     },
     {
       "id": "it-grc",
@@ -61,7 +61,7 @@
       "desc": "Pengembangan kerangka kerja tata kelola TI, struktur kebijakan (High-Level Policy), serta manajemen risiko pihak ketiga.",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/it-grc.png"
     },
     {
       "id": "iso-implementation",
@@ -69,7 +69,7 @@
       "desc": "Pendampingan implementasi standar internasional (seperti ISO/IEC 27001) menggunakan siklus PDCA.",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/iso-implementation.png"
     },
     {
       "id": "bcm-bcp-drp",
@@ -77,7 +77,7 @@
       "desc": "Penyusunan Business Continuity Plan (BCP), Disaster Recovery Plan (DRP), dan simulasi kesiapan penanganan insiden siber (Table-Top Exercise/Cyber Drill).",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/bcm-bcp-drp.png"
     },
     {
       "id": "digital-maturity",
@@ -85,7 +85,7 @@
       "desc": "Evaluasi tingkat kematangan digital dan kuantifikasi postur keamanan organisasi secara terukur.",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/digital-maturity.png"
     },
     {
       "id": "cyber-awareness",
@@ -93,7 +93,7 @@
       "desc": "Program pelatihan, phishing simulation, dan kampanye keamanan untuk staf non-teknis.",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/cyber-awareness.png"
     },
     {
       "id": "it-audit",
@@ -101,7 +101,7 @@
       "desc": "Audit menyeluruh terkait tata kelola, infrastruktur, sistem perdagangan (trading), dan kepatuhan regulasi (seperti POJK).",
       "badge": "Governance",
       "cluster": "governance",
-      "imageUrl": "/illustrations/governance.png"
+      "imageUrl": "/illustrations/it-audit.png"
     },
     {
       "id": "vulnerability-assessment",
@@ -109,7 +109,7 @@
       "desc": "Pemetaan dan pemindaian kerentanan sistem atau jaringan secara otomatis dan berkala.",
       "badge": "Offensive",
       "cluster": "offensive",
-      "imageUrl": "/illustrations/offensive.png"
+      "imageUrl": "/illustrations/vulnerability-assessment.png"
     },
     {
       "id": "penetration-testing",
@@ -117,7 +117,7 @@
       "desc": "Simulasi eksploitasi keamanan menggunakan metode Black Box, Gray Box, maupun White Box.",
       "badge": "Offensive",
       "cluster": "offensive",
-      "imageUrl": "/illustrations/offensive.png"
+      "imageUrl": "/illustrations/penetration-testing.png"
     },
     {
       "id": "secure-sdlc",
@@ -125,7 +125,7 @@
       "desc": "Integrasi keamanan sejak tahap awal pemrograman dengan pendekatan Shift Left atau DevSecOps.",
       "badge": "Offensive",
       "cluster": "offensive",
-      "imageUrl": "/illustrations/offensive.png"
+      "imageUrl": "/illustrations/secure-sdlc.png"
     },
     {
       "id": "red-teaming",
@@ -133,7 +133,7 @@
       "desc": "Simulasi serangan siber multi-vektor secara riil untuk menguji ketahanan sistem dan tim keamanan internal.",
       "badge": "Offensive",
       "cluster": "offensive",
-      "imageUrl": "/illustrations/offensive.png"
+      "imageUrl": "/illustrations/red-teaming.png"
     },
     {
       "id": "soc",
@@ -141,7 +141,7 @@
       "desc": "Pemantauan keamanan siber 24/7 real-time berbasis infrastruktur SIEM dan tim analis terlatih.",
       "badge": "Defensive",
       "cluster": "defensive",
-      "imageUrl": "/illustrations/defensive.png"
+      "imageUrl": "/illustrations/soc.png"
     },
     {
       "id": "cyber-threat-intelligence",
@@ -149,7 +149,7 @@
       "desc": "Integrasi data ancaman global secara real-time untuk mendeteksi kebocoran data dan kredensial secara dini.",
       "badge": "Defensive",
       "cluster": "defensive",
-      "imageUrl": "/illustrations/defensive.png"
+      "imageUrl": "/illustrations/cyber-threat-intelligence.png"
     },
     {
       "id": "network-endpoint-hardening",
@@ -157,7 +157,7 @@
       "desc": "Reinforcement konfigurasi sistem, penutupan port, dan penguatan perangkat jaringan serta endpoint.",
       "badge": "Defensive",
       "cluster": "defensive",
-      "imageUrl": "/illustrations/defensive.png"
+      "imageUrl": "/illustrations/network-endpoint-hardening.png"
     },
     {
       "id": "incident-management",
@@ -165,7 +165,7 @@
       "desc": "Kerangka respons darurat untuk mendeteksi, mengisolasi, dan membasmi ancaman berdasarkan NIST IR Life Cycle.",
       "badge": "Defensive",
       "cluster": "defensive",
-      "imageUrl": "/illustrations/defensive.png"
+      "imageUrl": "/illustrations/incident-management.png"
     },
     {
       "id": "digital-forensic",
@@ -173,7 +173,7 @@
       "desc": "Identifikasi, pengumpulan, dan analisis bukti digital pasca-insiden yang memenuhi standar hukum dan regulasi.",
       "badge": "Defensive",
       "cluster": "defensive",
-      "imageUrl": "/illustrations/defensive.png"
+      "imageUrl": "/illustrations/digital-forensic.png"
     }
   ],
   "packages": [
@@ -294,9 +294,9 @@
     "geminiApiKey": "",
     "smtpHost": "",
     "smtpPort": "587",
-    "smtpUser": "admin@risetin.co.id",
+    "smtpUser": "admin@technotama.co.id",
     "smtpPassword": "",
-    "smtpFrom": "customercare@risetin.co.id",
+    "smtpFrom": "customercare@technotama.co.id",
     "whatsappGatewayUrl": "",
     "whatsappToken": ""
   }

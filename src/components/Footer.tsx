@@ -165,8 +165,8 @@ export default function Footer() {
               )}
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href={`mailto:${siteConfig?.general?.email || 'customercare@risetin.co.id'}`} className="hover:text-white transition-colors">
-                  {siteConfig?.general?.email || 'customercare@risetin.co.id'}
+                <a href={`mailto:${siteConfig?.general?.email || 'customercare@technotama.co.id'}`} className="hover:text-white transition-colors">
+                  {siteConfig?.general?.email || 'customercare@technotama.co.id'}
                 </a>
               </li>
               <li className="flex items-center space-x-2">

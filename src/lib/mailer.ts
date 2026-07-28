@@ -21,7 +21,7 @@ function getDynamicSMTPConfig() {
           port: config.integrations.smtpPort ? parseInt(config.integrations.smtpPort) : (process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587),
           user: config.integrations.smtpUser || process.env.SMTP_USER,
           pass: config.integrations.smtpPassword || process.env.SMTP_PASSWORD,
-          from: config.integrations.smtpFrom || process.env.SMTP_FROM || 'customercare@risetin.co.id'
+          from: config.integrations.smtpFrom || process.env.SMTP_FROM || 'customercare@technotama.co.id'
         };
       }
     }
@@ -33,7 +33,7 @@ function getDynamicSMTPConfig() {
     port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587,
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
-    from: process.env.SMTP_FROM || 'customercare@risetin.co.id'
+    from: process.env.SMTP_FROM || 'customercare@technotama.co.id'
   };
 }
 

@@ -130,7 +130,7 @@ export async function POST(request: Request) {
     <div class="footer">
       <p><strong>PT Risetin Teknologi Indonesia (Technotama) Neo</strong></p>
       <p>Gedung Cyber, Kuningan Barat, Jakarta Selatan, Indonesia</p>
-      <p>Website: <a href="https://risetin.co.id" style="color: #2563eb; text-decoration: none;">risetin.co.id</a> | Email: customercare@risetin.co.id</p>
+      <p>Website: <a href="https://risetin.co.id" style="color: #2563eb; text-decoration: none;">risetin.co.id</a> | Email: customercare@technotama.co.id</p>
     </div>
   </div>
 </body>
