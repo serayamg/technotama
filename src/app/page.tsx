@@ -616,11 +616,11 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:divide-x md:divide-slate-100">
             <div>
               <div className="font-display font-extrabold text-3xl lg:text-4xl text-blue-600">12+ Tahun</div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Pengalaman Industri</div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Pengalaman Kolektif</div>
             </div>
             <div>
               <div className="font-display font-extrabold text-3xl lg:text-4xl text-blue-600">65+ Proyek</div>
-              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Sukses Diselesaikan</div>
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Portofolio Proyek</div>
             </div>
             <div>
               <div className="font-display font-extrabold text-3xl lg:text-4xl text-blue-600">100%</div>
