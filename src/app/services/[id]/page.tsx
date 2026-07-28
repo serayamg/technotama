@@ -468,14 +468,23 @@ export default function ServiceDetail() {
     return 'defensive';
   };
 
-  const getDefaultImageUrl = (cluster: string) => {
+  const getDefaultImageUrl = (id: string, cluster: string) => {
+    const standardIds = [
+      'cyber-blueprint', 'it-grc', 'iso-implementation', 'bcm-bcp-drp', 'digital-maturity', 
+      'cyber-awareness', 'it-audit', 'vulnerability-assessment', 'penetration-testing', 
+      'secure-sdlc', 'red-teaming', 'soc', 'cyber-threat-intelligence', 
+      'network-endpoint-hardening', 'incident-management', 'digital-forensic'
+    ];
+    if (standardIds.includes(id)) {
+      return `/illustrations/${id}.png`;
+    }
     if (cluster === 'governance') return '/illustrations/governance.png';
     if (cluster === 'offensive') return '/illustrations/offensive.png';
     return '/illustrations/defensive.png';
   };
 
   const dynamicService = siteConfig?.services?.find((s: any) => s.id === serviceId);
-  const imageUrl = dynamicService?.imageUrl || getDefaultImageUrl(dynamicService?.cluster || serviceIdToCluster(serviceId));
+  const imageUrl = dynamicService?.imageUrl || getDefaultImageUrl(serviceId, dynamicService?.cluster || serviceIdToCluster(serviceId));
 
   const IconComp = service.icon;
 

@@ -1811,8 +1811,18 @@ export default function AdminDashboard() {
                                       <button
                                         type="button"
                                         onClick={() => {
+                                          const standardIds = [
+                                            'cyber-blueprint', 'it-grc', 'iso-implementation', 'bcm-bcp-drp', 'digital-maturity', 
+                                            'cyber-awareness', 'it-audit', 'vulnerability-assessment', 'penetration-testing', 
+                                            'secure-sdlc', 'red-teaming', 'soc', 'cyber-threat-intelligence', 
+                                            'network-endpoint-hardening', 'incident-management', 'digital-forensic'
+                                          ];
+                                          const defaultUrl = standardIds.includes(svc.id)
+                                            ? `/illustrations/${svc.id}.png`
+                                            : (svc.cluster === 'offensive' ? '/illustrations/offensive.png' : svc.cluster === 'defensive' ? '/illustrations/defensive.png' : '/illustrations/governance.png');
+                                          
                                           const updatedServices = [...siteConfig.services];
-                                          updatedServices[index] = { ...svc, imageUrl: '' };
+                                          updatedServices[index] = { ...svc, imageUrl: defaultUrl };
                                           setSiteConfig({ ...siteConfig, services: updatedServices });
                                         }}
                                         className="py-1 px-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors text-[9px] font-bold cursor-pointer"
@@ -1834,11 +1844,26 @@ export default function AdminDashboard() {
                                           if (file) {
                                             try {
                                               const resizedBase64 = await resizeImage(file, 800, 450);
+                                              const uploadRes = await fetch('/api/upload', {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                  image: resizedBase64,
+                                                  serviceId: svc.id
+                                                })
+                                              });
+
+                                              if (!uploadRes.ok) {
+                                                const errData = await uploadRes.json();
+                                                throw new Error(errData.error || 'Upload failed');
+                                              }
+
+                                              const uploadData = await uploadRes.json();
                                               const updatedServices = [...siteConfig.services];
-                                              updatedServices[index] = { ...svc, imageUrl: resizedBase64 };
+                                              updatedServices[index] = { ...svc, imageUrl: uploadData.imageUrl };
                                               setSiteConfig({ ...siteConfig, services: updatedServices });
-                                            } catch (err) {
-                                              alert('Gagal memproses gambar.');
+                                            } catch (err: any) {
+                                              alert('Gagal mengunggah gambar: ' + (err.message || 'Terjadi kesalahan.'));
                                             }
                                           }
                                         }}
