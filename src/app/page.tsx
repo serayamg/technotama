@@ -642,7 +642,7 @@ export default function Home() {
               Dipercaya oleh Institusi Terkemuka di Indonesia
             </h2>
             <p className="text-xs text-slate-500 mt-2 font-semibold">
-              Technotama telah mendampingi proyek kepatuhan dan keamanan siber di berbagai sektor:
+              Tim ahli kami memiliki pengalaman mendampingi proyek kepatuhan dan keamanan siber di berbagai sektor:
             </p>
           </div>
 
