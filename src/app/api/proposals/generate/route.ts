@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { generateProposalWithAI } from '@/lib/gemini';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
 
 export async function POST(request: Request) {
   try {
+    const user = await getAuthUser();
+    if (!user || !isAdmin(user.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized access.' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { proposalId, additionalInstructions } = body;
 

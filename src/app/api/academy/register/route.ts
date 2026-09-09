@@ -1,5 +1,30 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { getAuthUser, isAdmin } from '@/lib/auth-helper';
+
+// GET /api/academy/register - Admin-only listing of academy registrations
+export async function GET() {
+  try {
+    const user = await getAuthUser();
+    if (!user || !isAdmin(user.role)) {
+      return NextResponse.json(
+        { error: 'Unauthorized access.' },
+        { status: 403 }
+      );
+    }
+
+    const registrations = await prisma.academyRegistration.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+    return NextResponse.json(registrations, { status: 200 });
+  } catch (err: any) {
+    console.error('[API ERROR] Failed to fetch academy registrations:', err);
+    return NextResponse.json(
+      { error: 'Terjadi kesalahan internal server.' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request: Request) {
   try {

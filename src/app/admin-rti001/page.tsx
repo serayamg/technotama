@@ -12,7 +12,7 @@ import {
   Users, Briefcase, FileText, CheckCircle2, TrendingUp, 
   Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo,
   Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X, Trash2,
-  Upload
+  Upload, GraduationCap, Save
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
@@ -62,7 +62,7 @@ const resizeImage = (file: File, maxWidth: number, maxHeight: number): Promise<s
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adminUser, setAdminUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'bookings' | 'proposals' | 'orders' | 'blogs' | 'settings'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'leads' | 'bookings' | 'proposals' | 'orders' | 'academy' | 'blogs' | 'settings'>('analytics');
 
   // CMS Website Editor States
   const [siteConfig, setSiteConfig] = useState<any>(null);
@@ -100,6 +100,7 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [proposals, setProposals] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
+  const [academyRegistrations, setAcademyRegistrations] = useState<any[]>([]);
 
   // Blog publishing state
   const [blogTitle, setBlogTitle] = useState('');
@@ -192,8 +193,57 @@ export default function AdminDashboard() {
         const dataBookings = await resBookings.json();
         setBookings(dataBookings);
       }
+
+      // 8. Fetch all academy registrations
+      const resAcademy = await fetch('/api/academy/register');
+      if (resAcademy.ok) {
+        const dataAcademy = await resAcademy.json();
+        setAcademyRegistrations(dataAcademy);
+      }
     } catch (err) {
       console.error('Failed to fetch admin data:', err);
+    }
+  };
+
+  // Update lead status (CRM follow-up)
+  const handleUpdateLeadStatus = async (leadId: string, status: string) => {
+    try {
+      const res = await fetch(`/api/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status: updated.status } : l)));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Gagal memperbarui status lead.');
+      }
+    } catch (err) {
+      console.error('Failed to update lead status:', err);
+      alert('Terjadi kesalahan jaringan saat memperbarui status lead.');
+    }
+  };
+
+  // Update order status
+  const handleUpdateOrderStatus = async (orderId: string, status: string) => {
+    try {
+      const res = await fetch(`/api/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: updated.status } : o)));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Gagal memperbarui status order.');
+      }
+    } catch (err) {
+      console.error('Failed to update order status:', err);
+      alert('Terjadi kesalahan jaringan saat memperbarui status order.');
     }
   };
 
@@ -740,11 +790,24 @@ export default function AdminDashboard() {
       case 'NEW': return 'bg-blue-50 text-blue-600 border-blue-200';
       case 'CONTACTED': return 'bg-amber-50 text-amber-600 border-amber-200';
       case 'CONVERTED': return 'bg-emerald-50 text-emerald-600 border-emerald-200';
+      case 'LOST': return 'bg-red-50 text-red-600 border-red-200';
       case 'PENDING': return 'bg-slate-50 text-slate-600 border-slate-200';
+      case 'REVIEWING': return 'bg-indigo-50 text-indigo-600 border-indigo-200';
+      case 'SENT': return 'bg-blue-50 text-blue-600 border-blue-200';
+      case 'APPROVED': return 'bg-emerald-50 text-emerald-600 border-emerald-200';
+      case 'REJECTED': return 'bg-red-50 text-red-600 border-red-200';
+      case 'ORDERED': return 'bg-blue-50 text-blue-600 border-blue-200';
       case 'DOC_UPLOADED': return 'bg-cyan-50 text-cyan-600 border-cyan-200';
+      case 'QUOTATION_GENERATED': return 'bg-indigo-50 text-indigo-600 border-indigo-200';
+      case 'INVOICED': return 'bg-amber-50 text-amber-600 border-amber-200';
+      case 'PAID': return 'bg-teal-50 text-teal-600 border-teal-200';
+      case 'COMPLETED': return 'bg-emerald-50 text-emerald-600 border-emerald-200';
       default: return 'bg-slate-50 text-slate-600 border-slate-200';
     }
   };
+
+  const LEAD_STATUSES = ['NEW', 'CONTACTED', 'CONVERTED', 'LOST'];
+  const ORDER_STATUSES = ['ORDERED', 'DOC_UPLOADED', 'QUOTATION_GENERATED', 'APPROVED', 'INVOICED', 'PAID', 'COMPLETED'];
 
   // Recharts Chart Config
   const COLORS = ['#2563eb', '#06b6d4', '#d97706', '#10b981', '#6366f1'];
@@ -919,6 +982,17 @@ export default function AdminDashboard() {
                     <span>Project Orders</span>
                   </button>
                   <button
+                    onClick={() => setActiveTab('academy')}
+                    className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
+                      activeTab === 'academy'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <GraduationCap className="w-4.5 h-4.5" />
+                    <span>Academy Registrations</span>
+                  </button>
+                  <button
                     onClick={() => setActiveTab('blogs')}
                     className={`p-3 lg:p-4 rounded-xl text-left border text-xs font-bold transition-all focus:outline-none flex items-center space-x-2.5 shrink-0 ${
                       activeTab === 'blogs'
@@ -1054,9 +1128,15 @@ export default function AdminDashboard() {
                                   </span>
                                 </td>
                                 <td className="py-4 px-4">
-                                  <span className={`text-[9px] font-bold border px-2 py-0.5 rounded ${getStatusColor(lead.status)}`}>
-                                    {lead.status}
-                                  </span>
+                                  <select
+                                    value={lead.status}
+                                    onChange={(e) => handleUpdateLeadStatus(lead.id, e.target.value)}
+                                    className={`text-[9px] font-bold border px-2 py-1 rounded focus:outline-none cursor-pointer ${getStatusColor(lead.status)}`}
+                                  >
+                                    {LEAD_STATUSES.map((s) => (
+                                      <option key={s} value={s}>{s}</option>
+                                    ))}
+                                  </select>
                                 </td>
                               </tr>
                             ))}
@@ -1210,12 +1290,25 @@ export default function AdminDashboard() {
                                 </td>
                                 <td className="py-4 px-4 text-slate-500">{new Date(ord.createdAt).toLocaleDateString()}</td>
                                 <td className="py-4 px-4">
-                                  <span className={`text-[9px] font-bold border px-2 py-0.5 rounded ${getStatusColor(ord.status)}`}>
-                                    {ord.status}
-                                  </span>
+                                  <select
+                                    value={ord.status}
+                                    onChange={(e) => handleUpdateOrderStatus(ord.id, e.target.value)}
+                                    className={`text-[9px] font-bold border px-2 py-1 rounded focus:outline-none cursor-pointer ${getStatusColor(ord.status)}`}
+                                  >
+                                    {ORDER_STATUSES.map((s) => (
+                                      <option key={s} value={s}>{s}</option>
+                                    ))}
+                                  </select>
                                 </td>
                               </tr>
                             ))}
+                            {orders.length === 0 && (
+                              <tr>
+                                <td colSpan={5} className="py-8 text-center text-slate-400 italic">
+                                  Belum ada order proyek yang masuk.
+                                </td>
+                              </tr>
+                            )}
                           </tbody>
                         </table>
                       </div>
