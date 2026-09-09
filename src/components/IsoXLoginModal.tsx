@@ -91,13 +91,23 @@ const DEMO_USERS: DemoIsoUser[] = [
 
 export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps) {
   const [step, setStep] = useState<'credentials' | 'mfa' | 'authenticated'>('credentials');
-  const [username, setUsername] = useState('siti_jl8');
-  const [password, setPassword] = useState('ISOX@COMPLIANCE2026!');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [mfaCode, setMfaCode] = useState('');
   const [selectedUser, setSelectedUser] = useState<DemoIsoUser>(DEMO_USERS[1]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setUsername('');
+      setPassword('');
+      setMfaCode('');
+      setStep('credentials');
+      setErrorMessage('');
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -212,44 +222,6 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                 </span>
               </div>
 
-              {/* Demo Account Quick Switcher */}
-              <div className="bg-slate-950/60 rounded-xl p-3.5 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-300 flex items-center gap-1.5">
-                    <Fingerprint className="w-3.5 h-3.5 text-teal-400" />
-                    Pilih Akun Demo / Persona Konsultan:
-                  </span>
-                  <span className="text-[10px] text-slate-500">Klik untuk auto-fill</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {DEMO_USERS.map((usr) => {
-                    const isSelected = selectedUser.id === usr.id;
-                    return (
-                      <button
-                        key={usr.id}
-                        type="button"
-                        onClick={() => handleSelectDemo(usr)}
-                        className={`text-left p-2.5 rounded-lg border transition-all text-xs flex flex-col justify-between ${
-                          isSelected
-                            ? 'bg-blue-950/40 border-blue-500/60 text-white shadow-sm shadow-blue-500/20'
-                            : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-bold text-slate-200 truncate">{usr.name}</span>
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold border ${getJlBadgeColor(usr.jlLevel)}`}>
-                            {usr.jlLevel}
-                          </span>
-                        </div>
-                        <div className="text-[11px] text-slate-400 truncate">{usr.title}</div>
-                        <div className="text-[10px] text-slate-500 font-mono truncate mt-0.5">{usr.email}</div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
               {/* Login Form */}
               <form onSubmit={handleCredentialSubmit} className="space-y-4">
                 {errorMessage && (
@@ -269,8 +241,8 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                       type="text"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="e.g. siti_jl8 atau siti.rahma@bank-artha.co.id"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
+                      autoComplete="off"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
                       required
                     />
                   </div>
@@ -281,13 +253,6 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                     <label className="text-xs font-semibold text-slate-300">
                       Kata Sandi Keamanan
                     </label>
-                    <button
-                      type="button"
-                      onClick={() => setPassword('ISOX@COMPLIANCE2026!')}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 hover:underline"
-                    >
-                      Isi Demo Password
-                    </button>
                   </div>
                   <div className="relative">
                     <KeyRound className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
@@ -295,8 +260,8 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Masukkan kata sandi portal"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-10 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
+                      autoComplete="new-password"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl pl-9 pr-10 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono"
                       required
                     />
                     <button
@@ -384,15 +349,8 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-slate-300">
-                      Masukkan 6-Digit Authenticator Token
+                      Masukkan Kode Otorisasi Authenticator
                     </label>
-                    <button
-                      type="button"
-                      onClick={() => setMfaCode('987654')}
-                      className="text-[11px] text-teal-400 hover:text-teal-300 hover:underline"
-                    >
-                      Isi Demo Token (987654)
-                    </button>
                   </div>
                   <div className="relative">
                     <input
@@ -400,7 +358,6 @@ export default function IsoXLoginModal({ isOpen, onClose }: IsoXLoginModalProps)
                       maxLength={6}
                       value={mfaCode}
                       onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
-                      placeholder="987654"
                       className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg tracking-[0.5em] font-mono text-teal-300 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                       required
                     />
