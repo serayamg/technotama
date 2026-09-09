@@ -158,7 +158,7 @@ export default function Footer() {
               <li className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  {siteConfig?.general?.address || 'Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190'}
+                  {siteConfig?.general?.address || 'Graha Mustika Ratu Lantai 7, Jalan Jenderal Gatot Subroto, Kav. 74-75, Jakarta Selatan'}
                 </span>
               </li>
               {siteConfig?.general?.showPhone && (
