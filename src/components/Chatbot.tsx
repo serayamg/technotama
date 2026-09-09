@@ -198,7 +198,7 @@ export default function Chatbot() {
       {
         id: '1',
         sender: 'bot',
-        text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+        text: '👋 Selamat datang di Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
         options: [
           { label: '🛡 Explore Solutions', action: 'explore_solutions' },
           { label: '🎓 Cyber Academy', action: 'menu_academy' },
@@ -606,7 +606,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+          text: '👋 Selamat datang di Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
           options: [
             { label: '🛡 Explore Solutions', action: 'explore_solutions' },
             { label: '🎓 Cyber Academy', action: 'menu_academy' },
@@ -1404,7 +1404,7 @@ export default function Chatbot() {
         {
           id: Math.random().toString(),
           sender: 'bot',
-          text: 'Anda dapat men-download Brosur Lengkap Bootcamp Cyber Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://Technotama.co.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
+          text: 'Anda dapat men-download Brosur Lengkap Bootcamp Cyber Academy melalui link di bawah ini:\n\n📄 [Download Brosur Bootcamp (PDF)](https://technotama.id/academy-brochure.pdf)\n\nApakah masih ada hal lain yang ingin Anda tanyakan terkait program pembelajaran di Cyber Academy?',
           options: [
             { label: '✅ Ya, Saya Punya Pertanyaan Lain', action: 'ask_more_yes' },
             { label: '❌ Tidak, Sudah Cukup', action: 'ask_more_no' }
@@ -2291,7 +2291,7 @@ export default function Chatbot() {
           {
             id: Math.random().toString(),
             sender: 'bot',
-            text: '👋 Selamat datang di Technotama – Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
+            text: '👋 Selamat datang di Technotama.\n\nSaya adalah Technotama AI Cybersecurity Consultant.\n\nSaya siap membantu menemukan solusi cybersecurity maupun program pembelajaran yang paling sesuai untuk Anda.',
             options: [
               { label: '🛡 Explore Solutions', action: 'explore_solutions' },
               { label: '🎓 Cyber Academy', action: 'menu_academy' },

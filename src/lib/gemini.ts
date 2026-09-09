@@ -38,7 +38,7 @@ export async function generateProposalWithAI(proposal: ProposalData, additionalI
   const defaultTitle = `Proposal Layanan Keamanan Siber ${proposal.serviceType} - ${proposal.company}`;
 
   const systemInstructions = `
-Anda adalah Konsultan Senior Keamanan Siber di Technotama (Risetin Teknologi Indonesia) Neo.
+Anda adalah Konsultan Senior Keamanan Siber di Technotama.
 Tugas Anda adalah membuat proposal penawaran formal yang profesional, mendalam, meyakinkan, dan terstruktur dengan sangat rapi menggunakan Markdown.
 
 Gunakan data berikut untuk mengkustomisasi proposal:
@@ -140,7 +140,7 @@ function generateFallbackProposal(p: ProposalData, additional?: string): string 
 
 ## 1. RINGKASAN EKSEKUTIF (EXECUTIVE SUMMARY)
 
-PT Risetin Teknologi Indonesia (Technotama) Neo dengan bangga mengajukan proposal penawaran layanan teknologi dan keamanan siber ini untuk **${p.company}**. Di era digitalisasi yang sangat dinamis saat ini, khususnya pada sektor **${p.industry || 'Swasta/Industri'}**, perlindungan terhadap aset digital, data rahasia perusahaan, serta kepercayaan customer adalah prioritas utama.
+PT Technotama Artha Raya dengan bangga mengajukan proposal penawaran layanan teknologi dan keamanan siber ini untuk **${p.company}**. Di era digitalisasi yang sangat dinamis saat ini, khususnya pada sektor **${p.industry || 'Swasta/Industri'}**, perlindungan terhadap aset digital, data rahasia perusahaan, serta kepercayaan customer adalah prioritas utama.
 
 Berdasarkan deskripsi kebutuhan yang Anda sampaikan:
 > "${p.details}"
@@ -182,13 +182,13 @@ Proyek ini diproyeksikan selesai dalam jangka waktu **${p.timeline}** dengan rin
 **Dokumen Hasil Akhir (Deliverables):**
 1. *Executive Summary Report* (Cocok untuk level Manajemen/C-Level).
 2. *Technical Security Assessment Report* (Panduan detail perbaikan untuk tim Developer/IT).
-3. *Certificate of Security Compliance* dari Technotama Neo.
+3. *Certificate of Security Compliance* dari Technotama.
 
 ---
 
 ## 5. PROFIL Technotama & TIM AHLI
 
-Technotama Neo didukung oleh konsultan bersertifikasi internasional terkemuka di bidangnya, memastikan pengerjaan proyek berjalan sesuai standar terbaik industri global. Tim kami memegang sertifikasi:
+Technotama didukung oleh konsultan bersertifikasi internasional terkemuka di bidangnya, memastikan pengerjaan proyek berjalan sesuai standar terbaik industri global. Tim kami memegang sertifikasi:
 - **CEH** (Certified Ethical Hacker)
 - **CISSP** (Certified Information Systems Security Professional)
 - **CHFI** (Computer Hacking Forensic Investigator)
@@ -198,9 +198,9 @@ Technotama Neo didukung oleh konsultan bersertifikasi internasional terkemuka di
 
 ## 6. PENUTUP & KELANJUTAN PROYEK
 
-Kami berharap proposal penawaran ini dapat memperjelas pendekatan teknis dan metodologi Technotama Neo dalam meningkatkan postur keamanan siber di **${p.company}**. 
+Kami berharap proposal penawaran ini dapat memperjelas pendekatan teknis dan metodologi Technotama dalam meningkatkan postur keamanan siber di **${p.company}**. 
 
-Jika terdapat pertanyaan lebih lanjut atau tim Anda ingin mengadakan rapat kick-off virtual, silakan menghubungi kami langsung melalui PIC Customer Care di email **customercare@technotama.co.id**.
+Jika terdapat pertanyaan lebih lanjut atau tim Anda ingin mengadakan rapat kick-off virtual, silakan menghubungi kami langsung melalui PIC Customer Care di email **customercare@technotama.id**.
 
 ${additional ? `\n--- \n### Catatan Tambahan (Kustomisasi Admin):\n*${additional}*` : ''}
 `;

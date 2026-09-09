@@ -68,7 +68,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center space-x-4 pt-2">
               <a 
-                href={siteConfig?.general?.linkedin || "https://linkedin.com/company/riset-teknologi-indonesia"} 
+                href={siteConfig?.general?.linkedin || "https://linkedin.com/company/technotama"} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-blue-500 transition-colors"
@@ -165,8 +165,8 @@ export default function Footer() {
               )}
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href={`mailto:${siteConfig?.general?.email || 'customercare@technotama.co.id'}`} className="hover:text-white transition-colors">
-                  {siteConfig?.general?.email || 'customercare@technotama.co.id'}
+                <a href={`mailto:${siteConfig?.general?.email || 'customercare@technotama.id'}`} className="hover:text-white transition-colors">
+                  {siteConfig?.general?.email || 'customercare@technotama.id'}
                 </a>
               </li>
               <li className="flex items-center space-x-2">

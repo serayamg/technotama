@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     );
 
     response.cookies.set({
-      name: 'rti_session',
+      name: 'technotama_session',
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

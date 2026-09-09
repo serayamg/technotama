@@ -121,16 +121,16 @@ export async function POST(request: Request) {
 <body>
   <div class="wrapper">
     <div class="header">
-      <h1>RISETIN TEKNOLOGI INDONESIA</h1>
+      <h1>TECHNOTAMA</h1>
       <p>Cybersecurity & Technology Strategy Consulting</p>
     </div>
     <div class="content">
       ${emailBody}
     </div>
     <div class="footer">
-      <p><strong>PT Risetin Teknologi Indonesia (Technotama) Neo</strong></p>
+      <p><strong>PT Technotama Artha Raya</strong></p>
       <p>Gedung Cyber, Kuningan Barat, Jakarta Selatan, Indonesia</p>
-      <p>Website: <a href="https://risetin.co.id" style="color: #2563eb; text-decoration: none;">risetin.co.id</a> | Email: customercare@technotama.co.id</p>
+      <p>Website: <a href="https://technotama.id" style="color: #2563eb; text-decoration: none;">technotama.id</a> | Email: customercare@technotama.id</p>
     </div>
   </div>
 </body>

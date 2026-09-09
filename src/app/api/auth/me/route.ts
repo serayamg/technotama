@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'Technotama-super-secret-key-3
 export async function GET() {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('rti_session')?.value;
+    const token = cookieStore.get('technotama_session')?.value;
 
     if (!token) {
       return NextResponse.json(

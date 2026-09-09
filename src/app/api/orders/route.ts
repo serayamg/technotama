@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     if (email) {
       const emailHtml = `
         <p>Halo <strong>${name || 'Klien'}</strong>,</p>
-        <p>Terima kasih telah mempercayakan kebutuhan keamanan siber Anda kepada <strong>PT Risetin Teknologi Indonesia (Technotama) Neo</strong>.</p>
+        <p>Terima kasih telah mempercayakan kebutuhan keamanan siber Anda kepada <strong>PT Technotama Artha Raya</strong>.</p>
         <p>Pemesanan Anda untuk layanan <strong>${serviceType}</strong> dari perusahaan <strong>${companyName}</strong> telah berhasil kami terima dan terdaftar di sistem kami dengan Nomor Proyek: <strong>PROJ-${newOrder.id.substring(0, 8).toUpperCase()}</strong>.</p>
         
         <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
 
       await sendProposalEmail({
         to: email,
-        subject: `Aktivasi Akun Portal Klien Technotama Neo - ${companyName}`,
+        subject: `Aktivasi Akun Portal Klien Technotama - ${companyName}`,
         html: emailHtml
       }).catch(err => {
         console.error('[API ERROR] Failed to send activation email:', err);

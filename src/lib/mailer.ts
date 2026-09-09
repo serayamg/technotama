@@ -21,7 +21,7 @@ function getDynamicSMTPConfig() {
           port: config.integrations.smtpPort ? parseInt(config.integrations.smtpPort) : (process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587),
           user: config.integrations.smtpUser || process.env.SMTP_USER,
           pass: config.integrations.smtpPassword || process.env.SMTP_PASSWORD,
-          from: config.integrations.smtpFrom || process.env.SMTP_FROM || 'customercare@technotama.co.id'
+          from: config.integrations.smtpFrom || process.env.SMTP_FROM || 'customercare@technotama.id'
         };
       }
     }
@@ -33,7 +33,7 @@ function getDynamicSMTPConfig() {
     port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587,
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
-    from: process.env.SMTP_FROM || 'customercare@technotama.co.id'
+    from: process.env.SMTP_FROM || 'customercare@technotama.id'
   };
 }
 
@@ -111,7 +111,7 @@ function saveSimulationLog(to: string, subject: string, html: string, smtpError?
   </style>
 </head>
 <body>
-  <h2>Simulasi Pengiriman Email Technotama Neo</h2>
+  <h2>Simulasi Pengiriman Email Technotama</h2>
   <div class="meta-box">
     ${smtpError ? `<div class="smtp-warning">⚠️ Gagal terhubung ke server SMTP (${smtpError}). Email disimulasikan secara aman di bawah ini.</div>` : '<div>ℹ️ Email dikirimkan dalam mode simulasi karena SMTP belum dikonfigurasi di file .env.</div>'}
     <div><span class="meta-title">Waktu:</span> ${timestamp}</div>

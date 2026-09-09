@@ -5,7 +5,7 @@ export async function POST() {
 
   // Clear cookie by setting expiration to past
   response.cookies.set({
-    name: 'rti_session',
+    name: 'technotama_session',
     value: '',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

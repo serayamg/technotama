@@ -14,7 +14,7 @@ export interface AuthUser {
 export async function getAuthUser(): Promise<AuthUser | null> {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('rti_session')?.value;
+    const token = cookieStore.get('technotama_session')?.value;
     if (!token) return null;
 
     const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;

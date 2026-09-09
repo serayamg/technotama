@@ -585,7 +585,7 @@ export default function AdminDashboard() {
         </head>
         <body>
           <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px double #e2e8f0; padding-bottom: 20px;">
-            <h1 style="border: none; margin: 0; font-size: 28px; text-transform: uppercase;">PT Risetin Teknologi Indonesia</h1>
+            <h1 style="border: none; margin: 0; font-size: 28px; text-transform: uppercase;">PT Technotama Artha Raya</h1>
             <p style="margin: 5px 0 0 0; font-size: 12px; color: #64748b; letter-spacing: 2px;">CYBERSECURITY & TECHNOLOGY CONSULTING</p>
           </div>
           ${htmlContent}
@@ -607,7 +607,7 @@ export default function AdminDashboard() {
     setProposalTitle(proposal.proposalTitle || `Proposal Layanan Keamanan Siber ${proposal.serviceType} - ${proposal.company}`);
     setProposalContent(proposal.generatedContent || '');
     setAdditionalInstructions('');
-    setEmailSubject(proposal.proposalTitle || `Penawaran Resmi: ${proposal.serviceType} - Technotama Neo`);
+    setEmailSubject(proposal.proposalTitle || `Penawaran Resmi: ${proposal.serviceType} - Technotama`);
     setEmailBody(proposal.generatedContent ? convertMarkdownToHtml(proposal.generatedContent) : '');
     setEmailSendStatus(null);
     setIsBuilderOpen(true);
@@ -651,7 +651,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         setProposalTitle(data.title);
         setProposalContent(data.content);
-        setEmailSubject(`Penawaran Resmi: ${selectedProposal.serviceType} - Technotama Neo`);
+        setEmailSubject(`Penawaran Resmi: ${selectedProposal.serviceType} - Technotama`);
         setEmailBody(convertMarkdownToHtml(data.content));
         
         fetchAdminData();
@@ -2064,7 +2064,7 @@ export default function AdminDashboard() {
                                   ...siteConfig,
                                   integrations: { ...siteConfig.integrations, smtpUser: e.target.value }
                                 })}
-                                placeholder="customercare@technotama.co.id"
+                                placeholder="customercare@technotama.id"
                                 className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                               />
                             </div>
@@ -2092,7 +2092,7 @@ export default function AdminDashboard() {
                                   ...siteConfig,
                                   integrations: { ...siteConfig.integrations, smtpFrom: e.target.value }
                                 })}
-                                placeholder="customercare@technotama.co.id"
+                                placeholder="customercare@technotama.id"
                                 className="w-full text-xs font-semibold text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-blue-500"
                               />
                             </div>

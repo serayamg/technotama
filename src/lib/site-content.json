@@ -2,10 +2,10 @@
   "general": {
     "companyName": "Technotama",
     "companyShortName": "Technotama",
-    "email": "customercare@technotama.co.id",
+    "email": "customercare@technotama.id",
     "phone": "0878-8333-6017",
     "address": "Sudirman Central Business District (SCBD), Lantai 28, Senayan, Jakarta Selatan, 12190",
-    "linkedin": "https://linkedin.com/company/riset-teknologi-indonesia",
+    "linkedin": "https://linkedin.com/company/technotama",
     "youtube": "https://youtube.com",
     "whatsappNumber": "0878-8333-6017",
     "showPhone": false,
@@ -300,9 +300,9 @@
     "geminiApiKey": "",
     "smtpHost": "",
     "smtpPort": "587",
-    "smtpUser": "admin@technotama.co.id",
+    "smtpUser": "admin@technotama.id",
     "smtpPassword": "",
-    "smtpFrom": "customercare@technotama.co.id",
+    "smtpFrom": "customercare@technotama.id",
     "whatsappGatewayUrl": "",
     "whatsappToken": ""
   }
