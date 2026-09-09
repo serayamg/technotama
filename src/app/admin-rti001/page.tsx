@@ -1315,6 +1315,65 @@ export default function AdminDashboard() {
                     </div>
                   )}
 
+                  {/* Academy Registrations */}
+                  {activeTab === 'academy' && (
+                    <div className="space-y-6">
+                      <h2 className="font-display font-extrabold text-base text-slate-900 border-b pb-3">Pendaftaran Technotama Academy</h2>
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-slate-400 font-bold uppercase text-[9px] tracking-wider bg-slate-50/50">
+                              <th className="py-3 px-4">Peserta</th>
+                              <th className="py-3 px-4">Kontak</th>
+                              <th className="py-3 px-4">Kelas / Paket</th>
+                              <th className="py-3 px-4">Pendidikan</th>
+                              <th className="py-3 px-4">Pembayaran</th>
+                              <th className="py-3 px-4">Tanggal Daftar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {academyRegistrations.map((reg) => (
+                              <tr key={reg.id} className="border-b border-slate-100 hover:bg-slate-50/50 align-top">
+                                <td className="py-4 px-4">
+                                  <div className="font-bold text-slate-800">{reg.name}</div>
+                                  <div className="text-[10px] text-slate-400 mt-0.5">{reg.participantType}</div>
+                                  {reg.corpName && (
+                                    <div className="text-[10px] text-slate-400">{reg.corpName}</div>
+                                  )}
+                                </td>
+                                <td className="py-4 px-4 font-mono text-[11px] text-slate-600">
+                                  <div>{reg.email}</div>
+                                  <div>{reg.phone}</div>
+                                </td>
+                                <td className="py-4 px-4 text-slate-600">
+                                  <div className="font-bold text-blue-600">{reg.classOption}</div>
+                                  <div className="text-[10px] text-slate-500">{reg.packageOption}</div>
+                                </td>
+                                <td className="py-4 px-4 text-slate-600">
+                                  <div>{reg.educationLevel}</div>
+                                  <div className="text-[10px] text-slate-500">{reg.school} - {reg.major}</div>
+                                </td>
+                                <td className="py-4 px-4">
+                                  <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">
+                                    {reg.paymentMethod}
+                                  </span>
+                                </td>
+                                <td className="py-4 px-4 text-slate-500">{new Date(reg.createdAt).toLocaleDateString()}</td>
+                              </tr>
+                            ))}
+                            {academyRegistrations.length === 0 && (
+                              <tr>
+                                <td colSpan={6} className="py-8 text-center text-slate-400 italic">
+                                  Belum ada pendaftaran Academy yang masuk.
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Publish Blog */}
                   {activeTab === 'blogs' && (
                     <div className="space-y-6">
