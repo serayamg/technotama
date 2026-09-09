@@ -2482,11 +2482,13 @@ export default function Chatbot() {
             {/* Header */}
             <div className="bg-slate-900 text-white px-4 py-4 flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
-                <img 
-                  src="/logo.png" 
-                  alt="Logo Technotama" 
-                  className="w-8 h-8 object-contain bg-white rounded-md p-0.5"
-                />
+                <div className="bg-white rounded-lg px-2 py-1 shadow-sm flex items-center justify-center">
+                  <img 
+                    src="/logo.png" 
+                    alt="Logo Technotama" 
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
                 <div>
                   <div className="font-display font-extrabold text-sm leading-tight">Technotama AI Consultant</div>
                   <div className="text-[10px] text-slate-400 font-semibold flex items-center space-x-1">

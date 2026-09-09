@@ -55,16 +55,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo & Description */}
           <div className="md:col-span-1 space-y-4">
-            <div className="flex items-center space-x-2">
+            <Link href="/" className="inline-block bg-white rounded-xl p-2.5 shadow-sm hover:opacity-95 transition-opacity">
               <img 
                 src="/logo.png" 
                 alt="Logo Technotama" 
-                className="w-9 h-9 object-contain bg-white rounded-md p-0.5"
+                className="h-10 sm:h-11 w-auto object-contain"
               />
-              <span className="font-display font-bold text-white text-lg tracking-tight">
-                {siteConfig?.general?.companyShortName || 'Technotama'}
-              </span>
-            </div>
+            </Link>
             <p className="text-xs leading-relaxed text-slate-400">
               {siteConfig?.general?.companyName || 'Technotama'} adalah konsultan teknologi siber dan tata kelola TI nasional. Kami mendampingi pemerintah, sektor keuangan, dan korporasi mewujudkan kepatuhan dan ketahanan siber berbasis best practice internasional.
             </p>
