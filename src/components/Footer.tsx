@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Shield, Phone, Mail, MapPin, Award, ExternalLink } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, Award, ExternalLink, ShieldCheck } from 'lucide-react';
+import BcmLoginModal from './BcmLoginModal';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [siteConfig, setSiteConfig] = useState<any>(null);
+  const [isBcmModalOpen, setIsBcmModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -195,6 +197,15 @@ export default function Footer() {
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">NIST CSF</span>
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">PCI DSS</span>
             <span className="px-2 py-0.5 rounded border border-slate-800 bg-slate-900/50">CIS Controls</span>
+            <button
+              type="button"
+              onClick={() => setIsBcmModalOpen(true)}
+              className="px-2.5 py-0.5 rounded border border-cyan-500/60 bg-cyan-950/40 text-cyan-400 font-bold hover:bg-cyan-900/60 hover:border-cyan-400 hover:text-cyan-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shadow-cyan-500/20 group"
+              title="Akses Sistem Konsultan BCM Navigator"
+            >
+              <ShieldCheck className="w-3 h-3 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span>BCM NAV</span>
+            </button>
           </div>
         </div>
 
@@ -211,6 +222,11 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <BcmLoginModal 
+        isOpen={isBcmModalOpen} 
+        onClose={() => setIsBcmModalOpen(false)} 
+      />
     </footer>
   );
 }

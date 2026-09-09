@@ -12,7 +12,7 @@ import {
   Users, Briefcase, FileText, CheckCircle2, TrendingUp, 
   Activity, ArrowRight, Loader2, Plus, Calendar, BadgeInfo,
   Sparkles, Download, Send, Check, Edit3, ExternalLink, FileCode, Wand2, X, Trash2,
-  Upload, GraduationCap, Save
+  Upload, GraduationCap
 } from 'lucide-react';
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
@@ -1140,6 +1140,13 @@ export default function AdminDashboard() {
                                 </td>
                               </tr>
                             ))}
+                            {leads.length === 0 && (
+                              <tr>
+                                <td colSpan={5} className="py-8 text-center text-slate-400 italic">
+                                  Belum ada qualified leads yang masuk.
+                                </td>
+                              </tr>
+                            )}
                           </tbody>
                         </table>
                       </div>
