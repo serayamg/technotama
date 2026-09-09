@@ -4,13 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Shield, Phone, Mail, MapPin, Award, ExternalLink, ShieldCheck } from 'lucide-react';
 import BcmLoginModal from './BcmLoginModal';
-import IsoXLoginModal from './IsoXLoginModal';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [siteConfig, setSiteConfig] = useState<any>(null);
   const [isBcmModalOpen, setIsBcmModalOpen] = useState(false);
-  const [isIsoXModalOpen, setIsIsoXModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings')
@@ -213,15 +211,14 @@ export default function Footer() {
               <span>BCM NAV</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => setIsIsoXModalOpen(true)}
+            <Link
+              href="/iso-x"
               className="px-2.5 py-1 rounded border border-teal-500/60 bg-teal-950/40 text-teal-400 font-bold hover:bg-teal-900/60 hover:border-teal-400 hover:text-teal-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shadow-teal-500/20 group text-[10px] tracking-wider uppercase"
-              title="Akses Sistem Konsultan ISO-X Enterprise Platform"
+              title="Buka Halaman Utama Sistem ISO-X Enterprise"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-teal-400 group-hover:scale-110 transition-transform" />
               <span>ISO-X</span>
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -242,11 +239,6 @@ export default function Footer() {
       <BcmLoginModal 
         isOpen={isBcmModalOpen} 
         onClose={() => setIsBcmModalOpen(false)} 
-      />
-
-      <IsoXLoginModal 
-        isOpen={isIsoXModalOpen} 
-        onClose={() => setIsIsoXModalOpen(false)} 
       />
     </footer>
   );
